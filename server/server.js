@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const pool = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", async (req, res) => {
   try {
