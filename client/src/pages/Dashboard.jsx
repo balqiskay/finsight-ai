@@ -6,6 +6,8 @@ import {
 
 import {
   addTransaction,
+  getTransactions,
+  deleteTransaction,
 } from "../services/transactionService";
 
 function Dashboard() {
@@ -15,6 +17,8 @@ function Dashboard() {
     totalExpenses: 0,
     balance: 0,
   });
+
+  const [transactions, setTransactions] = useState([]);
 
   const [formData, setFormData] = useState({
     type: "expense",
@@ -41,9 +45,26 @@ function Dashboard() {
 
   };
 
+  const fetchTransactions = async () => {
+    
+    try {
+        
+        const data = await getTransactions();
+
+        setTransactions(data);
+
+    } catch (error) {
+        
+        console.error(error);
+
+    }
+
+  };
+
   useEffect(() => {
 
     fetchSummary();
+    fetchTransactions();
 
   }, []);
 
@@ -65,6 +86,7 @@ function Dashboard() {
       await addTransaction(formData);
 
       fetchSummary();
+      fetchTransactions();
 
       setFormData({
         type: "expense",
@@ -79,6 +101,23 @@ function Dashboard() {
       console.error(error);
 
       alert("Failed to add transaction");
+
+    }
+
+  };
+
+  const handleDelete =
+  async (id) => {
+    
+    try {
+        
+        await deleteTransaction(id);
+
+        fetchSummary();
+        fetchTransactions();
+
+    } catch (error) {
+        console.error(error);
 
     }
 
@@ -194,6 +233,83 @@ function Dashboard() {
         </button>
 
       </form>
+
+      <div className="mt-10 bg-zinc-900 p-8 rounded-2xl">
+        
+        <h2 className="text-2xl font-bold mb-6">
+            Recent Transactions
+        </h2>
+
+        <div className="overflow-x-auto">
+            
+            <table className="w-full text-left">
+                <thead>
+                    <tr className="border-b border-zinc-700">
+                        <th className="pb-4">
+                            Type
+                        </th>
+                        
+                        <th className="pb-4">
+                            Category
+                        </th>
+
+                        <th className="pb-4">
+                            Amount
+                        </th>
+
+                        <th className="pb-4">
+                            Date
+                        </th>
+
+                        <th className="pb-4">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    
+                    {transactions.map((transaction) => (
+                        
+                        <tr
+                        key={transaction.id}
+                        className="border-b border-zinc-800"
+                        >
+                            
+                            <td className="py-4 capitalize">
+                                {transaction.type}
+                            </td>
+
+                            <td className="py-4">
+                                {transaction.category}
+                            </td>
+
+                            <td className="py-4">
+                                RM {transaction.amount}
+                            </td>
+
+                            <td className="py-4">
+                                {new Date(
+                                    transaction.transaction_date
+                                ).toLocaleDateString("en-GB")}
+                            </td>
+
+                            <td className="py-4">
+                                <button
+                                 onClick={() =>
+                                    handleDelete(transaction.id)
+                                }
+                                 className="bg-red-500 px-4 py-2 rounded-lg"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     </div>
   );
