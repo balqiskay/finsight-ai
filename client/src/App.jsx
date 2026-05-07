@@ -7,6 +7,8 @@ import {
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Transactions from "./pages/Transactions";
+import Analytics from "./pages/Analytics";
 
 function App() {
 
@@ -36,8 +38,30 @@ function App() {
       />
 
       <Route
-        path="*"
-        element={<Navigate to="/login" />}
+        path="/transactions"
+        element={
+          token
+            ? <Transactions />
+            : <Navigate to="/login" />
+        }
+      />
+
+      <Route
+        path="/analytics"
+        element={
+          token
+            ? <Analytics />
+            : <Navigate to="/login" />
+        }
+      />
+
+      <Route
+      path="*"
+      element={
+        token
+        ? <Navigate to="/dashboard" />
+        : <Navigate to="/login" />
+      }
       />
 
     </Routes>
