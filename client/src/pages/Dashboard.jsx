@@ -19,6 +19,8 @@ import {
   Cell,
 } from "recharts";
 
+import Sidebar from "../components/Sidebar";
+
 function Dashboard() {
 
   const [summary, setSummary] = useState({
@@ -158,7 +160,10 @@ function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-8">
+  <div className="flex bg-zinc-950 text-white">
+    <Sidebar />
+
+    <div className="flex-1 p-8 min-h-screen">
 
       <h1 className="text-4xl font-bold mb-8">
         FinSight AI Dashboard
@@ -399,6 +404,7 @@ function Dashboard() {
     </div>
 
     </div>
+  </div>
   );
 }
 
