@@ -59,29 +59,35 @@ function Dashboard() {
   };
 
   const fetchTransactions = async () => {
-    
-    try {
-        
-        const data = await getTransactions();
 
-        setTransactions(data);
+    try {
+
+      const data =
+        await getTransactions();
+
+      setTransactions(data);
 
     } catch (error) {
-        
-        console.error(error);
+
+      console.error(error);
 
     }
 
   };
 
-  const fetchCategoryData =
-  async () => {
-    
+  const fetchCategoryData = async () => {
+
     try {
-      const data = await getCategoryBreakdown();
+
+      const data =
+        await getCategoryBreakdown();
+
       setCategoryData(data);
+
     } catch (error) {
+
       console.error(error);
+
     }
 
   };
@@ -133,19 +139,19 @@ function Dashboard() {
 
   };
 
-  const handleDelete =
-  async (id) => {
-    
-    try {
-        
-        await deleteTransaction(id);
+  const handleDelete = async (id) => {
 
-        fetchSummary();
-        fetchTransactions();
-        fetchCategoryData();
+    try {
+
+      await deleteTransaction(id);
+
+      fetchSummary();
+      fetchTransactions();
+      fetchCategoryData();
 
     } catch (error) {
-        console.error(error);
+
+      console.error(error);
 
     }
 
@@ -162,243 +168,272 @@ function Dashboard() {
   return (
     <MainLayout>
 
-      <h1 className="text-4xl font-bold mb-8">
-        FinSight AI Dashboard
-      </h1>
+      <div className="w-full">
 
-      <div className="grid grid-cols-3 gap-6 mb-10">
+        <h1 className="text-2xl md:text-4xl font-bold mb-8">
+          FinSight AI Dashboard
+        </h1>
 
-        <div className="bg-zinc-900 p-6 rounded-2xl">
-          <h2 className="text-zinc-400">
-            Total Balance
-          </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
 
-          <p className="text-3xl font-bold mt-2">
-            RM {summary.balance}
-          </p>
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+
+            <h2 className="text-zinc-400">
+              Total Balance
+            </h2>
+
+            <p className="text-3xl font-bold mt-2">
+              RM {summary.balance}
+            </p>
+
+          </div>
+
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+
+            <h2 className="text-zinc-400">
+              Total Income
+            </h2>
+
+            <p className="text-3xl font-bold mt-2">
+              RM {summary.totalIncome}
+            </p>
+
+          </div>
+
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+
+            <h2 className="text-zinc-400">
+              Total Expenses
+            </h2>
+
+            <p className="text-3xl font-bold mt-2">
+              RM {summary.totalExpenses}
+            </p>
+
+          </div>
+
         </div>
 
-        <div className="bg-zinc-900 p-6 rounded-2xl">
-          <h2 className="text-zinc-400">
-            Total Income
-          </h2>
-
-          <p className="text-3xl font-bold mt-2">
-            RM {summary.totalIncome}
-          </p>
-        </div>
-
-        <div className="bg-zinc-900 p-6 rounded-2xl">
-          <h2 className="text-zinc-400">
-            Total Expenses
-          </h2>
-
-          <p className="text-3xl font-bold mt-2">
-            RM {summary.totalExpenses}
-          </p>
-        </div>
-
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="bg-zinc-900 p-8 rounded-2xl max-w-2xl"
-      >
-
-        <h2 className="text-2xl font-bold mb-6">
-          Add Transaction
-        </h2>
-
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
+        <form
+          onSubmit={handleSubmit}
+          className="bg-zinc-900 p-6 md:p-8 rounded-2xl w-full"
         >
 
-          <option value="expense">
-            Expense
-          </option>
+          <h2 className="text-2xl font-bold mb-6">
+            Add Transaction
+          </h2>
 
-          <option value="income">
-            Income
-          </option>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
+          >
 
-        </select>
+            <option value="expense">
+              Expense
+            </option>
 
-        <input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+            <option value="income">
+              Income
+            </option>
 
-        <input
-          type="number"
-          name="amount"
-          placeholder="Amount"
-          value={formData.amount}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+          </select>
 
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
+          />
 
-        <input
-          type="date"
-          name="transaction_date"
-          value={formData.transaction_date}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-6"
-        />
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            value={formData.amount}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
+          />
 
-        <button
-          type="submit"
-          className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
-        >
-          Add Transaction
-        </button>
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
+          />
 
-      </form>
+          <input
+            type="date"
+            name="transaction_date"
+            value={formData.transaction_date}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-zinc-800 mb-6"
+          />
 
-      <div className="mt-10 bg-zinc-900 p-8 rounded-2xl">
-        
-        <h2 className="text-2xl font-bold mb-6">
+          <button
+            type="submit"
+            className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
+          >
+            Add Transaction
+          </button>
+
+        </form>
+
+        <div className="mt-10 bg-zinc-900 p-6 md:p-8 rounded-2xl">
+
+          <h2 className="text-2xl font-bold mb-6">
             Recent Transactions
-        </h2>
+          </h2>
 
-        <div className="overflow-x-auto">
-            
-            <table className="w-full text-left">
-                <thead>
-                    <tr className="border-b border-zinc-700">
-                        <th className="pb-4">
-                            Type
-                        </th>
-                        
-                        <th className="pb-4">
-                            Category
-                        </th>
+          <div className="w-full">
 
-                        <th className="pb-4">
-                            Amount
-                        </th>
+            <table className="w-full text-left text-xs md:text-base">
 
-                        <th className="pb-4">
-                            Date
-                        </th>
+              <thead>
 
-                        <th className="pb-4">
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    
-                    {transactions.map((transaction) => (
-                        
-                        <tr
-                        key={transaction.id}
-                        className="border-b border-zinc-800"
-                        >
-                            
-                            <td className="py-4 capitalize">
-                                {transaction.type}
-                            </td>
+                <tr className="border-b border-zinc-700">
 
-                            <td className="py-4">
-                                {transaction.category}
-                            </td>
+                  <th className="pb-4">
+                    Type
+                  </th>
 
-                            <td className="py-4">
-                                RM {transaction.amount}
-                            </td>
+                  <th className="pb-4">
+                    Category
+                  </th>
 
-                            <td className="py-4">
-                                {new Date(
-                                    transaction.transaction_date
-                                ).toLocaleDateString("en-GB")}
-                            </td>
+                  <th className="pb-4">
+                    Amount
+                  </th>
 
-                            <td className="py-4">
-                                <button
-                                 onClick={() =>
-                                    handleDelete(transaction.id)
-                                }
-                                 className="bg-red-500 px-4 py-2 rounded-lg"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+                  <th className="pb-4">
+                    Date
+                  </th>
+
+                  <th className="pb-4">
+                    Action
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {transactions.map((transaction) => (
+
+                  <tr
+                    key={transaction.id}
+                    className="border-b border-zinc-800"
+                  >
+
+                    <td className="py-3 pr-2 capitalize">
+                      {transaction.type}
+                    </td>
+
+                    <td className="py-3 pr-2">
+                      {transaction.category}
+                    </td>
+
+                    <td className="py-3 pr-2">
+                      RM {transaction.amount}
+                    </td>
+
+                    <td className="py-3 pr-2">
+                      {new Date(
+                        transaction.transaction_date
+                      ).toLocaleDateString("en-GB")}
+                    </td>
+
+                    <td className="py-3 pr-2">
+
+                      <button
+                        onClick={() =>
+                          handleDelete(transaction.id)
+                        }
+                        className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
+                      >
+                        Delete
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
             </table>
+
+          </div>
+
         </div>
-    </div>
-    
-    <div className="mt-10 bg-zinc-900 p-8 rounded-2xl">
-      
-      <h2 className="text-2xl font-bold mb-6">
-        Expense Categories
-      </h2>
-      
-      <div className="w-full h-[400px]">
-        
-        <ResponsiveContainer
-        width="100%"
-        height={400}
-        >
-          
-          <PieChart>
-            
-            <Pie
-            data={categoryData.map(item => ({
-              ...item,
-              total: Number(item.total)
-            }))}
-            dataKey="total"
-            nameKey="category"
-            outerRadius={140}
-            label
-            >
-              
-              {categoryData.map(
-                (entry, index) => (
-                
-                <Cell
-                key={index}
-                fill={
-                  COLORS[
-                    index % COLORS.length
-                  ]
-                }
-                />
 
-                )
-              )}
+        <div className="mt-10 bg-zinc-900 p-6 md:p-8 rounded-2xl">
 
-            </Pie>
+          <h2 className="text-2xl font-bold mb-6">
+            Expense Categories
+          </h2>
 
-          <Tooltip />
+          <div className="w-full flex justify-center">
 
-          </PieChart>
+            <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
 
-        </ResponsiveContainer>
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <PieChart>
+
+                  <Pie
+                    data={categoryData.map(item => ({
+                      ...item,
+                      total: Number(item.total)
+                    }))}
+                    dataKey="total"
+                    nameKey="category"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="70%"
+                    label={false}
+                  >
+
+                    {categoryData.map(
+                      (entry, index) => (
+
+                        <Cell
+                          key={index}
+                          fill={
+                            COLORS[
+                              index % COLORS.length
+                            ]
+                          }
+                        />
+
+                      )
+                    )}
+
+                  </Pie>
+
+                  <Tooltip />
+
+                </PieChart>
+
+              </ResponsiveContainer>
+
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
-
-    </div>
 
     </MainLayout>
   );

@@ -30,7 +30,7 @@ function Sidebar() {
       : "flex items-center gap-3 text-zinc-400 hover:text-white px-4 py-3 rounded-xl w-full hover:bg-zinc-800 transition";
 
   return (
-    <div className="w-64 min-h-screen bg-zinc-900 border-r border-zinc-800 p-6">
+    <div className="hidden md:block w-64 min-h-screen bg-zinc-900 border-r border-zinc-800 p-6">
 
       <h1 className="text-3xl font-bold text-white mb-10">
         FinSight AI
