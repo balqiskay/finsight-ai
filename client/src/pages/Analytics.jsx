@@ -1,21 +1,15 @@
-import Sidebar from "../components/Sidebar";
+import MainLayout from "../layouts/MainLayout";
 
 function Analytics() {
 
   return (
-    <div className="flex bg-zinc-950 text-white">
+    <MainLayout>
 
-      <Sidebar />
+      <h1 className="text-4xl font-bold">
+        Analytics
+      </h1>
 
-      <div className="flex-1 p-8 min-h-screen">
-
-        <h1 className="text-4xl font-bold">
-          Analytics
-        </h1>
-
-      </div>
-
-    </div>
+    </MainLayout>
   );
 }
 
