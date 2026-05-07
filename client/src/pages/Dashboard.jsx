@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import {
   getFinancialSummary,
+  getCategoryBreakdown,
 } from "../services/analyticsService";
 
 import {
@@ -9,6 +10,14 @@ import {
   getTransactions,
   deleteTransaction,
 } from "../services/transactionService";
+
+import {
+  PieChart,
+  Pie,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 
 function Dashboard() {
 
@@ -19,6 +28,8 @@ function Dashboard() {
   });
 
   const [transactions, setTransactions] = useState([]);
+
+  const [categoryData, setCategoryData] = useState([]);
 
   const [formData, setFormData] = useState({
     type: "expense",
@@ -61,10 +72,23 @@ function Dashboard() {
 
   };
 
+  const fetchCategoryData =
+  async () => {
+    
+    try {
+      const data = await getCategoryBreakdown();
+      setCategoryData(data);
+    } catch (error) {
+      console.error(error);
+    }
+
+  };
+
   useEffect(() => {
 
     fetchSummary();
     fetchTransactions();
+    fetchCategoryData();
 
   }, []);
 
@@ -87,6 +111,7 @@ function Dashboard() {
 
       fetchSummary();
       fetchTransactions();
+      fetchCategoryData();
 
       setFormData({
         type: "expense",
@@ -115,6 +140,7 @@ function Dashboard() {
 
         fetchSummary();
         fetchTransactions();
+        fetchCategoryData();
 
     } catch (error) {
         console.error(error);
@@ -122,6 +148,14 @@ function Dashboard() {
     }
 
   };
+
+  const COLORS = [
+    "#3b82f6",
+    "#22c55e",
+    "#f59e0b",
+    "#ef4444",
+    "#a855f7",
+  ];
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-8">
@@ -309,6 +343,59 @@ function Dashboard() {
                 </tbody>
             </table>
         </div>
+    </div>
+    
+    <div className="mt-10 bg-zinc-900 p-8 rounded-2xl">
+      
+      <h2 className="text-2xl font-bold mb-6">
+        Expense Categories
+      </h2>
+      
+      <div className="w-full h-[400px]">
+        
+        <ResponsiveContainer
+        width="100%"
+        height={400}
+        >
+          
+          <PieChart>
+            
+            <Pie
+            data={categoryData.map(item => ({
+              ...item,
+              total: Number(item.total)
+            }))}
+            dataKey="total"
+            nameKey="category"
+            outerRadius={140}
+            label
+            >
+              
+              {categoryData.map(
+                (entry, index) => (
+                
+                <Cell
+                key={index}
+                fill={
+                  COLORS[
+                    index % COLORS.length
+                  ]
+                }
+                />
+
+                )
+              )}
+
+            </Pie>
+
+          <Tooltip />
+
+          </PieChart>
+
+        </ResponsiveContainer>
+
+      </div>
+
     </div>
 
     </div>

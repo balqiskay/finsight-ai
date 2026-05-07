@@ -20,3 +20,21 @@ export const getFinancialSummary =
 
     return response.data;
 };
+
+export const getCategoryBreakdown =
+  async () => {
+
+    const token =
+      localStorage.getItem("token");
+
+    const response = await axios.get(
+      `${API_URL}/categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+};
