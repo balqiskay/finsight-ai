@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 
 import {
+  getAIInsights,
+} from "../services/aiService";
+
+import {
   PieChart,
   Pie,
   Tooltip,
@@ -16,8 +20,11 @@ import {
 
 function Analytics() {
 
-  const [categoryData, setCategoryData] =
-    useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+
+  const [aiInsights, setAIInsights] = useState("");
+
+  const [loadingAI, setLoadingAI] = useState(false);
 
   const fetchCategoryData =
     async () => {
@@ -37,6 +44,35 @@ function Analytics() {
 
   };
 
+  const handleGenerateInsights =
+  async () => {
+    
+    try {
+      
+      setLoadingAI(true);
+      
+      const data = await getAIInsights();
+
+      setAIInsights(
+        data.insights
+      );
+
+    } catch (error) {
+      
+      console.error(error);
+
+      alert(
+        "Failed to generate AI insights"
+      );
+
+    } finally {
+      
+      setLoadingAI(false);
+
+    }
+
+  };
+  
   useEffect(() => {
 
     fetchCategoryData();
@@ -116,6 +152,40 @@ function Analytics() {
         </div>
 
       </div>
+
+      <div className="mt-10 bg-zinc-900 p-6 md:p-8 rounded-2xl">
+        
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          
+          <h2 className="text-2xl font-bold">
+            AI Financial Insights
+          </h2>
+          
+          <button
+          onClick={
+            handleGenerateInsights
+          }
+          disabled={loadingAI}
+          className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
+          >
+
+          {loadingAI
+          ? "Generating..."
+          : "Generate AI Insights"}
+
+          </button>
+
+        </div>
+
+      <div className="bg-zinc-800 p-6 rounded-xl min-h-[120px] whitespace-pre-line">
+        
+        {aiInsights
+        ? aiInsights
+        : "Generate AI insights to analyze your financial habits."}
+
+      </div>
+
+     </div>
 
     </MainLayout>
   );
