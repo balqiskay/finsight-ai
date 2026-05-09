@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.get("/", async (req, res) => {
   try {
