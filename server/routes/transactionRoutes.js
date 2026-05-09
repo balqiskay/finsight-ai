@@ -8,6 +8,7 @@ const {
   addTransaction,
   getTransactions,
   deleteTransaction,
+  updateTransaction,
 } = require("../controllers/transactionController");
 
 router.post(
@@ -26,6 +27,12 @@ router.delete(
   "/:id",
   authMiddleware,
   deleteTransaction
+);
+
+router.put(
+  "/:id",
+  authMiddleware,
+  updateTransaction
 );
 
 module.exports = router;
