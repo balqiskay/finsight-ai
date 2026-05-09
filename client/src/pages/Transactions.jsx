@@ -6,6 +6,7 @@ import {
   addTransaction,
   getTransactions,
   deleteTransaction,
+  updateTransaction,
 } from "../services/transactionService";
 
 function Transactions() {
@@ -21,6 +22,8 @@ function Transactions() {
       description: "",
       transaction_date: "",
     });
+
+  const [editingId, setEditingId] = useState(null);
 
   const fetchTransactions =
     async () => {
@@ -56,31 +59,48 @@ function Transactions() {
   };
 
   const handleSubmit =
-    async (e) => {
+  async (e) => {
+    
+    e.preventDefault();
+    
+    try {
+      
+      if (editingId) {
+        
+        await updateTransaction(
+          editingId,
+          formData
+        );
+        
+        setEditingId(null);
 
-      e.preventDefault();
-
-      try {
-
-        await addTransaction(formData);
-
-        fetchTransactions();
-
-        setFormData({
-          type: "expense",
-          category: "",
-          amount: "",
-          description: "",
-          transaction_date: "",
-        });
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert("Failed to add transaction");
+      } else {
+        
+        await addTransaction(
+          formData
+        );
 
       }
+      
+      fetchTransactions();
+
+      setFormData({
+        type: "expense",
+        category: "",
+        amount: "",
+        description: "",
+        transaction_date: "",
+      });
+
+    } catch (error) {
+      
+      console.error(error);
+
+      alert(
+        "Failed to save transaction"
+      );
+
+    }
 
   };
 
@@ -98,6 +118,30 @@ function Transactions() {
         console.error(error);
 
       }
+
+  };
+
+  const handleEdit =
+  (transaction) => {
+    
+    setEditingId(
+      transaction.id
+    );
+
+    setFormData({
+      type: transaction.type,
+
+      category: transaction.category,
+
+      amount: transaction.amount,
+
+      description: transaction.description,
+
+      transaction_date:
+      new Date(
+        transaction.transaction_date
+        ).toISOString().split("T")[0]
+    });
 
   };
 
@@ -173,7 +217,9 @@ function Transactions() {
           type="submit"
           className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
         >
-          Add Transaction
+          {editingId
+          ? "Update Transaction"
+          : "Add Transaction"}
         </button>
 
       </form>
@@ -238,21 +284,40 @@ function Transactions() {
                   </td>
 
                   <td className="py-3 pr-2">
-                    {new Date(
+                    {transaction.transaction_date &&
+                    !isNaN(
+                      new Date(
+                        transaction.transaction_date
+                      )
+                    )
+                    ? new Date(
                       transaction.transaction_date
-                    ).toLocaleDateString("en-GB")}
+                    ).toLocaleDateString("en-GB")
+                    : "Invalid Date"}
                   </td>
 
                   <td className="py-3 pr-2">
+                    <div className="flex gap-2">
+                    
+                    <button
+                    onClick={() =>
+                      handleEdit(transaction)
+                    }
+                    className="bg-blue-500 px-2 py-1 rounded-lg text-xs md:text-sm"
+                    >
+                      Edit
+                    </button>
 
                     <button
-                      onClick={() =>
-                        handleDelete(transaction.id)
-                      }
-                      className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
+                    onClick={() =>
+                      handleDelete(transaction.id)
+                    }
+                    className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
                     >
                       Delete
                     </button>
+
+                  </div>
 
                   </td>
 

@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL =
-  "http://localhost:5000/api/transactions";
+const API_URL = "http://localhost:5000/api/transactions";
 
 export const addTransaction =
   async (transactionData) => {
@@ -56,4 +55,26 @@ export const deleteTransaction =
     );
 
     return response.data;
+};
+
+export const updateTransaction =
+async (id, transactionData) => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response =
+    await axios.put(
+      `${API_URL}/${id}`,
+      transactionData,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.data;
+
 };
