@@ -72,6 +72,7 @@ function Login() {
 
         <button
           type="submit"
+          onClick={() => console.log("clicked")}
           className="w-full bg-white text-black p-3 rounded-lg font-semibold"
         >
           Login
