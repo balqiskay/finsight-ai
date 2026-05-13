@@ -24,6 +24,8 @@ function Transactions() {
     });
 
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("all");
 
   const fetchTransactions =
     async () => {
@@ -145,6 +147,43 @@ function Transactions() {
 
   };
 
+  const filteredTransactions =
+  transactions.filter(
+    (transaction) => {
+
+      const matchesSearch =
+
+        transaction.category
+          .toLowerCase()
+          .includes(
+            searchTerm.toLowerCase()
+          )
+
+        ||
+
+        transaction.description
+          ?.toLowerCase()
+          .includes(
+            searchTerm.toLowerCase()
+          );
+
+      const matchesType =
+
+        filterType === "all"
+
+        ||
+
+        transaction.type ===
+        filterType;
+
+      return (
+        matchesSearch &&
+        matchesType
+      );
+
+    }
+  );
+
   return (
     <MainLayout>
 
@@ -230,6 +269,46 @@ function Transactions() {
           Recent Transactions
         </h2>
 
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          
+          <input
+          type="text"
+          placeholder="Search transactions..."
+          value={searchTerm}
+          onChange={(e) =>
+            setSearchTerm(
+              e.target.value
+            )
+          }
+          className="flex-1 p-3 rounded-lg bg-zinc-800"
+          />
+
+          <select
+          value={filterType}
+          onChange={(e) =>
+            setFilterType(
+              e.target.value
+            )
+          }
+          className="p-3 rounded-lg bg-zinc-800"
+          >
+            
+            <option value="all">
+              All
+            </option>
+
+            <option value="income">
+              Income
+            </option>
+
+            <option value="expense">
+              Expense
+            </option>
+
+          </select>
+
+        </div>
+
         <div className="w-full">
 
           <table className="w-full text-left text-xs md:text-base">
@@ -264,7 +343,7 @@ function Transactions() {
 
             <tbody>
 
-              {transactions.map((transaction) => (
+              {filteredTransactions.map((transaction) => (
 
                 <tr
                   key={transaction.id}
