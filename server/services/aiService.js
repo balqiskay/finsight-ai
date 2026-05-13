@@ -7,10 +7,22 @@ const openai = new OpenAI({
 const generateFinancialInsights =
 async (summary, categories) => {
 
-  const prompt = `
+const prompt = `
 You are a financial advisor AI.
 
-Analyze this financial data and give short actionable insights.
+Analyze the user's financial data.
+
+Return your response STRICTLY in this format:
+
+SCORE: number out of 100
+
+RATING: Excellent / Good / Fair / Poor
+
+INSIGHTS:
+- short financial analysis
+- spending observations
+- savings advice
+- practical recommendations
 
 Financial Summary:
 - Total Income: RM ${summary.totalIncome}
@@ -24,14 +36,6 @@ ${categories
       `${c.category}: RM ${c.total}`
   )
   .join("\n")}
-
-Give:
-- spending observations
-- savings advice
-- warnings if needed
-- practical recommendations
-
-Keep response concise and professional.
 `;
 
   const completion =
