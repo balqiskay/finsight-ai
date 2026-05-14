@@ -342,67 +342,82 @@ function Transactions() {
             </thead>
 
             <tbody>
-
-              {filteredTransactions.map((transaction) => (
-
-                <tr
+              
+              {filteredTransactions.length > 0 ? (
+                
+                filteredTransactions.map(
+                  (transaction) => (
+                  
+                  <tr
                   key={transaction.id}
                   className="border-b border-zinc-800"
-                >
-
-                  <td className="py-3 pr-2 capitalize">
-                    {transaction.type}
-                  </td>
-
-                  <td className="py-3 pr-2">
-                    {transaction.category}
-                  </td>
-
-                  <td className="py-3 pr-2">
-                    RM {transaction.amount}
-                  </td>
-
-                  <td className="py-3 pr-2">
-                    {transaction.transaction_date &&
-                    !isNaN(
-                      new Date(
-                        transaction.transaction_date
-                      )
-                    )
-                    ? new Date(
-                      transaction.transaction_date
-                    ).toLocaleDateString("en-GB")
-                    : "Invalid Date"}
-                  </td>
-
-                  <td className="py-3 pr-2">
-                    <div className="flex gap-2">
+                  >
                     
-                    <button
-                    onClick={() =>
-                      handleEdit(transaction)
-                    }
-                    className="bg-blue-500 px-2 py-1 rounded-lg text-xs md:text-sm"
-                    >
-                      Edit
-                    </button>
+                    <td className="py-3 pr-2 capitalize">
+                      {transaction.type}
+                    </td>
 
-                    <button
-                    onClick={() =>
-                      handleDelete(transaction.id)
-                    }
-                    className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
-                    >
-                      Delete
-                    </button>
+                    <td className="py-3 pr-2">
+                      {transaction.category}
+                    </td>
 
-                  </div>
+                    <td className="py-3 pr-2">
+                      RM {transaction.amount}
+                    </td>
 
-                  </td>
+                    <td className="py-3 pr-2">
+                      {transaction.transaction_date
+                      ? new Date(
+                        transaction.transaction_date
+                      ).toLocaleDateString("en-GB")
+                      : "No Date"}
+                    </td>
 
-                </tr>
+                    <td className="py-3 pr-2">
+                      
+                      <div className="flex gap-2">
+                        
+                        <button
+                        onClick={() =>
+                          handleEdit(transaction)
+                        }
+                        className="bg-blue-500 px-2 py-1 rounded-lg text-xs md:text-sm"
+                        >
+                          Edit
+                        </button>
 
-              ))}
+                        <button
+                        onClick={() =>
+                          handleDelete(transaction.id)
+                        }
+                        className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
+                        >
+                          Delete
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                  )
+                )
+
+              ) : (
+              
+              <tr>
+                
+                <td
+                colSpan="5"
+                className="text-center py-10 text-zinc-500"
+                >
+                  No transactions found.
+                </td>
+
+              </tr>
+
+              )}
 
             </tbody>
 
