@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { loginUser } from "../services/authService";
+import toast
+from "react-hot-toast";
 
 function Login() {
 
@@ -11,6 +13,8 @@ function Login() {
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,6 +27,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      setLoading(true);
 
       const data = await loginUser(formData);
 
@@ -31,13 +36,20 @@ function Login() {
         data.token
       );
 
+      toast.success(
+        "Login successful"
+      );
+
+      setLoading(false);
       navigate("/dashboard");
 
     } catch (error) {
 
+      setLoading(false);
+
       console.error(error);
 
-      alert("Login failed");
+      toast.error("Login failed");
 
     }
   };
@@ -71,11 +83,15 @@ function Login() {
         />
 
         <button
-          type="submit"
-          onClick={() => console.log("clicked")}
-          className="w-full bg-white text-black p-3 rounded-lg font-semibold"
+        type="submit"
+        disabled={loading}
+        className="w-full bg-white text-black p-3 rounded-lg font-semibold disabled:opacity-50"
         >
-          Login
+          
+          {loading
+          ? "Logging in..."
+          : "Login"}
+
         </button>
 
       </form>
