@@ -26,6 +26,36 @@ function Analytics() {
 
   const [loadingAI, setLoadingAI] = useState(false);
 
+  const scoreMatch =
+  aiInsights.match(
+    /SCORE:\s*(\d+)/
+  );
+
+const ratingMatch =
+  aiInsights.match(
+    /RATING:\s*(.*)/
+  );
+
+const insightsMatch =
+  aiInsights.match(
+    /INSIGHTS:\s*([\s\S]*)/
+  );
+
+const score =
+  scoreMatch
+    ? scoreMatch[1]
+    : null;
+
+const rating =
+  ratingMatch
+    ? ratingMatch[1]
+    : "";
+
+const insightsText =
+  insightsMatch
+    ? insightsMatch[1]
+    : aiInsights;
+
   const fetchCategoryData =
     async () => {
 
@@ -177,11 +207,58 @@ function Analytics() {
 
         </div>
 
-      <div className="bg-zinc-800 p-6 rounded-xl min-h-[120px] whitespace-pre-line">
+      <div className="bg-zinc-800 p-6 rounded-xl min-h-[120px]">
         
-        {aiInsights
-        ? aiInsights
-        : "Generate AI insights to analyze your financial habits."}
+        {aiInsights ? (
+          
+          <div className="space-y-6">
+            
+            <div className="flex flex-col md:flex-row gap-4">
+              
+              <div className="bg-zinc-900 p-6 rounded-2xl flex-1 text-center">
+                
+                <h3 className="text-zinc-400 mb-2">
+                  Financial Health Score
+                </h3>
+                
+                <p className="text-5xl font-bold">
+                  {score}/100
+                </p>
+
+              </div>
+
+              <div className="bg-zinc-900 p-6 rounded-2xl flex-1 text-center">
+                
+                <h3 className="text-zinc-400 mb-2">
+                  Rating
+                </h3>
+
+                <p className="text-3xl font-bold">
+                  {rating}
+                </p>
+
+              </div>
+
+            </div>
+
+          <div>
+            <h3 className="text-xl font-bold mb-3">
+              AI Insights
+            </h3>
+
+            <div className="whitespace-pre-line text-zinc-300">
+              
+              {insightsText}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        ) : (
+          "Generate AI insights to analyze your financial habits."
+        )}
 
       </div>
 
