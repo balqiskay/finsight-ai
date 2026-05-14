@@ -14,15 +14,24 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
 } from "recharts";
 
 import {
   getCategoryBreakdown,
+  getMonthlyAnalytics,
 } from "../services/analyticsService";
 
 function Analytics() {
 
   const [categoryData, setCategoryData] = useState([]);
+
+  const [monthlyData, setMonthlyData] = useState([]);
 
   const [aiInsights, setAIInsights] = useState("");
 
@@ -104,10 +113,29 @@ const insightsText =
     }
 
   };
+
+  const fetchMonthlyData =
+  async () => {
+    
+    try {
+      
+      const data =
+      await getMonthlyAnalytics();
+
+      setMonthlyData(data);
+
+    } catch (error) {
+      
+      console.error(error);
+
+    }
+
+  };
   
   useEffect(() => {
 
     fetchCategoryData();
+    fetchMonthlyData();
 
   }, []);
 
@@ -329,6 +357,55 @@ const insightsText =
       </div>
 
      </div>
+
+     <div className="mt-10 bg-zinc-900 p-6 md:p-8 rounded-2xl">
+      
+      <h2 className="text-2xl font-bold mb-6">
+        Monthly Financial Trends
+      </h2>
+      
+      <div className="w-full h-[350px]">
+        
+        <ResponsiveContainer
+        width="100%"
+        height="100%"
+        >
+          
+          <LineChart data={monthlyData}>
+            
+            <CartesianGrid
+            strokeDasharray="3 3"
+            />
+            
+            <XAxis dataKey="month" />
+            
+            <YAxis />
+
+            <Tooltip />
+
+            <Legend />
+
+            <Line
+            type="monotone"
+            dataKey="income"
+            stroke="#22c55e"
+            strokeWidth={3}
+            />
+
+            <Line
+            type="monotone"
+            dataKey="expenses"
+            stroke="#ef4444"
+            strokeWidth={3}
+            />
+
+          </LineChart>
+
+        </ResponsiveContainer>
+
+      </div>
+
+      </div>
 
     </MainLayout>
   );

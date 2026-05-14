@@ -38,3 +38,24 @@ export const getCategoryBreakdown =
 
     return response.data;
 };
+
+export const getMonthlyAnalytics =
+async () => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response =
+    await axios.get(
+      `${API_URL}/monthly`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.data;
+
+};

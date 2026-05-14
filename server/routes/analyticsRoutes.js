@@ -7,6 +7,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const {
   getFinancialSummary,
   getCategoryBreakdown,
+  getMonthlyAnalytics,
 } = require("../controllers/analyticsController");
 
 router.get(
@@ -19,6 +20,12 @@ router.get(
   "/categories",
   authMiddleware,
   getCategoryBreakdown
+);
+
+router.get(
+  "/monthly",
+  authMiddleware,
+  getMonthlyAnalytics
 );
 
 module.exports = router;

@@ -74,3 +74,75 @@ exports.getCategoryBreakdown = async (req, res) => {
 
   }
 };
+
+exports.getMonthlyAnalytics =
+async (req, res) => {
+
+  try {
+
+    const userId =
+      req.user.userId;
+
+    const result =
+      await pool.query(
+        `
+        SELECT
+
+          TO_CHAR(
+            transaction_date,
+            'Mon'
+          ) AS month,
+
+          SUM(
+            CASE
+              WHEN type = 'income'
+              THEN amount
+              ELSE 0
+            END
+          ) AS income,
+
+          SUM(
+            CASE
+              WHEN type = 'expense'
+              THEN amount
+              ELSE 0
+            END
+          ) AS expenses
+
+        FROM transactions
+
+        WHERE user_id = $1
+
+        GROUP BY
+          TO_CHAR(
+            transaction_date,
+            'Mon'
+          ),
+          EXTRACT(
+            MONTH
+            FROM transaction_date
+          )
+
+        ORDER BY
+          EXTRACT(
+            MONTH
+            FROM transaction_date
+          )
+        `,
+        [userId]
+      );
+
+    res.json(result.rows);
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message:
+        "Failed to fetch monthly analytics",
+    });
+
+  }
+
+};
