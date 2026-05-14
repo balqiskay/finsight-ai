@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 
+import jsPDF from "jspdf";
+
 import {
   getAIInsights,
 } from "../services/aiService";
@@ -117,6 +119,58 @@ const insightsText =
     "#a855f7",
   ];
 
+  const downloadPDF = () => {
+    
+    const doc = new jsPDF();
+    
+    doc.setFontSize(22);
+
+    doc.text(
+      "FinSight AI Financial Report",
+      20,
+      20
+    );
+
+    doc.setFontSize(16);
+
+    doc.text(
+      `Financial Health Score: ${score}/100`,
+      20,
+      40
+    );
+
+    doc.text(
+      `Rating: ${rating}`,
+      20,
+      55
+    );
+
+    doc.setFontSize(14);
+
+    doc.text(
+      "AI Insights:",
+      20,
+      75
+    );
+
+    const splitText =
+    doc.splitTextToSize(
+      insightsText,
+      170
+    );
+
+    doc.text(
+      splitText,
+      20,
+      90
+    );
+
+    doc.save(
+      "FinSight-AI-Report.pdf"
+    );
+
+  };
+
   return (
     <MainLayout>
 
@@ -185,11 +239,13 @@ const insightsText =
 
       <div className="mt-10 bg-zinc-900 p-6 md:p-8 rounded-2xl">
         
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          
-          <h2 className="text-2xl font-bold">
-            AI Financial Insights
-          </h2>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        
+        <h2 className="text-2xl font-bold">
+          AI Financial Insights
+        </h2>
+        
+        <div className="flex flex-col md:flex-row gap-4">
           
           <button
           onClick={
@@ -198,14 +254,24 @@ const insightsText =
           disabled={loadingAI}
           className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
           >
+            
+            {loadingAI
+            ? "Generating..."
+            : "Generate AI Insights"}
 
-          {loadingAI
-          ? "Generating..."
-          : "Generate AI Insights"}
+         </button>
 
-          </button>
+         <button
+         onClick={downloadPDF}
+         className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold"
+         >
+          Download PDF Report
 
-        </div>
+        </button>
+
+       </div>
+
+      </div>
 
       <div className="bg-zinc-800 p-6 rounded-xl min-h-[120px]">
         
