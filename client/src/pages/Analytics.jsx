@@ -213,53 +213,68 @@ const insightsText =
         </h2>
 
         <div className="w-full flex justify-center">
-
-          <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
-
-            <ResponsiveContainer
+          
+          {categoryData.length > 0 ? (
+            
+            <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
+              
+              <ResponsiveContainer
               width="100%"
               height="100%"
-            >
-
-              <PieChart>
-
-                <Pie
-                  data={categoryData.map(item => ({
-                    ...item,
-                    total: Number(item.total)
-                  }))}
+              >
+                
+                <PieChart>
+                  
+                  <Pie
+                  data={categoryData.map(
+                    (item) => ({
+                      ...item,
+                      total: Number(item.total),
+                    })
+                  )}
                   dataKey="total"
                   nameKey="category"
                   cx="50%"
                   cy="50%"
                   outerRadius="70%"
                   label={false}
-                >
-
-                  {categoryData.map(
-                    (entry, index) => (
-
+                  >
+                    
+                    {categoryData.map(
+                      (entry, index) => (
+                      
                       <Cell
-                        key={index}
-                        fill={
-                          COLORS[
-                            index % COLORS.length
-                          ]
-                        }
+                      key={index}
+                      fill={
+                        COLORS[
+                          index %
+                          COLORS.length
+                        ]
+                      }
                       />
 
-                    )
-                  )}
+                      )
+                    )}
 
-                </Pie>
+                  </Pie>
 
                 <Tooltip />
 
-              </PieChart>
+                </PieChart>
 
-            </ResponsiveContainer>
+              </ResponsiveContainer>
+
+            </div>
+
+          ) : (
+          
+          <div className="text-zinc-500 py-20">
+            
+            No analytics data available.
 
           </div>
+
+          )}
 
         </div>
 
@@ -366,42 +381,51 @@ const insightsText =
       
       <div className="w-full h-[350px]">
         
-        <ResponsiveContainer
-        width="100%"
-        height="100%"
-        >
+        {monthlyData.length > 0 ? (
           
-          <LineChart data={monthlyData}>
+          <ResponsiveContainer
+          width="100%"
+          height="100%"
+          >
             
-            <CartesianGrid
-            strokeDasharray="3 3"
-            />
-            
-            <XAxis dataKey="month" />
-            
-            <YAxis />
+            <LineChart data={monthlyData}>
+              
+              <CartesianGrid
+              strokeDasharray="3 3"
+              />
+              
+              <XAxis dataKey="month" />
 
-            <Tooltip />
+              <YAxis />
 
-            <Legend />
+              <Tooltip />
 
-            <Line
-            type="monotone"
-            dataKey="income"
-            stroke="#22c55e"
-            strokeWidth={3}
-            />
+              <Legend />
 
-            <Line
-            type="monotone"
-            dataKey="expenses"
-            stroke="#ef4444"
-            strokeWidth={3}
-            />
+              <Line
+              type="monotone"
+              dataKey="income"
+              stroke="#22c55e"
+              strokeWidth={3}
+              />
 
-          </LineChart>
+              <Line
+              type="monotone"
+              dataKey="expenses"
+              stroke="#ef4444"
+              strokeWidth={3}
+              />
 
-        </ResponsiveContainer>
+            </LineChart>
+
+          </ResponsiveContainer>
+
+        ) : (
+        
+        <div className="flex items-center justify-center h-full text-zinc-500">
+          No monthly trend data available.
+        </div>
+      )}
 
       </div>
 
