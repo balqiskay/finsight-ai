@@ -313,12 +313,12 @@ const insightsText =
          </button>
 
          <button
-         onClick={downloadPDF}
-         className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02]"
+           onClick={downloadPDF}
+           disabled={!aiInsights}
+           className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
          >
           Download PDF Report
-
-        </button>
+         </button>
 
        </div>
 

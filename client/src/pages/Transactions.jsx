@@ -24,6 +24,8 @@ function Transactions() {
     });
 
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 
@@ -78,6 +80,8 @@ function Transactions() {
       alert("Amount must be greater than 0.");
       return;
     }
+
+    setLoading(true);
     
     try {
       
@@ -100,6 +104,8 @@ function Transactions() {
       
       fetchTransactions();
 
+      setLoading(false);
+
       setFormData({
         type: "expense",
         category: "",
@@ -109,6 +115,8 @@ function Transactions() {
       });
 
     } catch (error) {
+
+      setLoading(false);
       
       console.error(error);
 
@@ -122,16 +130,22 @@ function Transactions() {
 
   const handleDelete =
     async (id) => {
-
+      
       try {
+        
+        setDeletingId(id);
 
         await deleteTransaction(id);
 
         fetchTransactions();
 
       } catch (error) {
-
+        
         console.error(error);
+
+      } finally {
+        
+        setDeletingId(null);
 
       }
 
@@ -268,11 +282,14 @@ function Transactions() {
 
         <button
           type="submit"
+          disabled={loading}
           className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
         >
-          {editingId
-          ? "Update Transaction"
-          : "Add Transaction"}
+          {loading
+            ? "Saving..."
+            : editingId
+              ? "Update Transaction"
+              : "Add Transaction"}
         </button>
 
       </form>
@@ -400,12 +417,15 @@ function Transactions() {
                       </button>
 
                       <button
-                      onClick={() =>
-                        handleDelete(transaction.id)
-                      }
-                      className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                        onClick={() =>
+                          handleDelete(transaction.id)
+                        }
+                        disabled={deletingId === transaction.id}
+                        className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Delete
+                        {deletingId === transaction.id
+                          ? "Deleting..."
+                          : "Delete"}
                       </button>
 
                     </div>
@@ -491,9 +511,12 @@ function Transactions() {
                   onClick={() =>
                     handleDelete(transaction.id)
                   }
-                  className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                  disabled={deletingId === transaction.id}
+                  className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Delete
+                  {deletingId === transaction.id
+                    ? "Deleting..."
+                    : "Delete"}
                 </button>
 
               </div>
