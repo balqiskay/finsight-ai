@@ -49,7 +49,7 @@ exports.registerUser = async (req, res) => {
       {
         userId: newUser.rows[0].id,
       },
-      "finsight_secret_key",
+      process.env.JWT_SECRET,
       {
         expiresIn: "7d",
       }
@@ -106,7 +106,7 @@ exports.loginUser = async (req, res) => {
       {
         userId: user.rows[0].id,
       },
-      "finsight_secret_key",
+      process.env.JWT_SECRET,
       {
         expiresIn: "7d",
       }

@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const API_URL =
-  "http://localhost:5000/api/analytics";
+const API_URL = import.meta.env.VITE_API_URL;
+
+const API =
+`${API_URL}/analytics`;
 
 export const getFinancialSummary =
   async () => {
@@ -10,7 +12,7 @@ export const getFinancialSummary =
       localStorage.getItem("token");
 
     const response = await axios.get(
-      `${API_URL}/summary`,
+      `${API}/summary`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +30,7 @@ export const getCategoryBreakdown =
       localStorage.getItem("token");
 
     const response = await axios.get(
-      `${API_URL}/categories`,
+      `${API}/categories`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +49,7 @@ async () => {
 
   const response =
     await axios.get(
-      `${API_URL}/monthly`,
+      `${API}/monthly`,
       {
         headers: {
           Authorization:

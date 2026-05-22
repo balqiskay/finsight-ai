@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const API =
-  "http://localhost:5000/api/ai";
+`${API_URL}/ai`;
 
 export const getAIInsights =
 async () => {

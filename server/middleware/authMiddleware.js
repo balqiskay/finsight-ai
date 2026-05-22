@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
 
     const verified = jwt.verify(
       token,
-      "finsight_secret_key"
+      process.env.JWT_SECRET
     );
 
     req.user = verified;
