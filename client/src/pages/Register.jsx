@@ -25,6 +25,20 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -35,7 +49,10 @@ function Register() {
       navigate("/login");
     } catch (error) {
       console.error(error);
-      toast.error("Registration failed");
+      toast.error(
+        error.response?.data?.message ||
+        "Registration failed"
+      );
     } finally {
       setLoading(false);
     }

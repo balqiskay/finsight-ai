@@ -64,6 +64,20 @@ function Transactions() {
   async (e) => {
     
     e.preventDefault();
+
+    if (
+      !formData.category ||
+      !formData.amount ||
+      !formData.transaction_date
+    ) {
+      alert("Please fill in category, amount, and date.");
+      return;
+    }
+
+    if (Number(formData.amount) <= 0) {
+      alert("Amount must be greater than 0.");
+      return;
+    }
     
     try {
       
