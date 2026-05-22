@@ -76,7 +76,7 @@ function Register() {
 
         <button
           type="submit"
-          className="w-full bg-white text-black p-3 rounded-lg font-semibold"
+          className="w-full bg-white text-black p-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02]"
         >
           Register
         </button>

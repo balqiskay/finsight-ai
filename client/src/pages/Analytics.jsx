@@ -216,7 +216,7 @@ const insightsText =
           
           {categoryData.length > 0 ? (
             
-            <div className="w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
+            <div className="w-full max-w-[400px] aspect-square">
               
               <ResponsiveContainer
               width="100%"
@@ -226,6 +226,7 @@ const insightsText =
                 <PieChart>
                   
                   <Pie
+                  animationDuration={1200}
                   data={categoryData.map(
                     (item) => ({
                       ...item,
@@ -258,7 +259,14 @@ const insightsText =
 
                   </Pie>
 
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    borderRadius: "12px",
+                    color: "#fff",
+                  }} 
+                />
 
                 </PieChart>
 
@@ -295,7 +303,7 @@ const insightsText =
             handleGenerateInsights
           }
           disabled={loadingAI}
-          className="bg-white text-black px-6 py-3 rounded-lg font-semibold"
+          className="bg-white text-black px-6 py-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02]"
           >
             
             {loadingAI
@@ -306,7 +314,7 @@ const insightsText =
 
          <button
          onClick={downloadPDF}
-         className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold"
+         className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02]"
          >
           Download PDF Report
 
@@ -388,7 +396,9 @@ const insightsText =
           height="100%"
           >
             
-            <LineChart data={monthlyData}>
+            <LineChart 
+              data={monthlyData}
+            >
               
               <CartesianGrid
               strokeDasharray="3 3"
@@ -398,22 +408,45 @@ const insightsText =
 
               <YAxis />
 
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    borderRadius: "12px",
+                    color: "#fff",
+                  }} 
+                />
 
               <Legend />
 
               <Line
+              animationDuration={1200}
               type="monotone"
               dataKey="income"
               stroke="#22c55e"
-              strokeWidth={3}
+              strokeWidth={4}
+              dot={{
+                r: 5,
+                strokeWidth: 2,
+              }}
+              activeDot={{
+                r:7,
+              }}
               />
 
               <Line
+              animationDuration={1200}
               type="monotone"
               dataKey="expenses"
               stroke="#ef4444"
-              strokeWidth={3}
+              strokeWidth={4}
+              dot={{
+                r: 5,
+                strokeWidth: 2,
+              }}
+              activeDot={{
+                r: 7,
+              }}
               />
 
             </LineChart>

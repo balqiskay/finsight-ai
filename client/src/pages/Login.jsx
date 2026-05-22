@@ -41,7 +41,7 @@ function Login() {
       );
 
       setLoading(false);
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
 
     } catch (error) {
 
@@ -85,7 +85,7 @@ function Login() {
         <button
         type="submit"
         disabled={loading}
-        className="w-full bg-white text-black p-3 rounded-lg font-semibold disabled:opacity-50"
+        className="w-full bg-white text-black p-3 rounded-lg font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
         >
           
           {loading

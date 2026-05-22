@@ -309,14 +309,14 @@ function Transactions() {
 
         </div>
 
-        <div className="w-full">
-
-          <table className="w-full text-left text-xs md:text-base">
-
+        <div className="hidden md:block w-full">
+          
+          <table className="w-full text-left text-base">
+            
             <thead>
-
+              
               <tr className="border-b border-zinc-700">
-
+                
                 <th className="pb-4">
                   Type
                 </th>
@@ -345,83 +345,156 @@ function Transactions() {
               
               {filteredTransactions.length > 0 ? (
                 
-                filteredTransactions.map(
-                  (transaction) => (
-                  
-                  <tr
+                filteredTransactions.map((transaction) => (
+                
+                <tr
                   key={transaction.id}
                   className="border-b border-zinc-800"
-                  >
+                >
+                  
+                  <td className="py-4 capitalize">
+                    {transaction.type}
+                  </td>
+
+                  <td className="py-4">
+                    {transaction.category}
+                  </td>
+                  
+                  <td className="py-4">
+                    RM {transaction.amount}
+                  </td>
+                  
+                  <td className="py-4">
+                    {transaction.transaction_date
+                    ? new Date(
+                      transaction.transaction_date
+                    ).toLocaleDateString("en-GB")
+                    : "No Date"}
+                  </td>
+
+                  <td className="py-4">
                     
-                    <td className="py-3 pr-2 capitalize">
-                      {transaction.type}
-                    </td>
-
-                    <td className="py-3 pr-2">
-                      {transaction.category}
-                    </td>
-
-                    <td className="py-3 pr-2">
-                      RM {transaction.amount}
-                    </td>
-
-                    <td className="py-3 pr-2">
-                      {transaction.transaction_date
-                      ? new Date(
-                        transaction.transaction_date
-                      ).toLocaleDateString("en-GB")
-                      : "No Date"}
-                    </td>
-
-                    <td className="py-3 pr-2">
+                    <div className="flex gap-2">
                       
-                      <div className="flex gap-2">
-                        
-                        <button
-                        onClick={() =>
-                          handleEdit(transaction)
-                        }
-                        className="bg-blue-500 px-2 py-1 rounded-lg text-xs md:text-sm"
-                        >
-                          Edit
-                        </button>
+                      <button
+                      onClick={() =>
+                        handleEdit(transaction)
+                      }
+                      className="bg-blue-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                      >
+                        Edit
+                      </button>
 
-                        <button
-                        onClick={() =>
-                          handleDelete(transaction.id)
-                        }
-                        className="bg-red-500 px-2 py-1 rounded-lg text-xs md:text-sm"
-                        >
-                          Delete
-                        </button>
+                      <button
+                      onClick={() =>
+                        handleDelete(transaction.id)
+                      }
+                      className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                      >
+                        Delete
+                      </button>
 
-                      </div>
+                    </div>
 
-                    </td>
+                  </td>
 
-                  </tr>
+                </tr>
 
-                  )
-                )
+              ))
 
-              ) : (
+            ) : (
+            
+            <tr>
               
-              <tr>
-                
-                <td
+              <td
                 colSpan="5"
                 className="text-center py-10 text-zinc-500"
-                >
-                  No transactions found.
-                </td>
+              >
+                No transactions found.
+              </td>
 
-              </tr>
+            </tr>
 
-              )}
+            )}
 
             </tbody>
 
           </table>
+
+        </div>
+
+        <div className="md:hidden space-y-4">
+          
+          {filteredTransactions.length > 0 ? (
+            
+            filteredTransactions.map((transaction) => (
+            
+            <div
+              key={transaction.id}
+              className="bg-zinc-800 p-4 rounded-2xl"
+            >
+              
+              <div className="flex items-center justify-between mb-3">
+                
+                <div>
+                  
+                  <p className="text-sm text-zinc-400">
+                    {transaction.type}
+                  </p>
+
+                  <h3 className="text-lg font-bold">
+                    {transaction.category}
+                  </h3>
+
+                </div>
+
+                <p className="text-lg font-bold">
+                  RM {transaction.amount}
+                </p>
+
+              </div>
+
+              <p className="text-sm text-zinc-400 mb-4">
+                {transaction.transaction_date
+                ? new Date(
+                  transaction.transaction_date
+                ).toLocaleDateString("en-GB")
+                : "No Date"}
+              </p>
+
+              <div className="flex gap-2">
+                
+                <button
+                  onClick={() =>
+                    handleEdit(transaction)
+                  }
+                  className="bg-blue-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() =>
+                    handleDelete(transaction.id)
+                  }
+                  className="bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02]"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+            ))
+
+          ) : (
+          
+          <div className="text-center py-10 text-zinc-500">
+            No transactions found.
+          </div>
+
+          )}
 
         </div>
 

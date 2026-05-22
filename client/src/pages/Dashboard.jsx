@@ -48,7 +48,7 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
 
-          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
 
             <h2 className="text-zinc-400">
               Total Balance
@@ -60,7 +60,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
 
             <h2 className="text-zinc-400">
               Total Income
@@ -72,7 +72,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="bg-zinc-900 p-6 rounded-2xl w-full">
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
 
             <h2 className="text-zinc-400">
               Total Expenses
