@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { loginUser } from "../services/authService";
-import toast
-from "react-hot-toast";
 
 function Login() {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -31,70 +29,123 @@ function Login() {
 
       const data = await loginUser(formData);
 
-      localStorage.setItem(
-        "token",
-        data.token
-      );
+      localStorage.setItem("token", data.token);
 
-      toast.success(
-        "Login successful"
-      );
+      toast.success("Login successful");
 
-      setLoading(false);
       window.location.href = "/dashboard";
-
     } catch (error) {
-
-      setLoading(false);
-
       console.error(error);
-
       toast.error("Login failed");
-
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+    <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-4">
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-zinc-900 p-8 rounded-2xl w-full max-w-md"
-      >
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-800">
 
-        <h1 className="text-white text-3xl font-bold mb-6">
-          Login
-        </h1>
+        <div className="hidden md:flex flex-col justify-between p-10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-blue-950">
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 text-white mb-4"
-        />
+          <div>
+            <h1 className="text-5xl font-bold mb-6">
+              FinSight AI
+            </h1>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 text-white mb-6"
-        />
+            <p className="text-zinc-300 text-lg leading-relaxed">
+              Your intelligent financial dashboard for tracking transactions,
+              understanding spending habits, and generating AI-powered money insights.
+            </p>
+          </div>
 
-        <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-white text-black p-3 rounded-lg font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
-        >
-          
-          {loading
-          ? "Logging in..."
-          : "Login"}
+          <div className="grid grid-cols-1 gap-4 mt-10">
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                AI Financial Score
+              </h3>
+              <p className="text-sm text-zinc-300">
+                Get smart evaluations of your financial health.
+              </p>
+            </div>
 
-        </button>
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                Smart Analytics
+              </h3>
+              <p className="text-sm text-zinc-300">
+                Visualize income, expenses, categories, and trends.
+              </p>
+            </div>
 
-      </form>
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                PDF Reports
+              </h3>
+              <p className="text-sm text-zinc-300">
+                Export clean financial reports anytime.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="p-8 md:p-12">
+
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-2">
+              Welcome back
+            </h2>
+
+            <p className="text-zinc-400">
+              Login to continue managing your finances.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-white text-black p-4 rounded-xl font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+          </form>
+
+          <p className="text-zinc-400 text-center mt-6">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-blue-400 hover:text-blue-300 font-semibold"
+            >
+              Create account
+            </Link>
+          </p>
+
+        </div>
+
+      </div>
 
     </div>
   );

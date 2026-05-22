@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { registerUser } from "../services/authService";
 
 function Register() {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -12,6 +12,8 @@ function Register() {
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -24,64 +26,136 @@ function Register() {
     e.preventDefault();
 
     try {
+      setLoading(true);
 
       await registerUser(formData);
 
+      toast.success("Account created successfully");
+
       navigate("/login");
-
     } catch (error) {
-
       console.error(error);
-
-      alert("Registration failed");
-
+      toast.error("Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+    <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-4">
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-zinc-900 p-8 rounded-2xl w-full max-w-md"
-      >
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-800">
 
-        <h1 className="text-white text-3xl font-bold mb-6">
-          Register
-        </h1>
+        <div className="hidden md:flex flex-col justify-between p-10 bg-gradient-to-br from-blue-950 via-zinc-950 to-zinc-900">
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 text-white mb-4"
-        />
+          <div>
+            <h1 className="text-5xl font-bold mb-6">
+              Start with FinSight AI
+            </h1>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 text-white mb-4"
-        />
+            <p className="text-zinc-300 text-lg leading-relaxed">
+              Create your account and start tracking your money with AI-powered
+              insights, smart analytics, and financial reports.
+            </p>
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 text-white mb-6"
-        />
+          <div className="grid grid-cols-1 gap-4 mt-10">
 
-        <button
-          type="submit"
-          className="w-full bg-white text-black p-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02]"
-        >
-          Register
-        </button>
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                Track Every Transaction
+              </h3>
+              <p className="text-sm text-zinc-300">
+                Record income and expenses in one clean dashboard.
+              </p>
+            </div>
 
-      </form>
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                Understand Spending
+              </h3>
+              <p className="text-sm text-zinc-300">
+                View categories, monthly trends, and visual analytics.
+              </p>
+            </div>
+
+            <div className="bg-white/10 p-5 rounded-2xl">
+              <h3 className="font-bold mb-1">
+                AI-Powered Advice
+              </h3>
+              <p className="text-sm text-zinc-300">
+                Generate financial health scores and practical recommendations.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="p-8 md:p-12">
+
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-2">
+              Create account
+            </h2>
+
+            <p className="text-zinc-400">
+              Sign up to start your financial journey.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-white text-black p-4 rounded-xl font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
+            >
+              {loading ? "Creating account..." : "Create Account"}
+            </button>
+
+          </form>
+
+          <p className="text-zinc-400 text-center mt-6">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-400 hover:text-blue-300 font-semibold"
+            >
+              Login
+            </Link>
+          </p>
+
+        </div>
+
+      </div>
 
     </div>
   );
