@@ -14,17 +14,21 @@ function Dashboard() {
     balance: 0,
   });
 
+  const [loading, setLoading] = useState(true);
+
   const fetchSummary = async () => {
 
     try {
+      setLoading(true);
 
       const data =
         await getFinancialSummary();
 
       setSummary(data);
+      setLoading(false);
 
     } catch (error) {
-
+      setLoading(false);
       console.error(error);
 
     }
@@ -54,9 +58,17 @@ function Dashboard() {
               Total Balance
             </h2>
 
+            {loading ? (
+              
+              <div className="h-10 w-40 bg-zinc-800 rounded animate-pulse mt-2" />
+
+            ) : (
+            
             <p className="text-3xl font-bold mt-2">
               RM {summary.balance}
             </p>
+
+            )}
 
           </div>
 
@@ -66,9 +78,17 @@ function Dashboard() {
               Total Income
             </h2>
 
+            {loading ? (
+              
+              <div className="h-10 w-40 bg-zinc-800 rounded animate-pulse mt-2" />
+
+            ) : (
+            
             <p className="text-3xl font-bold mt-2">
               RM {summary.totalIncome}
             </p>
+
+            )}
 
           </div>
 
@@ -78,9 +98,17 @@ function Dashboard() {
               Total Expenses
             </h2>
 
+            {loading ? (
+              
+              <div className="h-10 w-40 bg-zinc-800 rounded animate-pulse mt-2" />
+
+            ) : (
+            
             <p className="text-3xl font-bold mt-2">
               RM {summary.totalExpenses}
             </p>
+
+            )}
 
           </div>
 
