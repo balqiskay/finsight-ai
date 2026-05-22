@@ -92,6 +92,25 @@ function Login() {
         </div>
 
         <div className="p-8 md:p-12">
+          <div className="md:hidden mb-8 relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-700 p-6 border border-white/10 shadow-[0_0_40px_rgba(59,130,246,0.25)]">
+          
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/20 rounded-full blur-2xl" />
+
+            <div className="relative z-10">
+              <p className="text-sm text-blue-100 mb-2">
+                Welcome to
+              </p>
+
+              <h1 className="text-4xl font-extrabold mb-3">
+                FinSight AI
+              </h1>
+
+              <p className="text-blue-100 text-sm leading-relaxed">
+                Track money, analyze spending, generate AI insights, and export smart financial reports.
+              </p>
+            </div>
+
+          </div>
 
           <div className="mb-8">
             <h2 className="text-4xl font-bold mb-2">
