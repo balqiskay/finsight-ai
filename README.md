@@ -4,6 +4,13 @@ FinSight AI is a modern AI-powered personal finance management web application t
 
 ---
 
+## Live Demo
+
+Frontend: https://finsight-ai-lake.vercel.app  
+Backend API: https://finsight-ai-backend-6d3n.onrender.com
+
+---
+
 # Features
 
 - User Authentication (Login/Register)
