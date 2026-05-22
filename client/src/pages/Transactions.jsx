@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 
+import toast from "react-hot-toast";
+
 import {
   addTransaction,
   getTransactions,
@@ -72,12 +74,12 @@ function Transactions() {
       !formData.amount ||
       !formData.transaction_date
     ) {
-      alert("Please fill in category, amount, and date.");
+      toast.error("Please fill in category, amount, and date.");
       return;
     }
 
     if (Number(formData.amount) <= 0) {
-      alert("Amount must be greater than 0.");
+      toast.error("Amount must be greater than 0.");
       return;
     }
 
@@ -120,7 +122,7 @@ function Transactions() {
       
       console.error(error);
 
-      alert(
+      toast.error(
         "Failed to save transaction"
       );
 
@@ -228,22 +230,43 @@ function Transactions() {
           Add Transaction
         </h2>
 
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        >
-
-          <option value="expense">
+        <div className="flex gap-2 mb-4">
+          
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({
+                ...formData,
+                type: "expense",
+              })
+            }
+            className={`flex-1 p-3 rounded-lg transition duration-300 ${
+              formData.type === "expense"
+              ? "bg-red-500 text-white font-semibold"
+              : "bg-zinc-800 text-white"
+            }`}
+          >
             Expense
-          </option>
+          </button>
 
-          <option value="income">
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({
+                ...formData,
+                type: "income",
+              })
+            }
+            className={`flex-1 p-3 rounded-lg transition duration-300 ${
+              formData.type === "income"
+              ? "bg-green-500 text-white font-semibold"
+              : "bg-zinc-800 text-white"
+            }`}
+          >
             Income
-          </option>
+          </button>
 
-        </select>
+        </div>
 
         <input
           type="text"
@@ -314,29 +337,54 @@ function Transactions() {
           className="flex-1 p-3 rounded-lg bg-zinc-800"
           />
 
-          <select
-          value={filterType}
-          onChange={(e) =>
-            setFilterType(
-              e.target.value
-            )
-          }
-          className="p-3 rounded-lg bg-zinc-800"
-          >
+          <div className=" flex flex-wrap gap-2">
             
-            <option value="all">
+            <button
+              type="button"
+              onClick={() =>
+                setFilterType("all")
+              }
+              className={`flex-1 p-3 rounded-lg transition duration-300
+              ${
+                filterType === "all"
+                ? "bg-white text-black font-semibold"
+                : "bg-zinc-800 text-white"
+              }`}
+            >
               All
-            </option>
+            </button>
 
-            <option value="income">
+            <button
+              type="button"
+              onClick={() =>
+                setFilterType("income")
+              }
+              className={`flex-1 p-3 rounded-lg transition duration-300
+              ${
+                filterType === "income"
+                ? "bg-green-500 text-white font-semibold"
+                : "bg-zinc-800 text-white"
+              }`}
+            >
               Income
-            </option>
+            </button>
 
-            <option value="expense">
+            <button
+              type="button"
+              onClick={() =>
+                setFilterType("expense")
+              }
+              className={`flex-1 p-3 rounded-lg transition duration-300
+              ${
+                filterType === "expense"
+                ? "bg-red-500 text-white font-semibold"
+                : "bg-zinc-800 text-white"
+              }`}
+            >
               Expense
-            </option>
+            </button>
 
-          </select>
+          </div>
 
         </div>
 
