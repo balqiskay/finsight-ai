@@ -97,6 +97,14 @@ function Sidebar() {
             <PieChart size={20} />
             Analytics
           </button>
+
+          <button
+            onClick={() => handleNavigate("/savings")}
+            className={navItemClass("/savings")}
+          >
+            <Wallet size={20} />
+            Savings Goals
+          </button>
         </nav>
 
         <button

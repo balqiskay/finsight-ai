@@ -4,11 +4,14 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
+import Savings from "./pages/Savings";
 
 function App() {
 
@@ -64,7 +67,17 @@ function App() {
       }
       />
 
+      <Route
+      path="/savings"
+      element={
+       <ProtectedRoute>
+        <Savings />
+       </ProtectedRoute>
+      }
+      />
+
     </Routes>
+    
   );
 }
 
