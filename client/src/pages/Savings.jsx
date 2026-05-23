@@ -298,8 +298,16 @@ function Savings() {
             );
           })
         ) : (
-          <div className="text-zinc-500">
-            No savings goals yet.
+          <div className="col-span-full bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center">
+            
+            <h2 className="text-2xl font-bold mb-3">
+                No Savings Goals Yet
+            </h2>
+
+            <p className="text-zinc-400">
+                Start creating savings goals to track your financial progress and achieve your future targets.
+            </p>
+
           </div>
         )}
       </div>
