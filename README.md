@@ -51,6 +51,12 @@ Backend API: https://finsight-ai-backend-6d3n.onrender.com
 - OpenAI API
 - jsPDF
 
+## Deployment
+
+- Vercel (Frontend Hosting)
+- Render (Backend Hosting)
+- Neon PostgreSQL (Cloud Database)
+
 ---
 
 # Pages
@@ -116,6 +122,17 @@ FinSight AI is fully responsive and optimized for:
 
 ---
 
+# AI Capabilities
+
+FinSight AI uses OpenAI-powered analysis to:
+- Analyze spending behavior
+- Generate financial recommendations
+- Evaluate financial health score
+- Detect overspending patterns
+- Provide budgeting insights
+
+---
+
 # Future Improvements
 
 - Recurring transactions
@@ -126,6 +143,27 @@ FinSight AI is fully responsive and optimized for:
 - Cloud deployment
 
 ---
+
+## Upcoming Features
+
+- Savings goals tracking
+- Recurring transactions
+- AI spending predictions
+- Overspending alerts
+- Financial forecasting
+- Advanced analytics
+- SaaS premium features
+
+---
+
+# Production Status
+
+FinSight AI is fully deployed and production accessible with:
+- Live frontend deployment
+- Live backend API
+- Cloud PostgreSQL database
+- Responsive cross-device support
+- Real-time AI-powered analytics
 
 # Author
 
