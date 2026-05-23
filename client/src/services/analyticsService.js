@@ -61,3 +61,24 @@ async () => {
   return response.data;
 
 };
+
+export const getAdvancedAnalytics =
+async () => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response =
+    await axios.get(
+      `${API}/advanced`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.data;
+
+};

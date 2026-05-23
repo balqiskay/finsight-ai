@@ -25,6 +25,7 @@ import {
 import {
   getCategoryBreakdown,
   getMonthlyAnalytics,
+  getAdvancedAnalytics
 } from "../services/analyticsService";
 
 function Analytics() {
@@ -36,6 +37,8 @@ function Analytics() {
   const [aiInsights, setAIInsights] = useState("");
 
   const [loadingAI, setLoadingAI] = useState(false);
+
+  const [advancedAnalytics, setAdvancedAnalytics] = useState(null);
 
   const scoreMatch =
   aiInsights.match(
@@ -131,11 +134,29 @@ const insightsText =
     }
 
   };
+
+  const fetchAdvancedAnalytics =
+  async () => {
+    
+    try {
+      
+      const data = await getAdvancedAnalytics();
+
+      setAdvancedAnalytics(data);
+
+    } catch (error) {
+      
+      console.error(error);
+
+    }
+
+  };
   
   useEffect(() => {
 
     fetchCategoryData();
     fetchMonthlyData();
+    fetchAdvancedAnalytics();
 
   }, []);
 
@@ -205,6 +226,58 @@ const insightsText =
       <h1 className="text-2xl md:text-4xl font-bold mb-8">
         Analytics
       </h1>
+
+      {advancedAnalytics && (
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+          
+          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
+            <p className="text-zinc-400 mb-2">
+              Average Expense
+            </p>
+
+            <h2 className="text-3xl font-bold">
+              RM {advancedAnalytics.averageExpense}
+            </h2>
+          </div>
+
+          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
+            <p className="text-zinc-400 mb-2">
+              Savings Rate
+            </p>
+
+            <h2 className="text-3xl font-bold text-green-400">
+              {advancedAnalytics.savingsRate}%
+            </h2>
+          </div>
+
+          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
+            <p className="text-zinc-400 mb-2">
+              Expense Ratio
+            </p>
+
+            <h2 className="text-3xl font-bold text-red-400">
+              {advancedAnalytics.expenseRatio}%
+            </h2>
+          </div>
+
+          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
+            <p className="text-zinc-400 mb-2">
+              Highest Spending
+            </p>
+
+            <h2 className="text-2xl font-bold">
+              {
+              advancedAnalytics
+              .highestSpendingCategory
+              ?.category || "N/A"
+              }
+            </h2>
+          </div>
+
+        </div>
+
+      )}
 
       <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl">
 

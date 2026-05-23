@@ -8,6 +8,7 @@ const {
   getFinancialSummary,
   getCategoryBreakdown,
   getMonthlyAnalytics,
+  getAdvancedAnalytics,
 } = require("../controllers/analyticsController");
 
 router.get(
@@ -26,6 +27,12 @@ router.get(
   "/monthly",
   authMiddleware,
   getMonthlyAnalytics
+);
+
+router.get(
+  "/advanced",
+  authMiddleware,
+  getAdvancedAnalytics
 );
 
 module.exports = router;

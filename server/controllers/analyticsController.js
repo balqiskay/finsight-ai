@@ -146,3 +146,124 @@ async (req, res) => {
   }
 
 };
+
+exports.getAdvancedAnalytics =
+async (req, res) => {
+
+  try {
+
+    const userId =
+      req.user.userId;
+
+    const result =
+      await pool.query(
+        `
+        SELECT
+          COALESCE(
+            SUM(
+              CASE
+                WHEN type = 'income'
+                THEN amount
+                ELSE 0
+              END
+            ), 0
+          ) AS total_income,
+
+          COALESCE(
+            SUM(
+              CASE
+                WHEN type = 'expense'
+                THEN amount
+                ELSE 0
+              END
+            ), 0
+          ) AS total_expenses,
+
+          COALESCE(
+            AVG(
+              CASE
+                WHEN type = 'expense'
+                THEN amount
+              END
+            ), 0
+          ) AS average_expense
+
+        FROM transactions
+
+        WHERE user_id = $1
+        `,
+        [userId]
+      );
+
+    const categoryResult =
+      await pool.query(
+        `
+        SELECT
+          category,
+          SUM(amount) AS total
+
+        FROM transactions
+
+        WHERE
+          user_id = $1
+          AND type = 'expense'
+
+        GROUP BY category
+
+        ORDER BY total DESC
+
+        LIMIT 1
+        `,
+        [userId]
+      );
+
+    const data =
+      result.rows[0];
+
+    const totalIncome =
+      Number(data.total_income);
+
+    const totalExpenses =
+      Number(data.total_expenses);
+
+    const savingsRate =
+      totalIncome > 0
+        ? (
+            ((totalIncome - totalExpenses) /
+              totalIncome) *
+            100
+          ).toFixed(1)
+        : 0;
+
+    const expenseRatio =
+      totalIncome > 0
+        ? (
+            (totalExpenses /
+              totalIncome) *
+            100
+          ).toFixed(1)
+        : 0;
+
+    res.status(200).json({
+      totalIncome,
+      totalExpenses,
+      averageExpense:
+        Number(data.average_expense).toFixed(2),
+      highestSpendingCategory:
+        categoryResult.rows[0] || null,
+      savingsRate,
+      expenseRatio,
+    });
+
+  } catch (error) {
+
+    console.error(error.message);
+
+    res.status(500).json({
+      message:
+        "Failed to fetch advanced analytics",
+    });
+
+  }
+
+};
