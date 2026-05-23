@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
 import Savings from "./pages/Savings";
+import Recurring from "./pages/Recurring";
 
 function App() {
 
@@ -74,6 +75,15 @@ function App() {
         <Savings />
        </ProtectedRoute>
       }
+      />
+
+      <Route
+        path="/recurring"
+        element={
+         <ProtectedRoute>
+          <Recurring />
+         </ProtectedRoute>
+        }
       />
 
     </Routes>

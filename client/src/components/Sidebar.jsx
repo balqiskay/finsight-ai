@@ -105,6 +105,14 @@ function Sidebar() {
             <Wallet size={20} />
             Savings Goals
           </button>
+
+          <button
+            onClick={() => handleNavigate("/recurring")}
+            className={navItemClass("/recurring")}
+          >
+            <Wallet size={20} />
+            Recurring
+          </button>
         </nav>
 
         <button
