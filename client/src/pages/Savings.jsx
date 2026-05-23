@@ -224,14 +224,33 @@ function Savings() {
                   )
                 : 0;
 
+                const progressColor =
+                  progress >= 100
+                    ? "bg-green-500"
+                    : progress >= 70
+                      ? "bg-blue-500"
+                      : progress >= 40
+                        ? "bg-yellow-500"
+                        : "bg-red-500";
+
             return (
               <div
                 key={goal.id}
                 className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800"
               >
-                <h2 className="text-2xl font-bold mb-2">
-                  {goal.goal_name}
-                </h2>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                    
+                    <h2 className="text-2xl font-bold">
+                        {goal.goal_name}
+                    </h2>
+
+                    {progress >= 100 && (
+                        <span className="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full font-semibold">
+                            Completed
+                        </span>
+                     )}
+
+                </div>
 
                 <p className="text-zinc-400 mb-4">
                   RM {goal.current_amount} / RM {goal.target_amount}
@@ -239,9 +258,9 @@ function Savings() {
 
                 <div className="w-full bg-zinc-800 rounded-full h-3 mb-3">
                   <div
-                    className="bg-blue-500 h-3 rounded-full"
+                    className={`${progressColor} h-3 rounded-full transition-all duration-700`}
                     style={{
-                      width: `${progress}%`,
+                        width: `${progress}%`,
                     }}
                   />
                 </div>
