@@ -25,7 +25,8 @@ import {
 import {
   getCategoryBreakdown,
   getMonthlyAnalytics,
-  getAdvancedAnalytics
+  getAdvancedAnalytics,
+  getSpendingAlerts
 } from "../services/analyticsService";
 
 function Analytics() {
@@ -39,6 +40,8 @@ function Analytics() {
   const [loadingAI, setLoadingAI] = useState(false);
 
   const [advancedAnalytics, setAdvancedAnalytics] = useState(null);
+
+  const [alerts, setAlerts] = useState([]);
 
   const scoreMatch =
   aiInsights.match(
@@ -151,12 +154,30 @@ const insightsText =
     }
 
   };
+
+  const fetchSpendingAlerts =
+  async () => {
+    
+    try {
+      
+      const data = await getSpendingAlerts();
+
+      setAlerts(data);
+
+    } catch (error) {
+      
+      console.error(error);
+
+    }
+
+  };
   
   useEffect(() => {
 
     fetchCategoryData();
     fetchMonthlyData();
     fetchAdvancedAnalytics();
+    fetchSpendingAlerts();
 
   }, []);
 
@@ -276,6 +297,47 @@ const insightsText =
           </div>
 
         </div>
+
+      )}
+
+      {alerts.length > 0 && (
+        
+        <div className="space-y-4 mb-10">
+          
+          {alerts.map((alert, index) => (
+            
+            <div
+             key={index}
+             className={`p-5 rounded-2xl border transition duration-300 hover:-translate-y-1 ${
+              alert.type === "danger"
+              ? "bg-red-500/10 border-red-500/30"
+              : alert.type === "warning"
+              ? "bg-yellow-500/10 border-yellow-500/30"
+              : "bg-green-500/10 border-green-500/30"
+            }`}
+            >
+
+            <h2
+            className={`text-xl font-bold mb-2 ${
+              alert.type === "danger"
+              ? "text-red-400"
+              : alert.type === "warning"
+              ? "text-yellow-400"
+              : "text-green-400"
+            }`}
+            >
+              {alert.title}
+            </h2>
+
+            <p className="text-zinc-300">
+              {alert.message}
+            </p>
+
+          </div>
+
+        ))}
+
+      </div>
 
       )}
 

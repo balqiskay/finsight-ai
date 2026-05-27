@@ -82,3 +82,24 @@ async () => {
   return response.data;
 
 };
+
+export const getSpendingAlerts =
+async () => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response =
+    await axios.get(
+      `${API}/alerts`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.data;
+
+};
