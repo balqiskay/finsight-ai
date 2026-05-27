@@ -26,7 +26,8 @@ import {
   getCategoryBreakdown,
   getMonthlyAnalytics,
   getAdvancedAnalytics,
-  getSpendingAlerts
+  getSpendingAlerts,
+  getFinancialForecast,
 } from "../services/analyticsService";
 
 function Analytics() {
@@ -42,6 +43,8 @@ function Analytics() {
   const [advancedAnalytics, setAdvancedAnalytics] = useState(null);
 
   const [alerts, setAlerts] = useState([]);
+
+  const [forecast, setForecast] = useState(null);
 
   const scoreMatch =
   aiInsights.match(
@@ -171,6 +174,23 @@ const insightsText =
     }
 
   };
+
+  const fetchForecast =
+  async () => {
+    
+    try {
+      
+      const data = await getFinancialForecast();
+
+      setForecast(data);
+
+    } catch (error) {
+      
+      console.error(error);
+
+    }
+
+  };
   
   useEffect(() => {
 
@@ -178,7 +198,7 @@ const insightsText =
     fetchMonthlyData();
     fetchAdvancedAnalytics();
     fetchSpendingAlerts();
-
+    fetchForecast();
   }, []);
 
   const COLORS = [
@@ -340,6 +360,78 @@ const insightsText =
       </div>
 
       )}
+
+      {forecast && (
+            
+            <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10 transition duration-300 hover:bg-zinc-800">
+              
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                
+                <div>
+                  
+                  <h2 className="text-2xl font-bold mb-2">
+                    Financial Forecast
+                  </h2>
+
+                  <p className="text-zinc-400">
+                    {forecast.message}
+                  </p>
+
+                </div>
+
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div className="bg-zinc-800 p-6 rounded-2xl">
+                  
+                  <p className="text-zinc-400 mb-2">
+                    Projected Income
+                  </p>
+
+                  <h2 className="text-3xl font-bold text-green-400">
+                    RM {forecast.projectedIncome}
+                  </h2>
+
+                </div>
+
+                <div className="bg-zinc-800 p-6 rounded-2xl">
+                  
+                  <p className="text-zinc-400 mb-2">
+                    Projected Expenses
+                  </p>
+
+                  <h2 className="text-3xl font-bold text-red-400">
+                    RM {forecast.projectedExpenses}
+                  </h2>
+
+                </div>
+
+                <div className="bg-zinc-800 p-6 rounded-2xl">
+                  
+                  <p className="text-zinc-400 mb-2">
+                    Projected Balance
+                  </p>
+
+                  <h2
+                  className={`text-3xl font-bold ${
+                    Number(
+                      forecast.projectedBalance
+                    ) >= 0
+                    ? "text-blue-400"
+                    : "text-red-400"
+                  }`}
+                  >
+                    RM {forecast.projectedBalance}
+                  </h2>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
 
       <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl">
 

@@ -103,3 +103,24 @@ async () => {
   return response.data;
 
 };
+
+export const getFinancialForecast =
+async () => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response =
+    await axios.get(
+      `${API}/forecast`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.data;
+
+};

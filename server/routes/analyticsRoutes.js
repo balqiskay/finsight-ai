@@ -10,6 +10,7 @@ const {
   getMonthlyAnalytics,
   getAdvancedAnalytics,
   getSpendingAlerts,
+  getFinancialForecast,
 } = require("../controllers/analyticsController");
 
 router.get(
@@ -40,6 +41,12 @@ router.get(
   "/alerts",
   authMiddleware,
   getSpendingAlerts
+);
+
+router.get(
+  "/forecast",
+  authMiddleware,
+  getFinancialForecast
 );
 
 module.exports = router;

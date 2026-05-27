@@ -422,3 +422,121 @@ async (req, res) => {
   }
 
 };
+
+exports.getFinancialForecast =
+async (req, res) => {
+
+  try {
+
+    const userId =
+      req.user.userId;
+
+    const result =
+      await pool.query(
+        `
+        SELECT
+          DATE_TRUNC(
+            'month',
+            transaction_date
+          ) AS month,
+
+          COALESCE(
+            SUM(
+              CASE
+                WHEN type = 'income'
+                THEN amount
+                ELSE 0
+              END
+            ), 0
+          ) AS income,
+
+          COALESCE(
+            SUM(
+              CASE
+                WHEN type = 'expense'
+                THEN amount
+                ELSE 0
+              END
+            ), 0
+          ) AS expenses
+
+        FROM transactions
+
+        WHERE user_id = $1
+
+        GROUP BY
+          DATE_TRUNC(
+            'month',
+            transaction_date
+          )
+
+        ORDER BY month DESC
+
+        LIMIT 3
+        `,
+        [userId]
+      );
+
+    const months =
+      result.rows;
+
+    if (months.length === 0) {
+      return res.status(200).json({
+        projectedIncome: 0,
+        projectedExpenses: 0,
+        projectedBalance: 0,
+        message:
+          "Add transactions to generate a financial forecast.",
+      });
+    }
+
+    const totalIncome =
+      months.reduce(
+        (sum, item) =>
+          sum + Number(item.income),
+        0
+      );
+
+    const totalExpenses =
+      months.reduce(
+        (sum, item) =>
+          sum + Number(item.expenses),
+        0
+      );
+
+    const projectedIncome =
+      totalIncome / months.length;
+
+    const projectedExpenses =
+      totalExpenses / months.length;
+
+    const projectedBalance =
+      projectedIncome -
+      projectedExpenses;
+
+    res.status(200).json({
+      projectedIncome:
+        projectedIncome.toFixed(2),
+
+      projectedExpenses:
+        projectedExpenses.toFixed(2),
+
+      projectedBalance:
+        projectedBalance.toFixed(2),
+
+      message:
+        "Forecast is based on your recent monthly financial activity.",
+    });
+
+  } catch (error) {
+
+    console.error(error.message);
+
+    res.status(500).json({
+      message:
+        "Failed to generate financial forecast",
+    });
+
+  }
+
+};
