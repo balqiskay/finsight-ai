@@ -67,7 +67,8 @@ exports.getGoals = async (req, res) => {
     const userId = req.user.userId;
 
     const result = await pool.query(
-      `SELECT * FROM savings_goals
+      `SELECT id, user_id, goal_name, target_amount, current_amount, TO_CHAR(deadline, 'YYYY-MM-DD') AS deadline, created_at
+      FROM savings_goals
       WHERE user_id = $1
       ORDER BY created_at DESC`,
       [userId]

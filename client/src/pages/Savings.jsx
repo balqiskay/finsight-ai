@@ -121,8 +121,9 @@ function Savings() {
       goal_name: goal.goal_name,
       target_amount: goal.target_amount,
       current_amount: goal.current_amount,
-      deadline: goal.deadline
-        ? new Date(goal.deadline).toISOString().split("T")[0]
+      deadline:
+      goal.deadline
+        ? goal.deadline.slice(0, 10)
         : "",
     });
   };

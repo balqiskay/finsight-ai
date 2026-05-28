@@ -50,7 +50,8 @@ exports.getTransactions = async (req, res) => {
     const userId = req.user.userId;
 
     const transactions = await pool.query(
-      `SELECT * FROM transactions
+      `SELECT id, user_id, type, category, amount, description, TO_CHAR(transaction_date, 'YYYY-MM-DD') AS transaction_date, created_at
+       FROM transactions
       WHERE user_id = $1
       ORDER BY transaction_date DESC`,
       [userId]

@@ -385,6 +385,10 @@ const insightsText =
                     {forecast.message}
                   </p>
 
+                  <div className="mt-4 inline-block bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full font-semibold">
+                    {forecast.trend}
+                  </div>
+
                 </div>
 
               </div>
@@ -434,6 +438,18 @@ const insightsText =
                   </h2>
 
                 </div>
+
+              </div>
+
+              <div className="mt-6 bg-zinc-800 p-5 rounded-2xl">
+                
+                <h3 className="text-xl font-bold mb-2">
+                  Forecast Insight
+                </h3>
+
+                <p className="text-zinc-400">
+                  {forecast.trendMessage}
+                </p>
 
               </div>
 

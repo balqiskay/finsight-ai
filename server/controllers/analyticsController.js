@@ -470,9 +470,7 @@ async (req, res) => {
             transaction_date
           )
 
-        ORDER BY month DESC
-
-        LIMIT 3
+        ORDER BY month ASC
         `,
         [userId]
       );
@@ -485,34 +483,84 @@ async (req, res) => {
         projectedIncome: 0,
         projectedExpenses: 0,
         projectedBalance: 0,
-        message:
+        trend: "No Data",
+        trendMessage:
           "Add transactions to generate a financial forecast.",
       });
     }
 
+    const recentMonths =
+      months.slice(-3);
+
     const totalIncome =
-      months.reduce(
+      recentMonths.reduce(
         (sum, item) =>
           sum + Number(item.income),
         0
       );
 
     const totalExpenses =
-      months.reduce(
+      recentMonths.reduce(
         (sum, item) =>
           sum + Number(item.expenses),
         0
       );
 
     const projectedIncome =
-      totalIncome / months.length;
+      totalIncome / recentMonths.length;
 
     const projectedExpenses =
-      totalExpenses / months.length;
+      totalExpenses / recentMonths.length;
 
     const projectedBalance =
       projectedIncome -
       projectedExpenses;
+
+    let trend =
+      "Stable";
+
+    let trendMessage =
+      "Your financial trend appears stable based on your recent activity.";
+
+    if (recentMonths.length >= 2) {
+      const firstMonth =
+        recentMonths[0];
+
+      const lastMonth =
+        recentMonths[
+          recentMonths.length - 1
+        ];
+
+      const firstExpenses =
+        Number(firstMonth.expenses);
+
+      const lastExpenses =
+        Number(lastMonth.expenses);
+
+      if (
+        firstExpenses > 0 &&
+        lastExpenses >
+          firstExpenses * 1.2
+      ) {
+        trend = "Rising Expenses";
+        trendMessage =
+          "Your expenses appear to be increasing. Consider reviewing non-essential spending.";
+      } else if (
+        firstExpenses > 0 &&
+        lastExpenses <
+          firstExpenses * 0.8
+      ) {
+        trend = "Improving";
+        trendMessage =
+          "Your expenses appear to be decreasing. This is a positive financial trend.";
+      } else if (
+        projectedBalance < 0
+      ) {
+        trend = "Risky";
+        trendMessage =
+          "Your projected expenses may exceed your income. Review your spending plan carefully.";
+      }
+    }
 
     res.status(200).json({
       projectedIncome:
@@ -524,6 +572,8 @@ async (req, res) => {
       projectedBalance:
         projectedBalance.toFixed(2),
 
+      trend,
+      trendMessage,
       message:
         "Forecast is based on your recent monthly financial activity.",
     });

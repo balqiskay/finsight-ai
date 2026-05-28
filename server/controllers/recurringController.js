@@ -44,7 +44,8 @@ exports.getRecurringTransactions = async (req, res) => {
     const userId = req.user.userId;
 
     const result = await pool.query(
-      `SELECT * FROM recurring_transactions
+      `SELECT id, user_id, type, category, amount, description, frequency, TO_CHAR(start_date, 'YYYY-MM-DD') AS start_date, created_at
+      FROM recurring_transactions
       WHERE user_id = $1
       ORDER BY created_at DESC`,
       [userId]

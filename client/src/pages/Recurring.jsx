@@ -145,11 +145,8 @@ function Recurring() {
       frequency:
         transaction.frequency,
       start_date:
-        new Date(
-          transaction.start_date
-        )
-          .toISOString()
-          .split("T")[0],
+      transaction.start_date
+      ?.slice(0, 10),
     });
   };
 

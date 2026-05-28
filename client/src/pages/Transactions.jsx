@@ -179,9 +179,8 @@ function Transactions() {
       description: transaction.description,
 
       transaction_date:
-      new Date(
-        transaction.transaction_date
-        ).toISOString().split("T")[0]
+      transaction.transaction_date
+      ?.slice(0, 10),
     });
 
   };
