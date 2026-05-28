@@ -356,14 +356,48 @@ function Recurring() {
                   </p>
                 )}
 
-                <p className="text-sm text-zinc-500 mb-4">
-                  Starts:{" "}
-                  {new Date(
-                    transaction.start_date
-                  ).toLocaleDateString(
-                    "en-GB"
-                  )}
-                </p>
+                {transaction.start_date && (() => {
+                  
+                  const startDate = new Date(transaction.start_date + "T00:00:00");
+
+                  const nextDate = new Date(startDate);
+
+                  const today = new Date();
+
+                  while (nextDate < today) {
+                    
+                    if (transaction.frequency === "Monthly") {
+                      nextDate.setMonth(nextDate.getMonth() + 1);
+                    } else if (transaction.frequency === "Weekly") {
+                      nextDate.setDate(nextDate.getDate() + 7);
+                    } else if (transaction.frequency === "Yearly") {
+                      nextDate.setFullYear(nextDate.getFullYear() + 1);
+                    } else if (transaction.frequency === "Daily") {
+                      nextDate.setDate(nextDate.getDate() + 1);
+                    } else {
+                      break;
+                    }
+
+                  }
+
+                  return (
+                  <div className="mb-4">
+                    
+                    <p className="text-sm text-zinc-500 mb-1">
+                      Starts:{" "}
+                      {new Date(transaction.start_date + "T00:00:00")
+                      .toLocaleDateString("en-GB")}
+                    </p>
+
+                    <p className="text-sm font-semibold text-blue-400">
+                      Next recurring:{" "}
+                      {nextDate.toLocaleDateString("en-GB")}
+                    </p>
+
+                  </div>
+                );
+
+                })()}
 
                 <div className="flex gap-2">
                   <button
