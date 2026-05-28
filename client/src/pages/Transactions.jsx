@@ -16,6 +16,9 @@ function Transactions() {
   const [transactions, setTransactions] =
     useState([]);
 
+  const [loadingTransactions, setLoadingTransactions] =
+  useState(true);
+
   const [formData, setFormData] =
     useState({
       type: "expense",
@@ -34,6 +37,8 @@ function Transactions() {
   const fetchTransactions =
     async () => {
 
+      setLoadingTransactions(true);
+      
       try {
 
         const data =
@@ -44,6 +49,10 @@ function Transactions() {
       } catch (error) {
 
         console.error(error);
+
+      } finally {
+        
+        setLoadingTransactions(false);
 
       }
 
@@ -492,8 +501,22 @@ function Transactions() {
                 colSpan="5"
                 className="text-center py-10 text-zinc-500"
               >
-                No transactions found.
-              </td>
+                {loadingTransactions ? (
+                  "Loading transactions..."
+                ) : (
+                <div className="text-center py-6">
+                  
+                  <h2 className="text-2xl font-bold mb-3 text-white">
+                    No Transactions Yet
+                  </h2>
+
+                  <p className="text-zinc-400 max-w-lg mx-auto">
+                    Add your first income or expense transaction to begin tracking your financial activity and unlock analytics insights.
+                  </p>
+
+                </div>
+              )}
+            </td>
 
             </tr>
 
@@ -576,8 +599,22 @@ function Transactions() {
           ) : (
           
           <div className="text-center py-10 text-zinc-500">
-            No transactions found.
-          </div>
+            {loadingTransactions ? (
+              "Loading transactions..."
+            ) : (
+            <div className="text-center py-6">
+              
+              <h2 className="text-2xl font-bold mb-3 text-white">
+                No Transactions Yet
+              </h2>
+
+              <p className="text-zinc-400 max-w-lg mx-auto">
+                Add your first income or expense transaction to begin tracking your financial activity and unlock analytics insights.
+              </p>
+
+            </div>
+          )}
+        </div>
 
           )}
 

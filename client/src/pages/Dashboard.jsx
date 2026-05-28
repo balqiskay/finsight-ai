@@ -5,8 +5,11 @@ import {
 } from "../services/analyticsService";
 
 import MainLayout from "../layouts/MainLayout";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+
+  const navigate = useNavigate();
 
   const [summary, setSummary] = useState({
     totalIncome: 0,
@@ -46,16 +49,29 @@ function Dashboard() {
 
       <div className="w-full">
 
-        <h1 className="text-2xl md:text-4xl font-bold mb-8">
-          FinSight AI Dashboard
-        </h1>
+        <div className="mb-8">
+          
+          <p className="text-blue-400 font-semibold mb-2">
+            Welcome back 👋
+          </p>
+
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-3">
+            Your Financial Command Center
+          </h1>
+
+          <p className="text-zinc-400 max-w-2xl">
+            Track your money, monitor your goals, review your financial alerts,
+            and make smarter decisions with AI-powered insights.
+          </p>
+
+        </div>
 
         <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-700 p-8 md:p-12 rounded-3xl mb-8 shadow-[0_0_60px_rgba(59,130,246,0.35)] border border-white/10">
           <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl" />
           
           <h2 className="relative z-10 text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-            Welcome to your AI Finance Command Center
+            Take control of your financial future
           </h2>
 
           <p className="relative z-10 text-blue-100/90 text-lg md:text-xl max-w-3xl leading-relaxed">
@@ -82,6 +98,96 @@ function Dashboard() {
           </div>
 
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+          
+          <button
+            onClick={() => navigate("/transactions")}
+            className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl text-left transition duration-300 hover:bg-zinc-800 hover:-translate-y-1"
+          >
+            
+            <h2 className="text-xl font-bold mb-2">
+              Add Transaction
+            </h2>
+
+            <p className="text-zinc-400">
+              Start tracking your income and expenses.
+            </p>
+
+          </button>
+
+          <button
+            onClick={() => navigate("/savings")}
+            className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl text-left transition duration-300 hover:bg-zinc-800 hover:-translate-y-1"
+          >
+            
+            <h2 className="text-xl font-bold mb-2">
+              Create Savings Goal
+            </h2>
+
+            <p className="text-zinc-400">
+              Plan and monitor your financial targets.
+            </p>
+
+          </button>
+
+          <button
+            onClick={() => navigate("/analytics")}
+            className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl text-left transition duration-300 hover:bg-zinc-800 hover:-translate-y-1"
+          >
+            
+            <h2 className="text-xl font-bold mb-2">
+              View Analytics
+            </h2>
+
+            <p className="text-zinc-400">
+              Analyze your spending and financial trends.
+            </p>
+
+          </button>
+
+          <button
+            onClick={() => navigate("/analytics")}
+            className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl text-left transition duration-300 hover:bg-zinc-800 hover:-translate-y-1"
+          >
+            
+            <h2 className="text-xl font-bold mb-2">
+              Generate AI Insights
+            </h2>
+
+            <p className="text-zinc-400">
+              Receive smart financial recommendations.
+            </p>
+
+          </button>
+
+        </div>
+
+        {!loading &&
+         summary.totalIncome === 0 &&
+         summary.totalExpenses === 0 ? (
+         
+         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 text-center mb-10">
+          
+          <h2 className="text-3xl font-bold mb-4">
+            Start Your Financial Journey Today
+          </h2>
+
+          <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
+            Add your first income or expense transaction to unlock analytics,
+            AI financial insights, forecasting, savings tracking, and more.
+          </p>
+
+          <button
+            onClick={() => navigate("/transactions")}
+            className="bg-white text-black px-8 py-4 rounded-2xl font-bold transition duration-300 hover:scale-[1.02]"
+          >
+            Add First Transaction
+          </button>
+
+        </div>
+
+      ) : (
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
 
@@ -146,6 +252,8 @@ function Dashboard() {
           </div>
 
         </div>
+
+          )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           

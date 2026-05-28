@@ -13,6 +13,8 @@ import {
 function Savings() {
   const [goals, setGoals] = useState([]);
 
+  const [loadingGoals, setLoadingGoals] = useState(true);
+  
   const [formData, setFormData] = useState({
     goal_name: "",
     target_amount: "",
@@ -25,11 +27,15 @@ function Savings() {
   const [deletingId, setDeletingId] = useState(null);
 
   const fetchGoals = async () => {
+    setLoadingGoals(true);
+
     try {
       const data = await getSavingsGoals();
       setGoals(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoadingGoals(false);
     }
   };
 
@@ -212,7 +218,11 @@ function Savings() {
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {goals.length > 0 ? (
+        {loadingGoals ? (
+          <div className="col-span-full bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center text-zinc-400">
+            Loading savings goals...
+          </div>
+        ) : goals.length > 0 ? (
           goals.map((goal) => {
             const progress =
               Number(goal.target_amount) > 0

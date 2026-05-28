@@ -46,6 +46,8 @@ function Analytics() {
 
   const [forecast, setForecast] = useState(null);
 
+  const [loadingAnalytics, setLoadingAnalytics] = useState(true);
+
   const scoreMatch =
   aiInsights.match(
     /SCORE:\s*(\d+)/
@@ -79,6 +81,8 @@ const insightsText =
   const fetchCategoryData =
     async () => {
 
+      setLoadingAnalytics(true);
+
       try {
 
         const data =
@@ -89,6 +93,10 @@ const insightsText =
       } catch (error) {
 
         console.error(error);
+
+      } finally {
+        
+        setLoadingAnalytics(false);
 
       }
 
@@ -441,7 +449,11 @@ const insightsText =
 
         <div className="w-full flex justify-center">
           
-          {categoryData.length > 0 ? (
+          {loadingAnalytics ? (
+            <div className="text-zinc-500 py-20">
+              Loading analytics data...
+            </div>
+          ) : categoryData.length > 0 ? (
             
             <div className="w-full max-w-[400px] aspect-square">
               
@@ -503,9 +515,16 @@ const insightsText =
 
           ) : (
           
-          <div className="text-zinc-500 py-20">
+          <div className="text-center py-20">
             
-            No analytics data available.
+            <h2 className="text-2xl font-bold mb-3">
+              No Analytics Data Yet
+            </h2>
+
+            <p className="text-zinc-400 max-w-xl mx-auto">
+              Start adding transactions to unlock financial insights,
+              spending analytics, AI recommendations, and forecasting.
+            </p>
 
           </div>
 

@@ -13,6 +13,8 @@ import {
 function Recurring() {
   const [transactions, setTransactions] = useState([]);
 
+  const [loadingRecurring, setLoadingRecurring] = useState(true);
+
   const [formData, setFormData] = useState({
     type: "Expense",
     category: "",
@@ -30,6 +32,9 @@ function Recurring() {
 
   const fetchRecurringTransactions =
     async () => {
+
+      setLoadingRecurring(true);
+
       try {
         const data =
           await getRecurringTransactions();
@@ -37,6 +42,8 @@ function Recurring() {
         setTransactions(data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingRecurring(false);
       }
     };
 
@@ -308,7 +315,11 @@ function Recurring() {
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {transactions.length > 0 ? (
+        {loadingRecurring ? (
+          <div className="col-span-full bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center text-zinc-400">
+            Loading recurring transactions...
+          </div>
+        ) : transactions.length > 0 ? (
           transactions.map(
             (transaction) => (
               <div
