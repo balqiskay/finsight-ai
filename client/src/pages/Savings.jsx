@@ -280,12 +280,54 @@ function Savings() {
                   {progress.toFixed(1)}% completed
                 </p>
 
-                {goal.deadline && (
-                  <p className="text-sm text-zinc-500 mb-4">
-                    Deadline:{" "}
-                    {new Date(goal.deadline).toLocaleDateString("en-GB")}
-                  </p>
-                )}
+                {goal.deadline && (() => {
+                  
+                  const today = new Date();
+
+                  const deadline = new Date(goal.deadline);
+
+                  const timeDiff = deadline - today;
+
+                  const daysRemaining =
+                  Math.ceil(
+                    timeDiff / (1000 * 60 * 60 * 24)
+                  );
+
+                  return (
+                  
+                  <div className="mb-4">
+                    
+                    <p className="text-sm text-zinc-500 mb-1">
+                      Deadline:{" "}
+                      {new Date(goal.deadline)
+                      .toLocaleDateString("en-GB")}
+                    </p>
+
+                    <p
+                     className={`text-sm font-semibold ${
+                      progress >= 100
+                      ? "text-green-400"
+                      : daysRemaining < 0
+                      ? "text-red-400"
+                      : daysRemaining <= 7
+                      ? "text-yellow-400"
+                      : "text-green-400"
+                     }`}
+                    >
+                      
+                      {progress >= 100
+                       ? "Goal achieved"
+                       : daysRemaining < 0
+                       ? "Deadline passed"
+                       : `${daysRemaining} days remaining`}
+
+                    </p>
+
+                  </div>
+
+                  );
+
+                })()}
 
                 <div className="flex gap-2">
                   <button
