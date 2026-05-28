@@ -15,6 +15,7 @@ import Savings from "./pages/Savings";
 import Recurring from "./pages/Recurring";
 import Landing from "./pages/Landing";
 import ChatAssistant from "./pages/ChatAssistant";
+import ReceiptScanner from "./pages/ReceiptScanner";
 
 function App() {
 
@@ -100,6 +101,11 @@ function App() {
           <ChatAssistant />
         </ProtectedRoute>
         }
+      />
+
+      <Route
+       path="/receipt-scanner"
+       element={<ReceiptScanner />}
       />
 
     </Routes>

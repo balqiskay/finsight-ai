@@ -6,6 +6,7 @@ import {
   Menu,
   X,
   Bot,
+  Receipt,
 } from "lucide-react";
 
 import {
@@ -105,6 +106,18 @@ function Sidebar() {
           >
             <Bot size={20} />
             AI Assistant
+          </button>
+
+          <button
+           onClick={() =>
+            handleNavigate("/receipt-scanner")
+           }
+           className={navItemClass(
+           "/receipt-scanner"
+          )}
+          >
+            <Receipt size={20} />
+            Receipt Scanner
           </button>
 
           <button
