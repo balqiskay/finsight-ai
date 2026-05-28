@@ -5,6 +5,7 @@ import {
   LogOut,
   Menu,
   X,
+  Bot,
 } from "lucide-react";
 
 import {
@@ -96,6 +97,14 @@ function Sidebar() {
           >
             <PieChart size={20} />
             Analytics
+          </button>
+
+          <button
+            onClick={() => handleNavigate("/assistant")}
+            className={navItemClass("/assistant")}
+          >
+            <Bot size={20} />
+            AI Assistant
           </button>
 
           <button

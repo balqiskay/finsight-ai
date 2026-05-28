@@ -14,6 +14,7 @@ import Analytics from "./pages/Analytics";
 import Savings from "./pages/Savings";
 import Recurring from "./pages/Recurring";
 import Landing from "./pages/Landing";
+import ChatAssistant from "./pages/ChatAssistant";
 
 function App() {
 
@@ -90,6 +91,15 @@ function App() {
       <Route
         path="/"
         element={<Landing />}
+      />
+
+      <Route
+        path="/assistant"
+        element={
+        <ProtectedRoute>
+          <ChatAssistant />
+        </ProtectedRoute>
+        }
       />
 
     </Routes>
