@@ -105,9 +105,24 @@ async (req, res) => {
         ],
       });
 
+    const aiAnswer = completion.choices[0].message.content;
+
+    await pool.query(
+        `INSERT INTO chat_messages
+        (user_id, role, content)
+        VALUES ($1, $2, $3)`,
+        [userId, "user", question]
+    );
+
+    await pool.query(
+        `INSERT INTO chat_messages
+        (user_id, role, content)
+        VALUES ($1, $2, $3)`,
+        [userId, "assistant", aiAnswer]
+    );
+
     res.status(200).json({
-      answer:
-        completion.choices[0].message.content,
+        answer: aiAnswer,
     });
 
   } catch (error) {
@@ -117,6 +132,45 @@ async (req, res) => {
     res.status(500).json({
       message:
         "Failed to get financial assistant response",
+    });
+
+  }
+
+};
+
+exports.getChatHistory =
+async (req, res) => {
+
+  try {
+
+    const userId =
+      req.user.userId;
+
+    const result =
+      await pool.query(
+        `
+        SELECT
+          role,
+          content,
+          created_at
+        FROM chat_messages
+        WHERE user_id = $1
+        ORDER BY created_at ASC
+        `,
+        [userId]
+      );
+
+    res.status(200).json(
+      result.rows
+    );
+
+  } catch (error) {
+
+    console.error(error.message);
+
+    res.status(500).json({
+      message:
+        "Failed to fetch chat history",
     });
 
   }

@@ -8,6 +8,7 @@ import MainLayout from "../layouts/MainLayout";
 
 import {
   askFinancialAssistant,
+  getChatHistory,
 } from "../services/chatService";
 
 import ReactMarkdown from "react-markdown";
@@ -27,13 +28,28 @@ function ChatAssistant() {
   useRef(null);
 
   useEffect(() => {
-    const savedMessages =
-    localStorage.getItem("chatMessages");
+    
+    const loadHistory =
+    async () => {
+        
+        try {
+            
+            const data =
+            await getChatHistory();
 
-    if (savedMessages) {
-        setMessages(JSON.parse(savedMessages));
-    }
-  }, []);
+            setMessages(data);
+
+        } catch (error) {
+            
+            console.error(error);
+
+        }
+
+    };
+
+    loadHistory();
+
+    }, []);
 
   useEffect(() => {
     
@@ -59,26 +75,17 @@ function ChatAssistant() {
             question
           );
 
-        setMessages((prev) => {
-            const updatedMessages = [
-                ...prev,
-                {
-                    role: "user",
-                    content: question,
-                },
-                {
-                    role: "assistant",
-                    content: data.answer,
-                },
-            ];
-            
-            localStorage.setItem(
-                "chatMessages",
-                JSON.stringify(updatedMessages)
-            );
-
-            return updatedMessages;
-        });
+        setMessages((prev) => [
+            ...prev,
+            {
+                role: "user",
+                content: question,
+            },
+            {
+                role: "assistant",
+                content: data.answer,
+            },
+        ]);
 
         setQuestion("");
 

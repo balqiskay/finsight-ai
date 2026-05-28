@@ -31,3 +31,16 @@ async (question) => {
   return response.data;
 
 };
+
+export const getChatHistory =
+async () => {
+
+  const response =
+    await axios.get(
+      `${API}/history`,
+      getAuthHeaders()
+    );
+
+  return response.data;
+
+};
