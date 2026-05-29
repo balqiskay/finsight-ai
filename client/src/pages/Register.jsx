@@ -11,6 +11,7 @@ function Register() {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -34,8 +35,21 @@ function Register() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    if (
+      formData.password.length < 8 ||
+      !/[A-Z]/.test(formData.password) ||
+      !/[a-z]/.test(formData.password) ||
+      !/[0-9]/.test(formData.password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)
+    ) {
+      toast.error(
+        "Password must include uppercase, lowercase, number, and special character"
+      );
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -147,7 +161,16 @@ function Register() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <input
+             type="password"
+             name="confirmPassword"
+             placeholder="Confirm Password"
+             value={formData.confirmPassword}
+             onChange={handleChange}
+             className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <button

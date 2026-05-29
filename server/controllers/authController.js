@@ -5,11 +5,26 @@ const validator = require("validator");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
+
+    const email = req.body.email?.toLowerCase().trim();
 
     if (!username || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
+      });
+    }
+
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[a-z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      return res.status(400).json({
+        message:
+        "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character",
       });
     }
 
