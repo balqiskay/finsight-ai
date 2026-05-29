@@ -16,11 +16,48 @@ function Register() {
 
   const [loading, setLoading] = useState(false);
 
+  const passwordChecks = {
+    length: formData.password.length >= 8,
+    uppercase: /[A-Z]/.test(formData.password),
+    lowercase: /[a-z]/.test(formData.password),
+    number: /[0-9]/.test(formData.password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(formData.password),
+  };
+
+  const strengthScore =
+   Object.values(passwordChecks)
+   .filter(Boolean)
+   .length;
+
+  const strengthLabel =
+   strengthScore <= 2
+    ? "Weak"
+    : strengthScore <= 4
+    ? "Medium"
+    : "Strong";
+
+  const strengthColor =
+   strengthScore <= 2
+    ? "text-red-400"
+    : strengthScore <= 4
+    ? "text-yellow-400"
+    : "text-green-400";
+
+  const strengthBarColor =
+   strengthScore <= 2
+    ? "bg-red-500"
+    : strengthScore <= 4
+    ? "bg-yellow-500"
+    : "bg-green-500";
+
+  const strengthBarWidth =
+   `${(strengthScore / 5) * 100}%`;
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+   setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+   });
   };
 
   const handleSubmit = async (e) => {
@@ -163,6 +200,49 @@ function Register() {
               onChange={handleChange}
               className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-4 outline-none focus:ring-2 focus:ring-blue-500"
             />
+
+            <div className="mb-4">
+              
+              <p className={`text-sm font-semibold ${strengthColor}`}>
+                Password Strength: {strengthLabel}
+              </p>
+
+              <div className="w-full h-2 bg-zinc-800 rounded-full mt-2 overflow-hidden">
+                
+                <div
+                 className={`h-full ${strengthBarColor} transition-all duration-300`}
+                 style={{
+                  width: strengthBarWidth,
+                 }}
+                />
+
+              </div>
+
+              <div className="text-xs mt-2 space-y-1">
+                
+                <p className={passwordChecks.length ? "text-green-400" : "text-zinc-500"}>
+                  ✓ At least 8 characters
+                </p>
+
+                <p className={passwordChecks.uppercase ? "text-green-400" : "text-zinc-500"}>
+                  ✓ Uppercase letter
+                </p>
+
+                <p className={passwordChecks.lowercase ? "text-green-400" : "text-zinc-500"}>
+                  ✓ Lowercase letter
+                </p>
+
+                <p className={passwordChecks.number ? "text-green-400" : "text-zinc-500"}>
+                  ✓ Number
+                </p>
+
+                <p className={passwordChecks.special ? "text-green-400" : "text-zinc-500"}>
+                  ✓ Special character
+                </p>
+
+              </div>
+
+            </div>
 
             <input
              type="password"
