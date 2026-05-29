@@ -28,3 +28,15 @@ export const loginUser = async (
 
   return response.data;
 };
+
+export const verifyEmail =
+async (token) => {
+
+  const response =
+    await axios.get(
+      `${API_URL}/auth/verify-email/${token}`
+    );
+
+  return response.data;
+
+};

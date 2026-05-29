@@ -46,7 +46,10 @@ function Login() {
       window.location.href = "/dashboard";
     } catch (error) {
       console.error(error);
-      toast.error("Login failed");
+      toast.error(
+        error.response?.data?.message ||
+        "Login failed"
+      );
     } finally {
       setLoading(false);
     }

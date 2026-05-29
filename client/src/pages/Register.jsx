@@ -16,6 +16,8 @@ function Register() {
 
   const [loading, setLoading] = useState(false);
 
+  const [registrationEmail, setRegistrationEmail] = useState("");
+
   const passwordChecks = {
     length: formData.password.length >= 8,
     uppercase: /[A-Z]/.test(formData.password),
@@ -95,9 +97,11 @@ function Register() {
 
       await registerUser(formData);
 
-      toast.success("Account created successfully");
+      setRegistrationEmail(formData.email);
 
-      navigate("/login");
+      toast.success(
+        "Account created. Please verify your email."
+      );
     } catch (error) {
       console.error(error);
       toast.error(
@@ -108,6 +112,41 @@ function Register() {
       setLoading(false);
     }
   };
+
+  if (registrationEmail) {
+    return (
+    <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-4">
+      
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 max-w-lg text-center">
+        
+        <h1 className="text-4xl font-bold mb-4">
+          Check your email
+        </h1>
+
+        <p className="text-zinc-400 mb-6">
+          We sent a verification link to:
+        </p>
+
+        <p className="text-blue-400 font-semibold mb-6">
+          {registrationEmail}
+        </p>
+
+        <p className="text-zinc-400 mb-8">
+          Please click the verification link before logging in to your FinSight AI account.
+        </p>
+
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-white text-black px-8 py-4 rounded-2xl font-bold"
+        >
+          Go to Login
+        </button>
+
+      </div>
+
+    </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-4">

@@ -2,6 +2,11 @@ const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
+const crypto = require("crypto");
+
+const {
+  sendVerificationEmail,
+} = require("../services/emailService");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -52,28 +57,31 @@ exports.registerUser = async (req, res) => {
       saltRounds
     );
 
+    const verificationToken =
+     crypto.randomBytes(32)
+     .toString("hex");
+
     const newUser = await pool.query(
       `INSERT INTO users 
-      (username, email, password)
-      VALUES ($1, $2, $3)
+      (username, email, password, verification_token)
+      VALUES ($1, $2, $3, $4)
       RETURNING id, username, email`,
-      [username, email, hashedPassword]
+      [
+        username,
+        email,
+        hashedPassword,
+        verificationToken,
+      ]
     );
 
-    const token = jwt.sign(
-      {
-        userId: newUser.rows[0].id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+    await sendVerificationEmail(
+      email,
+      verificationToken
     );
 
     res.status(201).json({
-      message: "User registered successfully",
-      token,
-      user: newUser.rows[0],
+      message:
+      "Registration successful. Please check your email to verify your account.",
     });
 
   } catch (error) {
@@ -103,6 +111,13 @@ exports.loginUser = async (req, res) => {
     if (user.rows.length === 0) {
       return res.status(400).json({
         message: "Invalid credentials",
+      });
+    }
+
+    if (!user.rows[0].is_verified) {
+      return res.status(403).json({
+        message:
+        "Please verify your email before logging in",
       });
     }
 
@@ -144,4 +159,58 @@ exports.loginUser = async (req, res) => {
       message: "Server error",
     });
   }
+};
+
+exports.verifyEmail =
+async (req, res) => {
+
+  try {
+
+    const { token } = req.params;
+
+    const user =
+      await pool.query(
+        `
+        SELECT *
+        FROM users
+        WHERE verification_token = $1
+        `,
+        [token]
+      );
+
+    if (
+      user.rows.length === 0
+    ) {
+      return res.status(400).json({
+        message:
+          "Invalid verification token",
+      });
+    }
+
+    await pool.query(
+      `
+      UPDATE users
+      SET
+        is_verified = TRUE,
+        verification_token = NULL
+      WHERE id = $1
+      `,
+      [user.rows[0].id]
+    );
+
+    res.status(200).json({
+      message:
+        "Email verified successfully",
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+
+  }
+
 };

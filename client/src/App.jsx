@@ -16,6 +16,7 @@ import Recurring from "./pages/Recurring";
 import Landing from "./pages/Landing";
 import ChatAssistant from "./pages/ChatAssistant";
 import ReceiptScanner from "./pages/ReceiptScanner";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
 
@@ -106,6 +107,11 @@ function App() {
       <Route
        path="/receipt-scanner"
        element={<ReceiptScanner />}
+      />
+
+      <Route
+       path="/verify-email/:token"
+       element={<VerifyEmail />}
       />
 
     </Routes>
