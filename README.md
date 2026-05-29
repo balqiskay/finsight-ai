@@ -1,170 +1,251 @@
 # FinSight AI
 
-FinSight AI is a modern AI-powered personal finance management web application that helps users track transactions, analyze spending habits, generate financial insights, and export smart financial reports.
+FinSight AI is an AI-powered personal finance management platform that helps users track expenses, manage savings goals, automate recurring transactions, forecast future finances, scan receipts using AI, and receive personalized financial guidance through an intelligent AI assistant.
 
 ---
 
 ## Live Demo
 
-Frontend: https://finsight-ai-lake.vercel.app  
+Frontend: https://finsight-ai-lake.vercel.app
+
 Backend API: https://finsight-ai-backend-6d3n.onrender.com
 
 ---
 
 # Features
 
-- User Authentication (Login/Register)
-- JWT Protected Routes
-- Transaction Management (CRUD)
-- Financial Dashboard
-- AI Financial Insights
-- Financial Health Scoring
-- Expense Category Analytics
-- Monthly Financial Trends
-- PDF Financial Report Export
-- Responsive Mobile UI
-- Modern Dark Mode Interface
-- Skeleton Loading States
-- Toast Notifications
-- Search & Filter Transactions
-- Form Validation System
+## Financial Management
+
+* User Authentication (Login/Register)
+* JWT Protected Routes
+* Transaction Management (Create, Read, Update, Delete)
+* Search & Filter Transactions
+* Financial Dashboard
+* Responsive Mobile UI
+* Modern Dark Mode Interface
+
+## Analytics & Insights
+
+* Expense Category Analytics
+* Monthly Financial Trends
+* Financial Health Scoring
+* AI Financial Insights
+* PDF Financial Report Export
+* Financial Forecasting
+* Forecast Trend Detection
+* Forecast Insight Recommendations
+
+## Savings Goals
+
+* Savings Goal Management
+* Goal Progress Tracking
+* Goal Achievement Detection
+* Deadline Countdown System
+* Smart Goal Status Indicators
+
+## Recurring Transactions
+
+* Daily Recurring Transactions
+* Weekly Recurring Transactions
+* Monthly Recurring Transactions
+* Yearly Recurring Transactions
+* Next Recurring Date Prediction
+
+## AI Financial Assistant
+
+* OpenAI-Powered Financial Chatbot
+* Personalized Financial Recommendations
+* Spending Analysis
+* Budgeting Suggestions
+* Persistent Chat History
+* Cross-Device Chat Synchronization
+
+## OCR Receipt Scanner
+
+* AI Receipt Scanning
+* Merchant Detection
+* Amount Extraction
+* Date Extraction
+* Category Suggestion
+* Transaction Description Generation
+
+## User Experience
+
+* Skeleton Loading States
+* Empty State Onboarding
+* Toast Notifications
+* Auto-Scrolling AI Chat
+* Mobile Responsive Design
 
 ---
 
 # Tech Stack
 
 ## Frontend
-- React
-- Tailwind CSS
-- React Router DOM
-- Recharts
-- React Hot Toast
+
+* React
+* Tailwind CSS
+* React Router DOM
+* Recharts
+* React Markdown
+* React Hot Toast
 
 ## Backend
-- Node.js
-- Express.js
-- PostgreSQL
-- JWT Authentication
-- bcrypt
 
-## AI & Reports
-- OpenAI API
-- jsPDF
+* Node.js
+* Express.js
+* PostgreSQL
+* JWT Authentication
+* bcrypt
+* Multer
+
+## Artificial Intelligence
+
+* OpenAI GPT-4o Mini
+* OpenAI Vision API
+
+## Reports & Export
+
+* jsPDF
 
 ## Deployment
 
-- Vercel (Frontend Hosting)
-- Render (Backend Hosting)
-- Neon PostgreSQL (Cloud Database)
+* Vercel (Frontend Hosting)
+* Render (Backend Hosting)
+* Neon PostgreSQL (Cloud Database)
 
 ---
 
-# Pages
+# Application Pages
 
-- Login
-- Register
-- Dashboard
-- Transactions
-- Analytics
+* Login
+* Register
+* Dashboard
+* Transactions
+* Analytics
+* Savings Goals
+* Recurring Transactions
+* AI Assistant
+* Receipt Scanner
 
 ---
 
 # Core Functionalities
 
 ## Authentication
-- User registration
-- User login
-- JWT token authentication
-- Protected routes
+
+* User Registration
+* User Login
+* JWT Authentication
+* Protected Routes
 
 ## Transactions
-- Add transactions
-- Edit transactions
-- Delete transactions
-- Search transactions
-- Filter by transaction type
+
+* Add Transactions
+* Edit Transactions
+* Delete Transactions
+* Search Transactions
+* Filter Transactions
 
 ## Analytics
-- Expense category pie chart
-- Monthly financial trends
-- AI-generated financial insights
-- Financial health scoring
-- PDF report generation
 
----
+* Spending Analytics
+* Category Breakdown
+* Monthly Trends
+* AI Insights
+* Financial Health Score
+* PDF Report Export
+* Forecasting
 
-# Responsive Design
+## AI Assistant
 
-FinSight AI is fully responsive and optimized for:
-- Desktop
-- Tablet
-- Mobile devices
+* Financial Question Answering
+* Spending Analysis
+* Budget Recommendations
+* Savings Recommendations
+* Persistent Chat History
+
+## OCR Receipt Scanner
+
+* Upload Receipt Images
+* AI Receipt Processing
+* Automatic Data Extraction
 
 ---
 
 # Validation & Testing
 
 ## Authentication Validation
-- Empty field validation
-- Duplicate email protection
-- Invalid login protection
-- Password length validation
+
+* Empty Field Validation
+* Duplicate Email Protection
+* Invalid Login Protection
+* Password Length Validation
 
 ## Transaction Validation
-- Empty fields prevention
-- Negative amount prevention
-- Zero amount prevention
 
-## Analytics Testing
-- Dynamic AI scoring tested
-- Dynamic chart rendering tested
-- PDF export tested
+* Empty Fields Prevention
+* Negative Amount Prevention
+* Zero Amount Prevention
 
----
+## AI Testing
 
-# AI Capabilities
-
-FinSight AI uses OpenAI-powered analysis to:
-- Analyze spending behavior
-- Generate financial recommendations
-- Evaluate financial health score
-- Detect overspending patterns
-- Provide budgeting insights
+* AI Financial Insights Tested
+* AI Chat Assistant Tested
+* OCR Receipt Scanner Tested
+* Forecasting System Tested
 
 ---
 
-# Future Improvements
+# Responsive Design
 
-- Recurring transactions
-- Budgeting goals
-- Notification system
-- User profile settings
-- Advanced AI forecasting
-- Cloud deployment
+FinSight AI is fully responsive and optimized for:
 
----
-
-## Upcoming Features
-
-- Savings goals tracking
-- Recurring transactions
-- AI spending predictions
-- Overspending alerts
-- Financial forecasting
-- Advanced analytics
-- SaaS premium features
+* Desktop
+* Tablet
+* Mobile Devices
 
 ---
 
 # Production Status
 
-FinSight AI is fully deployed and production accessible with:
-- Live frontend deployment
-- Live backend API
-- Cloud PostgreSQL database
-- Responsive cross-device support
-- Real-time AI-powered analytics
+FinSight AI is fully deployed and production-ready with:
+
+* Live Frontend Deployment
+* Live Backend API
+* Cloud PostgreSQL Database
+* OpenAI Integration
+* OCR Receipt Scanning
+* Persistent AI Chat History
+* Financial Forecasting
+* Savings Goals Tracking
+* Recurring Transactions
+* Cross-Device Support
+
+---
+
+# Roadmap
+
+## Phase 10 – SaaS Monetization Preparation
+
+* Pricing Page
+* Free vs Premium Plans
+* Feature Gating
+* Upgrade Prompts
+
+## Future Enhancements
+
+* Push Notifications
+* Email Financial Reports
+* Bank Account Integration
+* Investment Tracking
+* Mobile Application
+* Multi-Currency Support
+
+---
 
 # Author
 
-Developed by BalqisKay
+Developed by Echo Labs
+
+Founder: Balqis Kay
