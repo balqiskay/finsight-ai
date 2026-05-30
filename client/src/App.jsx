@@ -1,8 +1,16 @@
+import { useEffect } from "react";
+
 import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+
+import {
+  initGA,
+  trackPageView,
+} from "./utils/analytics";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -22,12 +30,28 @@ import ResetPassword from "./pages/ResetPassword";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    initGA();
+
+    trackPageView(
+      location.pathname + location.search
+    );
+  }, [location]);
+
+  return null;
+}
+
 function App() {
 
   const token =
     localStorage.getItem("token");
 
   return (
+    <>
+    <AnalyticsTracker/>
     <Routes>
 
       <Route
@@ -78,15 +102,6 @@ function App() {
       />
 
       <Route
-      path="*"
-      element={
-        token
-        ? <Navigate to="/dashboard" />
-        : <Navigate to="/login" />
-      }
-      />
-
-      <Route
       path="/savings"
       element={
        <ProtectedRoute>
@@ -131,8 +146,17 @@ function App() {
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
 
+      <Route
+      path="*"
+      element={
+        token
+        ? <Navigate to="/dashboard" />
+        : <Navigate to="/login" />
+      }
+      />
+      
     </Routes>
-    
+   </> 
   );
 }
 
