@@ -149,8 +149,36 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="px-6 md:px-16 py-8 border-t border-zinc-800 text-center text-zinc-500">
-        © 2026 FinSight AI by Echo Labs. All rights reserved.
+      <footer className="px-6 md:px-16 py-10 border-t border-zinc-800 text-center">
+        
+        <h3 className="text-white font-semibold text-lg">
+          FinSight AI
+        </h3>
+
+        <p className="text-zinc-400 mt-2">
+          AI-Powered Financial Intelligence.
+        </p>
+
+        <p className="text-zinc-500 text-sm mt-6">
+          © 2026 FinSight AI · A Kayvian Company
+        </p>
+
+        <div className="mt-4 flex justify-center gap-6 text-sm text-zinc-500">
+          <a
+           href="/privacy"
+           className="hover:text-white transition"
+          >
+            Privacy Policy
+          </a>
+
+          <a
+           href="/terms"
+           className="hover:text-white transition"
+          >
+            Terms of Service
+          </a>
+        </div>
+
       </footer>
 
     </div>
