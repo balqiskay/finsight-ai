@@ -11,7 +11,7 @@ const sendVerificationEmail =
       `${process.env.FRONTEND_URL}/verify-email/${token}`;
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "FinSight AI <noreply@kayvian.com>",
       to: email,
       subject: "Verify your FinSight AI account",
       html: `
@@ -46,7 +46,7 @@ const sendPasswordResetEmail =
       `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "FinSight AI <noreply@kayvian.com>",
       to: email,
       subject: "Reset your FinSight AI password",
       html: `
