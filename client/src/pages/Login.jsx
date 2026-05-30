@@ -155,6 +155,17 @@ function Login() {
               className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
+            <div className="flex justify-end mb-6">
+              
+              <a
+               href="/forgot-password"
+               className="text-blue-400 hover:text-blue-300 text-sm"
+              >
+                Forgot Password?
+              </a>
+
+            </div>
+
             <button
               type="submit"
               disabled={loading}

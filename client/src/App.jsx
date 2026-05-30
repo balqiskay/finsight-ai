@@ -17,6 +17,8 @@ import Landing from "./pages/Landing";
 import ChatAssistant from "./pages/ChatAssistant";
 import ReceiptScanner from "./pages/ReceiptScanner";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 
@@ -34,6 +36,16 @@ function App() {
       <Route
         path="/register"
         element={<Register />}
+      />
+
+      <Route
+       path="/forgot-password"
+       element={<ForgotPassword />}
+      />
+
+      <Route
+       path="/reset-password/:token"
+       element={<ResetPassword />}
       />
 
       <Route

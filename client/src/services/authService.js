@@ -40,3 +40,29 @@ async (token) => {
   return response.data;
 
 };
+
+export const forgotPassword =
+async (email) => {
+
+  const response =
+    await axios.post(
+      `${API_URL}/auth/forgot-password`,
+      { email }
+    );
+
+  return response.data;
+
+};
+
+export const resetPassword =
+async (token, password) => {
+
+  const response =
+    await axios.post(
+      `${API_URL}/auth/reset-password/${token}`,
+      { password }
+    );
+
+  return response.data;
+
+};

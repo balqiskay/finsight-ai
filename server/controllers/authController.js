@@ -6,6 +6,7 @@ const crypto = require("crypto");
 
 const {
   sendVerificationEmail,
+   sendPasswordResetEmail,
 } = require("../services/emailService");
 
 exports.registerUser = async (req, res) => {
@@ -209,6 +210,171 @@ async (req, res) => {
 
     res.status(500).json({
       message: "Server error",
+    });
+
+  }
+
+};
+
+exports.forgotPassword =
+async (req, res) => {
+
+  try {
+
+    const { email } = req.body;
+
+    const user =
+      await pool.query(
+        `
+        SELECT *
+        FROM users
+        WHERE email = $1
+        `,
+        [email.toLowerCase().trim()]
+      );
+
+    if (
+      user.rows.length === 0
+    ) {
+      return res.status(200).json({
+        message:
+          "If an account exists, a reset link has been sent.",
+      });
+    }
+
+    const resetToken =
+      crypto.randomBytes(32)
+        .toString("hex");
+
+    const expires =
+      new Date(
+        Date.now() +
+        60 * 60 * 1000
+      );
+
+    await pool.query(
+      `
+      UPDATE users
+      SET
+        reset_password_token = $1,
+        reset_password_expires = $2
+      WHERE id = $3
+      `,
+      [
+        resetToken,
+        expires,
+        user.rows[0].id,
+      ]
+    );
+
+    await sendPasswordResetEmail(
+      user.rows[0].email,
+      resetToken
+    );
+
+    res.status(200).json({
+      message:
+        "If an account exists, a reset link has been sent.",
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message:
+        "Server error",
+    });
+
+  }
+
+};
+
+exports.resetPassword =
+async (req, res) => {
+
+  try {
+
+    const { token } = req.params;
+
+    const { password } = req.body;
+
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[a-z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      return res.status(400).json({
+        message:
+        "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character",
+      });
+    }
+
+    const user =
+      await pool.query(
+        `
+        SELECT *
+        FROM users
+        WHERE reset_password_token = $1
+        `,
+        [token]
+      );
+
+    if (
+      user.rows.length === 0
+    ) {
+      return res.status(400).json({
+        message:
+          "Invalid reset token",
+      });
+    }
+
+    if (
+      new Date(
+        user.rows[0].reset_password_expires
+      ) < new Date()
+    ) {
+      return res.status(400).json({
+        message:
+          "Reset token has expired",
+      });
+    }
+
+    const hashedPassword =
+      await bcrypt.hash(
+        password,
+        10
+      );
+
+    await pool.query(
+      `
+      UPDATE users
+      SET
+        password = $1,
+        reset_password_token = NULL,
+        reset_password_expires = NULL
+      WHERE id = $2
+      `,
+      [
+        hashedPassword,
+        user.rows[0].id,
+      ]
+    );
+
+    res.status(200).json({
+      message:
+        "Password reset successful",
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message:
+        "Server error",
     });
 
   }
