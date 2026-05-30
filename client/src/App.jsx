@@ -19,6 +19,8 @@ import ReceiptScanner from "./pages/ReceiptScanner";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 function App() {
 
@@ -125,6 +127,9 @@ function App() {
        path="/verify-email/:token"
        element={<VerifyEmail />}
       />
+
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
 
     </Routes>
     

@@ -292,10 +292,40 @@ function Register() {
              className="w-full p-4 rounded-xl bg-zinc-800 text-white mb-6 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
+            <div className="mt-6 mb-2">
+              <label className="flex items-start gap-3 text-sm text-zinc-400 leading-relaxed">
+                <input
+                 type="checkbox"
+                 id="terms"
+                 required
+                 className="mt-1 h-4 w-4 accent-blue-500"
+                />
+
+                <span>
+                  I have read and agree to the{" "}
+                  <a
+                   href="/privacy"
+                   target="_blank"
+                   className="text-blue-400 hover:text-blue-300"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                   href="/terms"
+                   target="_blank"
+                   className="text-blue-400 hover:text-blue-300"
+                  >
+                    Terms of Service
+                  </a>.
+                </span>
+              </label>
+            </div>
+
             <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-white text-black p-4 rounded-xl font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
+             type="submit"
+             disabled={loading}
+             className="w-full mt-6 bg-white text-black p-4 rounded-xl font-semibold disabled:opacity-50 transition duration-300 hover:scale-[1.02]"
             >
               {loading ? "Creating account..." : "Create Account"}
             </button>
