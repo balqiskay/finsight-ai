@@ -163,10 +163,19 @@ function Landing() {
           © 2026 FinSight AI · A Kayvian Company
         </p>
 
+        <p className="mt-3">
+          <a
+           href="mailto:hello@kayvian.com"
+           className="text-zinc-500 text-sm hover:text-white transition"
+          >
+            hello@kayvian.com
+          </a>
+        </p>
+
         <div className="mt-4 flex justify-center gap-6 text-sm text-zinc-500">
           <a
-           href="/privacy"
-           className="hover:text-white transition"
+          href="/privacy"
+          className="hover:text-white transition"
           >
             Privacy Policy
           </a>
