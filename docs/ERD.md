@@ -1,8 +1,8 @@
-# FinSight AI — Entity Relationship Diagram (ERD)
+# Vayqor — Entity Relationship Diagram (ERD)
 
 ## 1. Database Overview
 
-FinSight AI uses PostgreSQL as the primary relational database management system.
+Vayqor uses PostgreSQL as the primary relational database management system.
 
 The database is designed to manage:
 - User accounts

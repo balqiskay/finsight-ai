@@ -14,7 +14,9 @@ function Landing() {
 
       <nav className="flex items-center justify-between px-6 md:px-16 py-6">
         <h1 className="text-2xl font-bold">
-          FinSight AI
+          Vayqor
+
+          The AI Financial Operating System.
         </h1>
 
         <div className="flex items-center gap-4">
@@ -135,7 +137,7 @@ function Landing() {
           </h2>
 
           <p className="text-blue-100 max-w-3xl mx-auto text-lg mb-8">
-            From daily spending to future forecasting, FinSight AI helps you
+            From daily spending to future forecasting, Vayqor helps you
             understand where your money goes and how to improve your financial health.
           </p>
 
@@ -152,7 +154,7 @@ function Landing() {
       <footer className="px-6 md:px-16 py-10 border-t border-zinc-800 text-center">
         
         <h3 className="text-white font-semibold text-lg">
-          FinSight AI
+          Vayqor
         </h3>
 
         <p className="text-zinc-400 mt-2">
@@ -160,7 +162,7 @@ function Landing() {
         </p>
 
         <p className="text-zinc-500 text-sm mt-6">
-          © 2026 FinSight AI · A Kayvian Company
+          © 2026 Vayqor · A Kayvian Company
         </p>
 
         <p className="mt-3">

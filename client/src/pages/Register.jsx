@@ -132,7 +132,7 @@ function Register() {
         </p>
 
         <p className="text-zinc-400 mb-8">
-          Please click the verification link before logging in to your FinSight AI account.
+          Please click the verification link before logging in to your Vayqor account.
         </p>
 
         <button
@@ -157,7 +157,7 @@ function Register() {
 
           <div>
             <h1 className="text-5xl font-bold mb-6">
-              Start with FinSight AI
+              Start with Vayqor
             </h1>
 
             <p className="text-zinc-300 text-lg leading-relaxed">

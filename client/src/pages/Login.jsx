@@ -64,7 +64,7 @@ function Login() {
 
           <div>
             <h1 className="text-5xl font-bold mb-6">
-              FinSight AI
+              Vayqor
             </h1>
 
             <p className="text-zinc-300 text-lg leading-relaxed">
@@ -115,7 +115,7 @@ function Login() {
               </p>
 
               <h1 className="text-4xl font-extrabold mb-3">
-                FinSight AI
+                Vayqor
               </h1>
 
               <p className="text-blue-100 text-sm leading-relaxed">

@@ -1,6 +1,6 @@
-# FinSight AI
+# Vayqor
 
-FinSight AI is an AI-powered personal finance management platform that helps users track expenses, manage savings goals, automate recurring transactions, forecast future finances, scan receipts using AI, and receive personalized financial guidance through an intelligent AI assistant.
+Vayqor is an AI-powered personal finance management platform that helps users track expenses, manage savings goals, automate recurring transactions, forecast future finances, scan receipts using AI, and receive personalized financial guidance through an intelligent AI assistant.
 
 ---
 
@@ -199,7 +199,7 @@ Backend API: https://finsight-ai-backend-6d3n.onrender.com
 
 # Responsive Design
 
-FinSight AI is fully responsive and optimized for:
+Vayqor is fully responsive and optimized for:
 
 * Desktop
 * Tablet
@@ -209,7 +209,7 @@ FinSight AI is fully responsive and optimized for:
 
 # Production Status
 
-FinSight AI is fully deployed and production-ready with:
+Vayqor is fully deployed and production-ready with:
 
 * Live Frontend Deployment
 * Live Backend API
@@ -246,6 +246,6 @@ FinSight AI is fully deployed and production-ready with:
 
 # Author
 
-Developed by Echo Labs
+Developed by Kayvian
 
 Founder: Balqis Kay

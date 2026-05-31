@@ -66,7 +66,7 @@ function ReceiptScanner() {
           </h1>
 
           <p className="text-zinc-400 max-w-2xl">
-            Upload a receipt image and let FinSight AI
+            Upload a receipt image and let Vayqor
             automatically extract transaction details.
           </p>
 

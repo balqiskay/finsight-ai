@@ -19,7 +19,7 @@ function TermsOfService() {
               1. Acceptance of Terms
             </h2>
             <p>
-              By accessing or using FinSight AI, you agree to comply with these
+              By accessing or using Vayqor, you agree to comply with these
               Terms of Service.
             </p>
           </section>
@@ -49,7 +49,7 @@ function TermsOfService() {
               4. Limitation of Liability
             </h2>
             <p>
-              FinSight AI provides financial insights for informational purposes
+              Vayqor provides financial insights for informational purposes
               only and does not constitute professional financial advice.
             </p>
           </section>

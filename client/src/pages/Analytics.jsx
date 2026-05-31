@@ -224,7 +224,7 @@ const insightsText =
     doc.setFontSize(22);
 
     doc.text(
-      "FinSight AI Financial Report",
+      "Vayqor Financial Report",
       20,
       20
     );
@@ -264,7 +264,7 @@ const insightsText =
     );
 
     doc.save(
-      "FinSight-AI-Report.pdf"
+      "Vayqor-Report.pdf"
     );
 
   };

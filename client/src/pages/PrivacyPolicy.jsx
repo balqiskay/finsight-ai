@@ -19,7 +19,7 @@ function PrivacyPolicy() {
               1. Information We Collect
             </h2>
             <p>
-              FinSight AI collects account information such as your username,
+              Vayqor collects account information such as your username,
               email address, and financial data you choose to enter, including
               transactions, savings goals, recurring transactions, receipt data,
               and AI chat history.
@@ -52,7 +52,7 @@ function PrivacyPolicy() {
               4. Third-Party Services
             </h2>
             <p>
-              FinSight AI uses third-party services such as OpenAI, Resend,
+              Vayqor uses third-party services such as OpenAI, Resend,
               Vercel, Render, Neon PostgreSQL, and Cloudflare to operate the
               platform.
             </p>

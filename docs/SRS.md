@@ -1,12 +1,12 @@
-# FinSight AI — Software Requirements Specification (SRS)
+# Vayqor — Software Requirements Specification (SRS)
 
 ## 1. Introduction
 
 ### 1.1 Project Overview
-FinSight AI is an AI-powered personal finance analytics platform designed to help users manage expenses, track financial activities, visualize spending behavior, and receive intelligent financial insights through AI analysis.
+Vayqor is an AI-powered personal finance analytics platform designed to help users manage expenses, track financial activities, visualize spending behavior, and receive intelligent financial insights through AI analysis.
 
 ### 1.2 Objectives
-The objectives of FinSight AI are:
+The objectives of Vayqor are:
 - Help users track income and expenses efficiently
 - Provide financial analytics through interactive dashboards
 - Generate AI-powered spending insights and recommendations

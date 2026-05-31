@@ -10,7 +10,7 @@ router.get(
   async (req, res) => {
 
     res.json({
-      message: "Welcome to FinSight AI Dashboard",
+      message: "Welcome to Vayqor Dashboard",
       user: req.user,
     });
 

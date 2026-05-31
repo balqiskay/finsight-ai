@@ -113,7 +113,7 @@ function ChatAssistant() {
           </p>
 
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-            Ask FinSight AI
+            Ask Vayqor
           </h1>
 
           <p className="text-zinc-400 max-w-2xl">
@@ -142,7 +142,7 @@ function ChatAssistant() {
                         <p className="text-sm text-zinc-500 mb-3">
                             {message.role === "user"
                             ? "You"
-                            : "FinSight AI"}
+                            : "Vayqor"}
                         </p>
 
                         {message.role === "assistant" ? (

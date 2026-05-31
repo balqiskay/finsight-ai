@@ -35,7 +35,7 @@ app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
     res.json({
-      message: "FinSight AI Backend Running",
+      message: "Vayqor Backend Running",
       time: result.rows[0],
     });
   } catch (error) {

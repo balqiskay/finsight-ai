@@ -1,8 +1,8 @@
-# FinSight AI — System Architecture
+# Vayqor — System Architecture
 
 ## 1. Architecture Overview
 
-FinSight AI follows a full-stack client-server architecture consisting of:
+Vayqor follows a full-stack client-server architecture consisting of:
 
 - Frontend Client (React)
 - Backend API Server (Node.js + Express)
