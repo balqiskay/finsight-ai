@@ -1,4 +1,4 @@
-# FinSight AI — Database Setup
+# Vayqor — Database Setup
 
 ## Database Name
 finsight_ai
