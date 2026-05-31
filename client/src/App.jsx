@@ -29,6 +29,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Pricing from "./pages/Pricing";
 
 function AnalyticsTracker() {
   const location = useLocation();
@@ -154,6 +155,8 @@ function App() {
         : <Navigate to="/login" />
       }
       />
+
+      <Route path="/pricing" element={<Pricing />} />
       
     </Routes>
    </> 
