@@ -1,12 +1,14 @@
 # Vayqor
 
-Vayqor is an AI-powered personal finance management platform that helps users track expenses, manage savings goals, automate recurring transactions, forecast future finances, scan receipts using AI, and receive personalized financial guidance through an intelligent AI assistant.
+The AI Financial Operating System.
+
+Vayqor is an AI-powered financial operating system that helps users track expenses, manage savings goals, automate recurring transactions, analyze spending patterns, scan receipts using AI, and make smarter financial decisions through intelligent insights.
 
 ---
 
 ## Live Demo
 
-Frontend: https://finsight-ai-lake.vercel.app
+Frontend: https://www.kayvian.com
 
 Backend API: https://finsight-ai-backend-6d3n.onrender.com
 
