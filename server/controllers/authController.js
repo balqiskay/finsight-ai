@@ -75,15 +75,26 @@ exports.registerUser = async (req, res) => {
       ]
     );
 
-    await sendVerificationEmail(
-      email,
-      verificationToken
-    );
+   await pool.query(
+    `INSERT INTO user_subscriptions
+    (user_id, plan_id, status)
+    VALUES ($1, $2, $3)`,
+    [
+      newUser.rows[0].id,
+      1,
+      "active",
+    ]
+  );
 
-    res.status(201).json({
-      message:
-      "Registration successful. Please check your email to verify your account.",
-    });
+  await sendVerificationEmail(
+    email,
+    verificationToken
+  );
+
+  res.status(201).json({
+    message:
+    "Registration successful. Please check your email to verify your account.",
+  });
 
   } catch (error) {
     console.error(error.message);
