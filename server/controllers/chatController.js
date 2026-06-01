@@ -70,6 +70,13 @@ async (req, res) => {
       const usageCount =
       Number(usageResult.rows[0].usage_count);
 
+      console.log("AI LIMIT DEBUG:", {
+        userId,
+        plan: subscription.plan_name,
+        aiLimit,
+        usageCount,
+      });
+
       if (usageCount >= aiLimit) {
         return res.status(403).json({
           message:
