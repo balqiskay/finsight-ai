@@ -1,6 +1,13 @@
+import { useState } from "react";
+import toast from "react-hot-toast";
+
 function Pricing() {
+  const [loadingPlan, setLoadingPlan] =
+    useState(null);
+
   const plans = [
     {
+      id: 1,
       name: "Free",
       price: "$0",
       description: "For users who want to start managing their finances.",
@@ -11,10 +18,11 @@ function Pricing() {
         "Basic analytics",
         "50 AI messages per month",
       ],
-      button: "Current Plan",
+      button: "Switch to Free",
       highlighted: false,
     },
     {
+      id: 2,
       name: "Pro",
       price: "$9",
       description: "For users who want deeper insights and AI assistance.",
@@ -29,6 +37,7 @@ function Pricing() {
       highlighted: true,
     },
     {
+      id: 3,
       name: "Premium",
       price: "$19",
       description: "For power users who want full financial intelligence.",
@@ -43,6 +52,60 @@ function Pricing() {
       highlighted: false,
     },
   ];
+
+  const handleUpgrade =
+    async (planId) => {
+      try {
+        setLoadingPlan(planId);
+
+        const token =
+          localStorage.getItem("token");
+
+        if (!token) {
+          toast.error(
+            "Please log in to change your plan."
+          );
+          return;
+        }
+
+        const response =
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/subscriptions/upgrade/${planId}`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          toast.error(
+            data.message ||
+            "Failed to change plan."
+          );
+          return;
+        }
+
+        toast.success(
+          data.message ||
+          "Plan updated successfully."
+        );
+
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          "Something went wrong."
+        );
+
+      } finally {
+        setLoadingPlan(null);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white px-6 md:px-16 py-16">
@@ -96,13 +159,19 @@ function Pricing() {
               </div>
 
               <button
-                className={`w-full py-3 rounded-xl font-semibold mb-8 transition ${
+                onClick={() =>
+                  handleUpgrade(plan.id)
+                }
+                disabled={loadingPlan === plan.id}
+                className={`w-full py-3 rounded-xl font-semibold mb-8 transition disabled:opacity-50 disabled:cursor-not-allowed ${
                   plan.highlighted
                     ? "bg-white text-black hover:scale-[1.02]"
                     : "bg-zinc-800 text-white hover:bg-zinc-700"
                 }`}
               >
-                {plan.button}
+                {loadingPlan === plan.id
+                  ? "Updating..."
+                  : plan.button}
               </button>
 
               <ul className="space-y-3">
