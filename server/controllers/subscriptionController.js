@@ -99,6 +99,29 @@ exports.upgradeSubscription = async (req, res) => {
       });
     }
 
+    const currentSubscription =
+    await pool.query(
+      `
+      SELECT plan_id
+      FROM user_subscriptions
+      WHERE
+      user_id = $1
+      AND status = 'active'
+      ORDER BY id DESC
+      LIMIT 1
+      `,
+      [userId]
+    );
+
+    if (
+      currentSubscription.rows.length > 0 &&
+      currentSubscription.rows[0].plan_id === selectedPlanId
+    ) {
+      return res.status(400).json({
+        message: `You are already on the ${planResult.rows[0].name} plan`,
+      });
+    }
+
     await pool.query(
       `
       UPDATE user_subscriptions
