@@ -12,61 +12,6 @@ async (req, res) => {
     const userId =
       req.user.userId;
 
-    const subscriptionResult =
-    await pool.query(
-      `
-      SELECT
-      sp.name AS plan_name,
-      sp.ai_limit
-      FROM user_subscriptions us
-      JOIN subscription_plans sp
-      ON us.plan_id = sp.id
-      WHERE
-      us.user_id = $1
-      AND us.status = 'active'
-      ORDER BY us.id DESC
-      LIMIT 1
-      `,
-      [userId]
-    );
-
-    if (subscriptionResult.rows.length === 0) {
-      return res.status(403).json({
-        message: "No active subscription found",
-      });
-    }
-
-    const subscription = subscriptionResult.rows[0];
-
-    const aiLimit =
-    subscription.ai_limit === null
-    ? null
-    : Number(subscription.ai_limit);
-
-    if (aiLimit !== null) {
-      const usageResult =
-      await pool.query(
-        `
-        SELECT COUNT(*) AS usage_count
-        FROM chat_messages
-        WHERE
-        user_id = $1
-        AND role = 'assistant'
-        AND created_at >= date_trunc('month', CURRENT_DATE)
-        `,
-        [userId]
-      );
-
-      const usageCount = Number(usageResult.rows[0].usage_count);
-
-      if (usageCount >= aiLimit) {
-        return res.status(403).json({
-          message:
-          "You have reached your monthly AI limit. Upgrade to Pro to continue using AI insights.",
-        });
-      }
-    }
-
     const summaryResult =
       await pool.query(
         `
@@ -126,37 +71,22 @@ async (req, res) => {
       );
 
     const insights =
-    await generateFinancialInsights(
-      {
-        totalIncome:
-        summary.total_income,
+      await generateFinancialInsights(
+        {
+          totalIncome:
+            summary.total_income,
 
-        totalExpenses:
-        summary.total_expenses,
+          totalExpenses:
+            summary.total_expenses,
 
-        balance,
-      },
+          balance,
+        },
 
-      categoryResult.rows
-    );
-    
-    await pool.query(
-      `
-      INSERT INTO chat_messages
-      (user_id, role, content)
-      VALUES ($1, $2, $3)
-      `,
-      [
-        userId,
-        "assistant",
-        insights,
-      ]
-    );
+        categoryResult.rows
+      );
 
     res.json({
       insights,
-      plan: subscription.plan_name,
-      aiLimit,
     });
 
   } catch (error) {

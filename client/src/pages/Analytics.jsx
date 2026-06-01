@@ -4,6 +4,8 @@ import MainLayout from "../layouts/MainLayout";
 
 import jsPDF from "jspdf";
 
+import { isPaidPlan } from "../utils/subscription";
+
 import {
   getAIInsights,
 } from "../services/aiService";
@@ -47,6 +49,8 @@ function Analytics() {
   const [forecast, setForecast] = useState(null);
 
   const [loadingAnalytics, setLoadingAnalytics] = useState(true);
+
+  const [subscription, setSubscription] = useState(null);
 
   const scoreMatch =
   aiInsights.match(
@@ -104,6 +108,12 @@ const insightsText =
 
   const handleGenerateInsights =
   async () => {
+    if (!isPaidPlan(subscription?.plan_name)) {
+      alert(
+        "AI Spending Insights is available on Pro and Premium plans."
+      );
+      return;
+    }
     
     try {
       
@@ -199,6 +209,35 @@ const insightsText =
     }
 
   };
+
+  const fetchSubscription =
+  async () => {
+    try {
+      const token =
+        localStorage.getItem("token");
+
+      const response =
+        await fetch(
+          `${import.meta.env.VITE_API_URL}/subscriptions/current`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      const data =
+        await response.json();
+
+      setSubscription(data);
+
+    } catch (error) {
+      console.error(
+        "Failed to fetch subscription",
+        error
+      );
+    }
+  };
   
   useEffect(() => {
 
@@ -207,6 +246,7 @@ const insightsText =
     fetchAdvancedAnalytics();
     fetchSpendingAlerts();
     fetchForecast();
+    fetchSubscription();
   }, []);
 
   const COLORS = [
@@ -569,8 +609,10 @@ const insightsText =
           >
             
             {loadingAI
-            ? "Generating..."
-            : "Generate AI Insights"}
+             ? "Generating..."
+             : isPaidPlan(subscription?.plan_name)
+             ? "Generate AI Insights"
+             : "Upgrade to Pro"}
 
          </button>
 
