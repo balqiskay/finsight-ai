@@ -20,19 +20,28 @@ function Landing() {
         </h1>
 
         <div className="flex items-center gap-4">
+          
           <Link
-            to="/login"
-            className="text-zinc-300 hover:text-white font-medium transition"
+           to="/pricing"
+           className="text-zinc-300 hover:text-white font-medium transition"
+          >
+            Pricing
+          </Link>
+
+          <Link
+           to="/login"
+           className="text-zinc-300 hover:text-white font-medium transition"
           >
             Login
           </Link>
 
           <Link
-            to="/register"
-            className="bg-white text-black px-5 py-2 rounded-xl font-semibold"
+           to="/register"
+           className="bg-white text-black px-5 py-2 rounded-xl font-semibold"
           >
             Get Started
           </Link>
+
         </div>
       </nav>
 
@@ -63,10 +72,10 @@ function Landing() {
             </Link>
 
             <Link
-              to="/login"
+              to="/pricing"
               className="bg-zinc-900 border border-zinc-800 px-8 py-4 rounded-2xl font-bold transition hover:bg-zinc-800"
             >
-              Login
+              View Pricing
             </Link>
           </div>
 
