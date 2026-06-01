@@ -8,6 +8,7 @@ const authMiddleware =
 const {
   getPlans,
   getCurrentSubscription,
+  upgradeSubscription,
 } = require("../controllers/subscriptionController");
 
 router.get(
@@ -19,6 +20,12 @@ router.get(
   "/current",
   authMiddleware,
   getCurrentSubscription
+);
+
+router.post(
+  "/upgrade/:planId",
+  authMiddleware,
+  upgradeSubscription
 );
 
 module.exports = router;
