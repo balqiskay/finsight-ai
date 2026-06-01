@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 
 import toast from "react-hot-toast";
+
+import { isPaidPlan } from "../utils/subscription";
 
 import {
   scanReceipt,
@@ -18,6 +20,9 @@ function ReceiptScanner() {
 
   const [result, setResult] =
     useState(null);
+
+  const [subscription, setSubscription] = useState(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(true);
 
   const handleScan =
     async (e) => {
@@ -49,6 +54,74 @@ function ReceiptScanner() {
       }
 
     };
+
+    useEffect(() => {
+      const fetchSubscription = async () => {
+        try {
+          const token = localStorage.getItem("token");
+
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/subscriptions/current`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          setSubscription(data);
+          } catch (error) {
+            console.error("Failed to fetch subscription", error);
+          } finally {
+            setLoadingSubscription(false);
+          }
+        };
+
+        fetchSubscription();
+    }, []);
+
+    if (loadingSubscription) {
+      return (
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-zinc-400">
+            Loading subscription...
+          </p>
+        </div>
+      </MainLayout>
+      );
+      }
+
+      if (!isPaidPlan(subscription?.plan_name)) {
+        return (
+        <MainLayout>
+          <div className="max-w-md mx-auto text-center mt-20 bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+            
+            <p className="text-blue-400 font-semibold mb-3">
+              Pro Feature
+            </p>
+
+            <h1 className="text-3xl font-bold mb-4">
+              Upgrade to scan receipts
+            </h1>
+
+            <p className="text-zinc-400 mb-8">
+              Receipt scanning is available on Pro and Premium plans.
+            </p>
+
+            <a
+             href="/pricing"
+             className="inline-block bg-white text-black px-8 py-3 rounded-2xl font-bold"
+            >
+              View Plans
+            </a>
+
+          </div>
+        </MainLayout>
+      );
+    }
 
   return (
     <MainLayout>
