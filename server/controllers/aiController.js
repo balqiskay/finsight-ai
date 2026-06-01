@@ -38,7 +38,12 @@ async (req, res) => {
 
     const subscription = subscriptionResult.rows[0];
 
-    if (subscription.ai_limit !== null) {
+    const aiLimit =
+    subscription.ai_limit === null
+    ? null
+    : Number(subscription.ai_limit);
+
+    if (aiLimit !== null) {
       const usageResult =
       await pool.query(
         `
@@ -54,7 +59,7 @@ async (req, res) => {
 
       const usageCount = Number(usageResult.rows[0].usage_count);
 
-      if (usageCount >= subscription.ai_limit) {
+      if (usageCount >= aiLimit) {
         return res.status(403).json({
           message:
           "You have reached your monthly AI limit. Upgrade to Pro to continue using AI insights.",
@@ -151,7 +156,7 @@ async (req, res) => {
     res.json({
       insights,
       plan: subscription.plan_name,
-      aiLimit: subscription.ai_limit,
+      aiLimit,
     });
 
   } catch (error) {
