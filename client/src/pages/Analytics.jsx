@@ -4,7 +4,10 @@ import MainLayout from "../layouts/MainLayout";
 
 import jsPDF from "jspdf";
 
-import { isPaidPlan } from "../utils/subscription";
+import { 
+  isPaidPlan,
+  isPremiumPlan,
+} from "../utils/subscription";
 
 import {
   getAIInsights,
@@ -409,7 +412,7 @@ const insightsText =
 
       )}
 
-      {forecast && (
+      {forecast && isPremiumPlan(subscription?.plan_name) && (
             
             <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10 transition duration-300 hover:bg-zinc-800">
               
@@ -495,7 +498,30 @@ const insightsText =
 
             </div>
 
-          )}
+      )}
+
+      {forecast && !isPremiumPlan(subscription?.plan_name) && (
+        <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10 border border-zinc-800">
+          <p className="text-blue-400 font-semibold mb-3">
+            Premium Feature
+          </p>
+
+          <h2 className="text-2xl font-bold mb-3">
+            Unlock Financial Forecasting
+          </h2>
+
+          <p className="text-zinc-400 mb-6">
+            Financial forecasting is available on the Premium plan. Upgrade to access future income, expense, and balance projections.
+          </p>
+
+          <a
+           href="/pricing"
+           className="inline-block bg-white text-black px-6 py-3 rounded-2xl font-bold transition duration-300 hover:scale-[1.02]"
+          >
+            Upgrade to Premium
+          </a>
+        </div>
+      )}
 
       <div className="bg-zinc-900 p-6 md:p-8 rounded-2xl">
 
@@ -617,7 +643,22 @@ const insightsText =
          </button>
 
          <button
-           onClick={downloadPDF}
+           onClick={() => {
+            
+            if (
+              !isPremiumPlan(
+                subscription?.plan_name
+              )
+            ) {
+              alert(
+                "Advanced Financial Reports are available on Premium."
+              );
+              return;
+            }
+
+            downloadPDF();
+
+           }}
            disabled={!aiInsights}
            className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
          >
