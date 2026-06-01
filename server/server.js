@@ -13,6 +13,7 @@ const savingsRoutes = require("./routes/savingsRoutes");
 const recurringRoutes = require("./routes/recurringRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const receiptRoutes = require("./routes/receiptRoutes");
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/recurring", recurringRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/receipt", receiptRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 app.get("/", async (req, res) => {
   try {
