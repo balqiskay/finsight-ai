@@ -24,6 +24,9 @@ function ChatAssistant() {
   const [loading, setLoading] =
     useState(false);
 
+  const [limitMessage, setLimitMessage] =
+  useState("");
+
   const bottomRef =
   useRef(null);
 
@@ -90,8 +93,14 @@ function ChatAssistant() {
         setQuestion("");
 
       } catch (error) {
-
+        
         console.error(error);
+
+        const message =
+        error?.response?.data?.message ||
+        "Failed to get AI response.";
+
+        setLimitMessage(message);
 
       } finally {
 
@@ -171,6 +180,29 @@ function ChatAssistant() {
 
         )}
 
+        {limitMessage && (
+         <div className="mt-6 bg-blue-500/10 border border-blue-500/30 rounded-3xl p-6">
+          <p className="text-blue-400 font-semibold mb-2">
+            Upgrade Required
+          </p>
+
+          <h2 className="text-2xl font-bold mb-3">
+            You’ve reached your free AI message limit
+          </h2>
+
+          <p className="text-zinc-400 mb-6">
+            {limitMessage}
+          </p>
+
+          <a
+           href="/pricing"
+           className="inline-block bg-white text-black px-6 py-3 rounded-2xl font-bold transition duration-300 hover:scale-[1.02]"
+          >
+            Upgrade to Pro
+          </a>
+         </div>
+        )}
+
         <form
           onSubmit={handleAsk}
           className="mt-6 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 mb-8"
@@ -178,9 +210,10 @@ function ChatAssistant() {
 
           <textarea
             value={question}
-            onChange={(e) =>
-              setQuestion(e.target.value)
-            }
+            onChange={(e) => {
+              setQuestion(e.target.value);
+              setLimitMessage("");
+            }}
             placeholder="Ask about your spending, savings, budgeting, or financial habits..."
             className="w-full h-40 bg-zinc-800 rounded-2xl p-5 outline-none resize-none"
           />
