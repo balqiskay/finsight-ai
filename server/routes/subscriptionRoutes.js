@@ -9,6 +9,7 @@ const {
   getPlans,
   getCurrentSubscription,
   upgradeSubscription,
+  createCheckoutSession,
 } = require("../controllers/subscriptionController");
 
 router.get(
@@ -26,6 +27,12 @@ router.post(
   "/upgrade/:planId",
   authMiddleware,
   upgradeSubscription
+);
+
+router.post(
+  "/create-checkout-session",
+  authMiddleware,
+  createCheckoutSession
 );
 
 module.exports = router;

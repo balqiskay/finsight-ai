@@ -1,5 +1,11 @@
 const pool = require("../config/db");
 
+const Stripe = require("stripe");
+
+const stripe = new Stripe(
+  process.env.STRIPE_SECRET_KEY
+);
+
 exports.getPlans = async (req, res) => {
   try {
     const plans = await pool.query(
@@ -159,6 +165,57 @@ exports.upgradeSubscription = async (req, res) => {
 
     res.status(500).json({
       message: "Server error",
+    });
+  }
+};
+
+exports.createCheckoutSession = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const { plan } = req.body;
+
+    let priceId;
+
+    if (plan === "Pro") {
+      priceId = process.env.STRIPE_PRO_PRICE_ID;
+    } else if (plan === "Premium") {
+      priceId = process.env.STRIPE_PREMIUM_PRICE_ID;
+    } else {
+      return res.status(400).json({
+        message: "Invalid plan selected",
+      });
+    }
+
+    const session =
+      await stripe.checkout.sessions.create({
+        mode: "subscription",
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        success_url:
+          `${process.env.FRONTEND_URL}/pricing?success=true`,
+        cancel_url:
+          `${process.env.FRONTEND_URL}/pricing?canceled=true`,
+        metadata: {
+          userId,
+          plan,
+        },
+      });
+
+    res.status(200).json({
+      url: session.url,
+    });
+
+  } catch (error) {
+    console.error(error.message);
+
+    res.status(500).json({
+      message: "Failed to create checkout session",
     });
   }
 };
