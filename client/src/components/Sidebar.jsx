@@ -7,6 +7,7 @@ import {
   X,
   Bot,
   Receipt,
+  CreditCard,
 } from "lucide-react";
 
 import {
@@ -118,6 +119,14 @@ function Sidebar() {
           >
             <Receipt size={20} />
             Receipt Scanner
+          </button>
+
+          <button
+           onClick={() => handleNavigate("/pricing")}
+           className={navItemClass("/pricing")}
+          >
+            <CreditCard size={20} />
+            Pricing
           </button>
 
           <button
