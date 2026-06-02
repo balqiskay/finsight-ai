@@ -33,7 +33,7 @@ function Pricing() {
         "AI spending insights",
         "Priority support",
       ],
-      button: "Upgrade to Pro",
+      button: "Test",
       highlighted: true,
     },
     {
