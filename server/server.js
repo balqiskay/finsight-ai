@@ -14,12 +14,19 @@ const recurringRoutes = require("./routes/recurringRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const receiptRoutes = require("./routes/receiptRoutes");
 const subscriptionRoutes = require("./routes/subscriptionRoutes");
+const stripeWebhookRoutes = require("./routes/stripeWebhookRoutes");
 
 dotenv.config();
 
 const app = express();
 
 app.use(cors());
+
+app.use(
+  "/api/stripe",
+  stripeWebhookRoutes
+);
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
