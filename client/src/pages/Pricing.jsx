@@ -54,58 +54,67 @@ function Pricing() {
   ];
 
   const handleUpgrade =
-    async (planId) => {
-      try {
-        setLoadingPlan(planId);
+  async (planId, planName) => {
+    try {
+      setLoadingPlan(planId);
 
-        const token =
-          localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token");
 
-        if (!token) {
-          toast.error(
-            "Please log in to change your plan."
-          );
-          return;
-        }
-
-        const response =
-          await fetch(
-            `${import.meta.env.VITE_API_URL}/subscriptions/upgrade/${planId}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          toast.error(
-            data.message ||
-            "Failed to change plan."
-          );
-          return;
-        }
-
-        toast.success(
-          data.message ||
-          "Plan updated successfully."
-        );
-
-      } catch (error) {
-        console.error(error);
-
+      if (!token) {
         toast.error(
-          "Something went wrong."
+          "Please log in first."
+        );
+        return;
+      }
+
+      if (planName === "Free") {
+        toast.error(
+          "Free plan downgrade will be handled later."
+        );
+        return;
+      }
+
+      const response =
+        await fetch(
+          `${import.meta.env.VITE_API_URL}/subscriptions/create-checkout-session`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              plan: planName,
+            }),
+          }
         );
 
-      } finally {
-        setLoadingPlan(null);
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        toast.error(
+          data.message ||
+          "Failed to start checkout."
+        );
+        return;
       }
-    };
+
+      window.location.href =
+        data.url;
+
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        "Something went wrong."
+      );
+
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white px-6 md:px-16 py-16">
@@ -160,7 +169,10 @@ function Pricing() {
 
               <button
                 onClick={() =>
-                  handleUpgrade(plan.id)
+                  handleUpgrade(
+                    plan.id,
+                    plan.name
+                  )
                 }
                 disabled={loadingPlan === plan.id}
                 className={`w-full py-3 rounded-xl font-semibold mb-8 transition disabled:opacity-50 disabled:cursor-not-allowed ${
