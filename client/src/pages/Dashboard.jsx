@@ -140,50 +140,84 @@ function Dashboard() {
             </p>
           </div>
 
-          <button
-            onClick={() => navigate("/transactions")}
-            className="w-full sm:w-fit bg-white text-black px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
-          >
-            + Add Transaction
-          </button>
         </div>
 
-        {/* Hero */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-700 p-6 sm:p-8 lg:p-12 rounded-[2rem] shadow-[0_0_70px_rgba(59,130,246,0.28)] border border-white/10">
-          <div className="absolute top-[-80px] right-[-80px] w-72 h-72 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-[-100px] left-[-100px] w-72 h-72 bg-purple-400/20 rounded-full blur-3xl" />
+        {/* Executive Summary */}
 
-          <div className="relative z-10 max-w-4xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-full text-sm text-blue-100 mb-6">
-              <Sparkles size={16} />
-              AI-powered financial intelligence
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold leading-tight mb-5">
-              Take control of your financial future.
-            </h2>
-
-            <p className="text-blue-100/90 text-base sm:text-lg lg:text-xl max-w-3xl leading-relaxed">
-              Manage transactions, analyze spending, ask Vayqor for guidance,
-              scan receipts, and unlock smarter financial decisions.
+        <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-6 sm:p-8 hover:border-blue-500/20 transition">
+        
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          
+          <div>
+            
+            <p className="text-blue-400 font-medium mb-2">
+              Financial Overview
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <button
-                onClick={() => navigate("/analytics")}
-                className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
-              >
-                View Analytics
-              </button>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              RM {summary.balance}
+            </h2>
 
-              <button
-                onClick={() => navigate("/assistant")}
-                className="bg-black/20 backdrop-blur-xl text-white px-6 py-3 rounded-2xl font-bold border border-white/20 hover:bg-white/10 transition"
-              >
-                Ask Vayqor
-              </button>
-            </div>
+            <p className="text-zinc-400 mt-2">
+              Current Available Balance
+            </p>
+
           </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            
+            <button
+             onClick={() => navigate("/transactions")}
+             className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
+            >
+              + Add Transaction
+            </button>
+
+            <button
+             onClick={() => navigate("/assistant")}
+             className="bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
+            >
+              Ask Vayqor
+            </button>
+
+          </div>
+
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+          
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm">
+              Total Income
+            </p>
+
+            <h3 className="text-green-400 text-2xl font-bold mt-2">
+              RM {summary.totalIncome}
+            </h3>
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm">
+              Total Expenses
+            </p>
+
+            <h3 className="text-red-400 text-2xl font-bold mt-2">
+              RM {summary.totalExpenses}
+            </h3>
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm">
+              Savings Rate
+            </p>
+
+            <h3 className="text-purple-400 text-2xl font-bold mt-2">
+              {savingsRate}%
+            </h3>
+          </div>
+
+        </div>
+
         </div>
 
         {/* Empty State */}
