@@ -9,6 +9,8 @@ import {
   Sparkles,
   ShieldCheck,
   CreditCard,
+  ArrowRight,
+  TrendingUp,
 } from "lucide-react";
 
 function Landing() {
@@ -48,13 +50,12 @@ function Landing() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white overflow-hidden">
 
-      {/* Background Glow */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-500/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-160px] right-[-120px] w-[420px] h-[420px] bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-blue-500/20 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-160px] right-[-120px] w-[460px] h-[460px] bg-purple-500/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute top-[35%] left-[-160px] w-[360px] h-[360px] bg-indigo-500/10 blur-[100px] rounded-full" />
       </div>
 
-      {/* Navbar */}
       <nav className="relative z-10 px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
 
@@ -84,7 +85,7 @@ function Landing() {
 
             <Link
               to="/register"
-              className="bg-white text-black px-4 sm:px-5 py-2 rounded-xl font-semibold hover:scale-[1.02] transition"
+              className="bg-white text-black px-4 sm:px-5 py-2 rounded-xl font-semibold hover:scale-[1.03] transition shadow-[0_0_25px_rgba(255,255,255,0.12)]"
             >
               Get Started
             </Link>
@@ -93,7 +94,6 @@ function Landing() {
         </div>
       </nav>
 
-      {/* Hero */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 text-center">
         <div className="max-w-6xl mx-auto">
 
@@ -117,14 +117,15 @@ function Landing() {
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/register"
-              className="bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.02] transition text-center"
+              className="group bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.03] transition shadow-[0_0_35px_rgba(255,255,255,0.18)] flex items-center justify-center gap-2"
             >
               Start Free
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition" />
             </Link>
 
             <Link
               to="/pricing"
-              className="bg-zinc-900/80 border border-zinc-800 px-7 py-4 rounded-2xl font-bold hover:bg-zinc-800 transition text-center"
+              className="bg-zinc-900/80 border border-zinc-800 px-7 py-4 rounded-2xl font-bold hover:bg-zinc-800 hover:border-blue-500/40 transition text-center"
             >
               View Pricing
             </Link>
@@ -134,15 +135,54 @@ function Landing() {
             Free plan available · Upgrade anytime · Built for modern money management
           </p>
 
+          <div className="mt-12 max-w-5xl mx-auto bg-zinc-900/70 border border-zinc-800 rounded-[2rem] p-4 sm:p-6 shadow-2xl hover:border-blue-500/30 transition">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <div className="bg-zinc-950 rounded-2xl p-5 text-left border border-zinc-800">
+                <p className="text-zinc-500 text-sm mb-2">
+                  Monthly Balance
+                </p>
+                <h3 className="text-3xl font-bold text-blue-400">
+                  RM 2,840
+                </h3>
+                <p className="text-green-400 text-sm mt-2 flex items-center gap-1">
+                  <TrendingUp size={14} />
+                  +18% from last month
+                </p>
+              </div>
+
+              <div className="bg-zinc-950 rounded-2xl p-5 text-left border border-zinc-800">
+                <p className="text-zinc-500 text-sm mb-2">
+                  AI Insight
+                </p>
+                <p className="text-zinc-300 text-sm leading-relaxed">
+                  You can save more by reducing food delivery and recurring subscriptions.
+                </p>
+              </div>
+
+              <div className="bg-zinc-950 rounded-2xl p-5 text-left border border-zinc-800">
+                <p className="text-zinc-500 text-sm mb-2">
+                  Goal Progress
+                </p>
+                <h3 className="text-3xl font-bold">
+                  72%
+                </h3>
+                <div className="mt-3 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-full w-[72%] bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* Preview / Trust Strip */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center">
-            <p className="text-3xl font-extrabold text-white">
+          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center hover:border-blue-500/30 transition">
+            <p className="text-3xl font-extrabold">
               50
             </p>
             <p className="text-zinc-400 text-sm mt-1">
@@ -150,8 +190,8 @@ function Landing() {
             </p>
           </div>
 
-          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center">
-            <p className="text-3xl font-extrabold text-white">
+          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center hover:border-blue-500/30 transition">
+            <p className="text-3xl font-extrabold">
               3
             </p>
             <p className="text-zinc-400 text-sm mt-1">
@@ -159,19 +199,18 @@ function Landing() {
             </p>
           </div>
 
-          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center">
-            <p className="text-3xl font-extrabold text-white">
+          <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 text-center hover:border-blue-500/30 transition">
+            <p className="text-3xl font-extrabold">
               AI
             </p>
             <p className="text-zinc-400 text-sm mt-1">
-              Insights, assistant, and forecasting
+              Assistant, insights, and forecasting
             </p>
           </div>
 
         </div>
       </section>
 
-      {/* Features */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="max-w-7xl mx-auto">
 
@@ -189,7 +228,7 @@ function Landing() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group bg-zinc-900/80 border border-zinc-800 p-6 sm:p-7 rounded-3xl hover:bg-zinc-900 hover:-translate-y-1 transition duration-300"
+                className="group bg-zinc-900/80 border border-zinc-800 p-6 sm:p-7 rounded-3xl hover:bg-zinc-900 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-[0_0_35px_rgba(59,130,246,0.12)] transition duration-300"
               >
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-5 group-hover:bg-blue-500/20 transition">
                   {feature.icon}
@@ -209,11 +248,10 @@ function Landing() {
         </div>
       </section>
 
-      {/* Plans Teaser */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-7 sm:p-10">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-7 sm:p-10 hover:border-blue-500/30 transition">
             <CreditCard className="text-blue-400 mb-5" size={30} />
 
             <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
@@ -228,14 +266,15 @@ function Landing() {
 
             <Link
               to="/pricing"
-              className="inline-block bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.02] transition"
+              className="inline-flex items-center gap-2 bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.03] transition"
             >
               Compare Plans
+              <ArrowRight size={18} />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6">
+            <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 hover:border-blue-500/30 transition">
               <p className="text-zinc-500 text-sm mb-2">
                 Free
               </p>
@@ -247,7 +286,7 @@ function Landing() {
               </p>
             </div>
 
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-3xl p-6">
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-3xl p-6 shadow-[0_0_35px_rgba(59,130,246,0.12)]">
               <p className="text-blue-400 text-sm mb-2">
                 Recommended
               </p>
@@ -259,7 +298,7 @@ function Landing() {
               </p>
             </div>
 
-            <div className="sm:col-span-2 bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6">
+            <div className="sm:col-span-2 bg-zinc-900/70 border border-zinc-800 rounded-3xl p-6 hover:border-purple-500/30 transition">
               <p className="text-purple-400 text-sm mb-2">
                 Premium
               </p>
@@ -275,7 +314,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="max-w-6xl mx-auto bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-700 rounded-[2rem] sm:rounded-[2.5rem] p-7 sm:p-12 lg:p-16 text-center shadow-[0_0_80px_rgba(59,130,246,0.28)]">
 
@@ -297,7 +335,7 @@ function Landing() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/register"
-              className="bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.02] transition"
+              className="bg-white text-black px-7 py-4 rounded-2xl font-bold hover:scale-[1.03] transition"
             >
               Create Free Account
             </Link>
@@ -313,7 +351,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="relative z-10 px-4 sm:px-6 lg:px-8 py-10 border-t border-zinc-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
 
