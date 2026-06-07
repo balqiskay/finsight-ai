@@ -131,8 +131,12 @@ function Dashboard() {
             </p>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-              Your Financial Command Center
+              Financial Dashboard
             </h1>
+
+            <p className="text-zinc-400 max-w-2xl mt-4 leading-relaxed">
+              Monitor your finances, analyze trends, and make smarter decisions with AI-powered insights.
+            </p>
 
             <p className="text-zinc-400 max-w-2xl mt-4 leading-relaxed">
               Track your money, monitor your goals, review analytics,
@@ -142,84 +146,7 @@ function Dashboard() {
 
         </div>
 
-        {/* Executive Summary */}
-
-        <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-6 sm:p-8 hover:border-blue-500/20 transition">
-        
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          
-          <div>
-            
-            <p className="text-blue-400 font-medium mb-2">
-              Financial Overview
-            </p>
-
-            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-              RM {summary.balance}
-            </h2>
-
-            <p className="text-zinc-400 mt-2">
-              Current Available Balance
-            </p>
-
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            
-            <button
-             onClick={() => navigate("/transactions")}
-             className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
-            >
-              + Add Transaction
-            </button>
-
-            <button
-             onClick={() => navigate("/assistant")}
-             className="bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold hover:scale-[1.02] transition"
-            >
-              Ask Vayqor
-            </button>
-
-          </div>
-
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-          
-          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
-            <p className="text-zinc-500 text-sm">
-              Total Income
-            </p>
-
-            <h3 className="text-green-400 text-2xl font-bold mt-2">
-              RM {summary.totalIncome}
-            </h3>
-          </div>
-
-          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
-            <p className="text-zinc-500 text-sm">
-              Total Expenses
-            </p>
-
-            <h3 className="text-red-400 text-2xl font-bold mt-2">
-              RM {summary.totalExpenses}
-            </h3>
-          </div>
-
-          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5">
-            <p className="text-zinc-500 text-sm">
-              Savings Rate
-            </p>
-
-            <h3 className="text-purple-400 text-2xl font-bold mt-2">
-              {savingsRate}%
-            </h3>
-          </div>
-
-        </div>
-
-        </div>
-
+    
         {/* Empty State */}
         {!loading &&
         Number(summary.totalIncome) === 0 &&
