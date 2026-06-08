@@ -13,6 +13,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import AIPulse from "../components/AIPulse";
+
 function Landing() {
   const features = [
     {
@@ -113,6 +115,10 @@ function Landing() {
             Vayqor helps you track spending, manage goals, analyze habits,
             forecast your financial future, and unlock AI-powered money insights.
           </p>
+
+          <div className="mt-12 flex justify-center">
+            <AIPulse size="xl" label="Vayqor AI Core" />
+          </div>
 
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <Link
