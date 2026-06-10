@@ -795,25 +795,34 @@ function DeleteConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-[110] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+
       <div className="w-full max-w-md bg-zinc-950 border border-red-500/30 rounded-[2rem] p-6 shadow-2xl">
 
-        <div className="w-14 h-14 bg-red-500/10 text-red-400 rounded-3xl flex items-center justify-center mb-5">
-          <Trash2 size={26} />
+        <div className="w-14 h-14 rounded-3xl bg-red-500/10 text-red-400 flex items-center justify-center mb-5">
+          <Trash2 size={28} />
         </div>
 
         <h2 className="text-2xl font-extrabold mb-3">
           Delete Transaction?
         </h2>
 
-        <p className="text-zinc-400 mb-6">
-          This will permanently delete{" "}
+        <p className="text-zinc-400 mb-6 leading-relaxed">
+          You are about to permanently delete
           <span className="text-white font-semibold">
-            {transaction.category}
-          </span>{" "}
-          for RM {transaction.amount}. This action cannot be undone.
+            {" "}"{transaction.category}"{" "}
+          </span>
+
+          worth
+
+          <span className="text-white font-semibold">
+            RM {transaction.amount}
+          </span>.
+
+          This action cannot be undone.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3">
+
           <button
             onClick={onCancel}
             className="flex-1 bg-zinc-900 border border-zinc-800 px-5 py-3 rounded-2xl font-bold hover:bg-zinc-800 transition"
@@ -830,9 +839,11 @@ function DeleteConfirmModal({
               ? "Deleting..."
               : "Delete"}
           </button>
+
         </div>
 
       </div>
+
     </div>
   );
 }
