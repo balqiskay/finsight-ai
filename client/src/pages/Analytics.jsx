@@ -28,6 +28,15 @@ import {
 } from "recharts";
 
 import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Sparkles,
+  Crown,
+  FileText,
+} from "lucide-react";
+
+import {
   getCategoryBreakdown,
   getMonthlyAnalytics,
   getAdvancedAnalytics,
@@ -54,7 +63,9 @@ function Analytics() {
   const [loadingAnalytics, setLoadingAnalytics] = useState(true);
 
   const [subscription, setSubscription] = useState(null);
-
+  
+  const [statusMessage, setStatusMessage] = useState(null);
+  
   const scoreMatch =
   aiInsights.match(
     /SCORE:\s*(\d+)/
@@ -85,6 +96,18 @@ const insightsText =
     ? insightsMatch[1]
     : aiInsights;
 
+const showStatus = (type, title, message) => {
+  setStatusMessage({
+    type,
+    title,
+    message,
+  });
+
+  setTimeout(() => {
+    setStatusMessage(null);
+  }, 4000);
+};
+
   const fetchCategoryData =
     async () => {
 
@@ -112,8 +135,10 @@ const insightsText =
   const handleGenerateInsights =
   async () => {
     if (!isPaidPlan(subscription?.plan_name)) {
-      alert(
-        "AI Spending Insights is available on Pro and Premium plans."
+      showStatus(
+        "premium",
+        "Upgrade Required",
+        "AI Spending Insights are available on Pro and Premium plans."
       );
       return;
     }
@@ -132,8 +157,10 @@ const insightsText =
       
       console.error(error);
 
-      alert(
-        "Failed to generate AI insights"
+      showStatus(
+        "error",
+        "Failed to generate AI insights",
+        "Please try again in a moment."
       );
 
     } finally {
@@ -315,60 +342,113 @@ const insightsText =
   return (
     <MainLayout>
 
-      <h1 className="text-2xl md:text-4xl font-bold mb-8">
-        Analytics
-      </h1>
+      <div className="mb-8">
+        <p className="text-blue-400 font-semibold mb-2">
+          Financial Intelligence
+        </p>
+
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+          Analytics Center
+        </h1>
+
+        <p className="text-zinc-400 max-w-2xl mt-4 leading-relaxed">
+          Monitor spending patterns, analyze financial performance,
+          generate AI insights, and forecast your financial future.
+        </p>
+      </div>
+
+      {statusMessage && (
+        <div
+         className={`rounded-3xl border p-5 mb-8 ${
+          statusMessage.type === "error"
+          ? "bg-red-500/10 border-red-500/30"
+          : "bg-blue-500/10 border-blue-500/30"
+         }`}
+        >
+          <p
+           className={`font-semibold mb-1 ${
+            statusMessage.type === "error"
+            ? "text-red-400"
+            : "text-blue-400"
+           }`}
+          >
+            {statusMessage.title}
+          </p>
+
+          <p className="text-zinc-400 text-sm">
+            {statusMessage.message}
+          </p>
+        </div>
+      )}
 
       {advancedAnalytics && (
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-10">
           
-          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
-            <p className="text-zinc-400 mb-2">
-              Average Expense
-            </p>
+          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl hover:border-blue-500/30 hover:-translate-y-1 transition">
+          <BarChart3 className="text-blue-400 mb-4" size={24} />
+          
+          <p className="text-zinc-500 text-sm mb-2">
+            Average Expense
+          </p>
 
-            <h2 className="text-3xl font-bold">
-              RM {advancedAnalytics.averageExpense}
-            </h2>
+          <h2 className="text-3xl font-extrabold">
+            RM {advancedAnalytics.averageExpense}
+          </h2>
+
+          <p className="text-zinc-500 text-sm mt-3">
+            Average spending per transaction
+          </p>
           </div>
 
-          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
-            <p className="text-zinc-400 mb-2">
-              Savings Rate
-            </p>
+          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl hover:border-green-500/30 hover:-translate-y-1 transition">
+          <TrendingUp className="text-green-400 mb-4" size={24} />
+        
+          <p className="text-zinc-500 text-sm mb-2">
+            Savings Rate
+          </p>
 
-            <h2 className="text-3xl font-bold text-green-400">
-              {advancedAnalytics.savingsRate}%
-            </h2>
+          <h2 className="text-3xl font-extrabold text-green-400">
+            {advancedAnalytics.savingsRate}%
+          </h2>
+
+          <p className="text-zinc-500 text-sm mt-3">
+            Income kept after expenses
+          </p>
           </div>
 
-          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
-            <p className="text-zinc-400 mb-2">
-              Expense Ratio
-            </p>
+          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl hover:border-red-500/30 hover:-translate-y-1 transition">
+          <TrendingDown className="text-red-400 mb-4" size={24} />
+      
+          <p className="text-zinc-500 text-sm mb-2">
+            Expense Ratio
+          </p>
 
-            <h2 className="text-3xl font-bold text-red-400">
-              {advancedAnalytics.expenseRatio}%
-            </h2>
+          <h2 className="text-3xl font-extrabold text-red-400">
+            {advancedAnalytics.expenseRatio}%
+          </h2>
+
+          <p className="text-zinc-500 text-sm mt-3">
+            Percentage of income spent
+          </p>
           </div>
 
-          <div className="bg-zinc-900 p-6 rounded-2xl transition duration-300 hover:-translate-y-1 hover:bg-zinc-800">
-            <p className="text-zinc-400 mb-2">
-              Highest Spending
-            </p>
+          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl hover:border-purple-500/30 hover:-translate-y-1 transition">
+          <Sparkles className="text-purple-400 mb-4" size={24} />
 
-            <h2 className="text-2xl font-bold">
-              {
-              advancedAnalytics
-              .highestSpendingCategory
-              ?.category || "N/A"
-              }
-            </h2>
+          <p className="text-zinc-500 text-sm mb-2">
+            Highest Spending
+          </p>
+
+          <h2 className="text-2xl font-extrabold">
+            {advancedAnalytics.highestSpendingCategory?.category || "N/A"}
+          </h2>
+
+          <p className="text-zinc-500 text-sm mt-3">
+            Category with highest expense
+          </p>
           </div>
 
         </div>
-
       )}
 
       {alerts.length > 0 && (
@@ -650,7 +730,9 @@ const insightsText =
                 subscription?.plan_name
               )
             ) {
-              alert(
+              showStatus(
+                "premium",
+                "Premium Feature",
                 "Advanced Financial Reports are available on Premium."
               );
               return;
