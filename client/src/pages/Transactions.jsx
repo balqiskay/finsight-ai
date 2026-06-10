@@ -41,6 +41,9 @@ function Transactions() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [sortBy, setSortBy] = useState("newest");
 
   const resetForm = () => {
     setFormData({
@@ -52,6 +55,7 @@ function Transactions() {
     });
 
     setEditingId(null);
+    setFormErrors({});
   };
 
   const openAddModal = () => {
@@ -110,27 +114,35 @@ function Transactions() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.category ||
-      !formData.amount ||
-      !formData.transaction_date
-    ) {
+    const errors = {};
+
+    if (!formData.category) {
+      errors.category = "Category is required.";
+    }
+
+    if (!formData.amount) {
+      errors.amount = "Amount is required.";
+    } else if (Number(formData.amount) <= 0) {
+      errors.amount = "Amount must be greater than 0.";
+    }
+
+    if (!formData.transaction_date) {
+      errors.transaction_date = "Date is required."; 
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+
       showStatus(
         "error",
-        "Missing information",
-        "Please fill in category, amount, and date."
+        "Check your transaction details",
+        "Please fix the highlighted fields before saving."
       );
+
       return;
     }
 
-    if (Number(formData.amount) <= 0) {
-      showStatus(
-        "error",
-        "Invalid amount",
-        "Amount must be greater than 0."
-      );
-      return;
-    }
+    setFormErrors({});
 
     setLoading(true);
 
@@ -445,7 +457,7 @@ function Transactions() {
                           </button>
 
                           <button
-                            onClick={() => handleDelete(transaction.id)}
+                            onClick={() => setDeleteTarget(transaction)}
                             disabled={deletingId === transaction.id}
                             className="bg-red-500/10 text-red-400 px-3 py-2 rounded-xl hover:bg-red-500/20 disabled:opacity-50 transition"
                           >
@@ -529,7 +541,7 @@ function Transactions() {
                       </button>
 
                       <button
-                        onClick={() => handleDelete(transaction.id)}
+                        onClick={() => setDeleteTarget(transaction)}
                         disabled={deletingId === transaction.id}
                         className="bg-red-500/10 text-red-400 px-3 py-2 rounded-xl disabled:opacity-50"
                       >
@@ -555,6 +567,18 @@ function Transactions() {
           <Plus size={26} />
         </button>
 
+        {deleteTarget && (
+          <DeleteConfirmModal
+           transaction={deleteTarget}
+           deletingId={deletingId}
+           onCancel={() => setDeleteTarget(null)}
+           onConfirm={async () => {
+            await handleDelete(deleteTarget.id);
+            setDeleteTarget(null);
+           }}
+          />
+        )}
+
         {isModalOpen && (
           <TransactionModal
             formData={formData}
@@ -564,6 +588,7 @@ function Transactions() {
             closeModal={closeModal}
             loading={loading}
             editingId={editingId}
+            formErrors={formErrors}
           />
         )}
 
@@ -613,6 +638,7 @@ function TransactionModal({
   closeModal,
   loading,
   editingId,
+  formErrors,
 }) {
   return (
     <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
@@ -667,22 +693,42 @@ function TransactionModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
-              type="text"
-              name="category"
-              placeholder="Category"
-              value={formData.category}
-              onChange={handleChange}
-              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 outline-none focus:border-blue-500/50"
+             type="text"
+             name="category"
+             placeholder="Category"
+             value={formData.category}
+             onChange={handleChange}
+             className={`bg-zinc-900 border rounded-2xl p-4 outline-none focus:border-blue-500/50 ${
+              formErrors.category
+              ? "border-red-500"
+              : "border-zinc-800"
+             }`}
             />
+            
+            {formErrors.category && (
+              <p className="text-red-400 text-sm mt-1">
+                {formErrors.category}
+              </p>
+            )}
 
             <input
-              type="number"
-              name="amount"
-              placeholder="Amount"
-              value={formData.amount}
-              onChange={handleChange}
-              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 outline-none focus:border-blue-500/50"
+             type="number"
+             name="amount"
+             placeholder="Amount"
+             value={formData.amount}
+             onChange={handleChange}
+             className={`bg-zinc-900 border rounded-2xl p-4 outline-none focus:border-blue-500/50 ${
+              formErrors.amount
+              ? "border-red-500"
+              : "border-zinc-800"
+             }`}
             />
+            
+            {formErrors.amount && (
+              <p className="text-red-400 text-sm mt-1">
+                {formErrors.amount}
+              </p>
+            )}
 
             <input
               type="text"
@@ -694,12 +740,22 @@ function TransactionModal({
             />
 
             <input
-              type="date"
-              name="transaction_date"
-              value={formData.transaction_date}
-              onChange={handleChange}
-              className="sm:col-span-2 bg-zinc-900 border border-zinc-800 rounded-2xl p-4 outline-none focus:border-blue-500/50"
+             type="date"
+             name="transaction_date"
+             value={formData.transaction_date}
+             onChange={handleChange}
+             className={`sm:col-span-2 bg-zinc-900 border rounded-2xl p-4 outline-none focus:border-blue-500/50 ${
+              formErrors.transaction_date
+              ? "border-red-500"
+              : "border-zinc-800"
+             }`}
             />
+            
+            {formErrors.transaction_date && (
+              <p className="text-red-400 text-sm mt-1 sm:col-span-2">
+                {formErrors.transaction_date}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-7">
@@ -725,6 +781,56 @@ function TransactionModal({
           </div>
 
         </form>
+
+      </div>
+    </div>
+  );
+}
+
+function DeleteConfirmModal({
+  transaction,
+  deletingId,
+  onCancel,
+  onConfirm,
+}) {
+  return (
+    <div className="fixed inset-0 z-[110] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-zinc-950 border border-red-500/30 rounded-[2rem] p-6 shadow-2xl">
+
+        <div className="w-14 h-14 bg-red-500/10 text-red-400 rounded-3xl flex items-center justify-center mb-5">
+          <Trash2 size={26} />
+        </div>
+
+        <h2 className="text-2xl font-extrabold mb-3">
+          Delete Transaction?
+        </h2>
+
+        <p className="text-zinc-400 mb-6">
+          This will permanently delete{" "}
+          <span className="text-white font-semibold">
+            {transaction.category}
+          </span>{" "}
+          for RM {transaction.amount}. This action cannot be undone.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 bg-zinc-900 border border-zinc-800 px-5 py-3 rounded-2xl font-bold hover:bg-zinc-800 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={onConfirm}
+            disabled={deletingId === transaction.id}
+            className="flex-1 bg-red-500 text-white px-5 py-3 rounded-2xl font-bold hover:bg-red-600 transition disabled:opacity-50"
+          >
+            {deletingId === transaction.id
+              ? "Deleting..."
+              : "Delete"}
+          </button>
+        </div>
 
       </div>
     </div>
