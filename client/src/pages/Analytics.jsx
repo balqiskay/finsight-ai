@@ -243,6 +243,31 @@ function Analytics() {
     "#a855f7",
   ];
 
+  const highestIncomeMonth =
+  monthlyData.length > 0
+    ? monthlyData.reduce((highest, item) =>
+        Number(item.income) > Number(highest.income)
+          ? item
+          : highest
+      )
+    : null;
+
+  const highestExpenseMonth =
+  monthlyData.length > 0
+    ? monthlyData.reduce((highest, item) =>
+        Number(item.expenses) > Number(highest.expenses)
+          ? item
+          : highest
+      )
+    : null;
+
+  const netPositiveMonths =
+  monthlyData.filter(
+    (item) =>
+      Number(item.income) >
+      Number(item.expenses)
+  ).length;
+
   const downloadPDF = () => {
     const doc = new jsPDF();
 
@@ -745,77 +770,137 @@ function Analytics() {
       </div>
 
       <div className="mt-10 bg-zinc-900 border border-zinc-800 p-6 md:p-8 rounded-[2rem]">
+        
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+          <div>
+            <p className="text-blue-400 font-semibold mb-2">
+              Trend Intelligence
+            </p>
 
-        <h2 className="text-2xl font-bold mb-6">
-          Monthly Financial Trends
-        </h2>
+            <h2 className="text-2xl font-bold">
+              Monthly Financial Trends
+            </h2>
 
-        <div className="w-full h-[350px]">
+            <p className="text-zinc-500 text-sm mt-2">
+              Compare income and expenses across your financial timeline.
+            </p>
+          </div>
+        </div>
 
+        {monthlyData.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            
+            <div className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm mb-2">
+              Highest Income Month
+            </p>
+
+            <h3 className="text-xl font-bold">
+              {highestIncomeMonth?.month || "N/A"}
+            </h3>
+
+            <p className="text-green-400 font-semibold mt-2">
+              RM {Number(highestIncomeMonth?.income || 0).toFixed(2)}
+            </p>
+            </div>
+
+            <div className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm mb-2">
+              Highest Expense Month
+            </p>
+
+            <h3 className="text-xl font-bold">
+              {highestExpenseMonth?.month || "N/A"}
+            </h3>
+
+            <p className="text-red-400 font-semibold mt-2">
+              RM {Number(highestExpenseMonth?.expenses || 0).toFixed(2)}
+            </p>
+            </div>
+
+            <div className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-5">
+            <p className="text-zinc-500 text-sm mb-2">
+              Net Positive Months
+            </p>
+
+            <h3 className="text-xl font-bold">
+              {netPositiveMonths}
+            </h3>
+
+            <p className="text-blue-400 font-semibold mt-2">
+              Months income exceeded expenses
+            </p>
+            </div>
+
+          </div>
+        )}
+
+        <div className="w-full h-[320px] sm:h-[380px]">
+          
           {monthlyData.length > 0 ? (
             <ResponsiveContainer
-              width="100%"
-              height="100%"
+             width="100%"
+             height="100%"
             >
               <LineChart data={monthlyData}>
                 <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="#27272a"
+                 strokeDasharray="3 3"
+                 stroke="#27272a"
                 />
-
+                
                 <XAxis
-                  dataKey="month"
-                  stroke="#71717a"
+                 dataKey="month"
+                 stroke="#71717a"
                 />
 
                 <YAxis stroke="#71717a" />
 
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
-                    borderRadius: "12px",
-                    color: "#fff",
-                  }}
+                 contentStyle={{
+                  backgroundColor: "#18181b",
+                  border: "1px solid #27272a",
+                  borderRadius: "12px",
+                  color: "#fff",
+                 }}
                 />
 
                 <Legend />
-
+                
                 <Line
-                  animationDuration={1200}
-                  type="monotone"
-                  dataKey="income"
-                  stroke="#22c55e"
-                  strokeWidth={4}
-                  dot={{
-                    r: 5,
-                    strokeWidth: 2,
-                  }}
-                  activeDot={{
-                    r: 7,
-                  }}
+                 animationDuration={1200}
+                 type="monotone"
+                 dataKey="income"
+                 stroke="#22c55e"
+                 strokeWidth={4}
+                 dot={{
+                  r: 5,
+                  strokeWidth: 2,
+                 }}
+                 activeDot={{
+                  r: 7,
+                 }}
                 />
 
                 <Line
-                  animationDuration={1200}
-                  type="monotone"
-                  dataKey="expenses"
-                  stroke="#ef4444"
-                  strokeWidth={4}
-                  dot={{
-                    r: 5,
-                    strokeWidth: 2,
-                  }}
-                  activeDot={{
-                    r: 7,
-                  }}
+                 animationDuration={1200}
+                 type="monotone"
+                 dataKey="expenses"
+                 stroke="#ef4444"
+                 strokeWidth={4}
+                 dot={{
+                  r: 5,
+                  strokeWidth: 2,
+                 }}
+                 activeDot={{
+                  r: 7,
+                 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-zinc-500">
-              No monthly trend data available.
-            </div>
+          <div className="flex items-center justify-center h-full text-zinc-500">
+            No monthly trend data available.
+          </div>
           )}
 
         </div>
