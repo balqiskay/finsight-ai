@@ -34,6 +34,16 @@ function ReceiptScanner() {
   const [loading, setLoading] = useState(false);
   const [creatingTransaction, setCreatingTransaction] = useState(false);
   const [result, setResult] = useState(null);
+  const [reviewData, setReviewData] =
+  useState({
+    merchant: "",
+    amount: "",
+    date: "",
+    category: "",
+    description: "",
+  });
+
+  const [creatingTransaction, setCreatingTransaction] = useState(false);
 
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
@@ -89,6 +99,14 @@ function ReceiptScanner() {
       const data = await scanReceipt(file);
 
       setResult(data);
+
+      setReviewData({
+        merchant: data.merchant || "",
+        amount: data.amount || "",
+        date: data.date || "",
+        category: data.category || "",
+        description: data.description || "",
+      });
 
       showStatus(
         "success",
@@ -192,24 +210,31 @@ function ReceiptScanner() {
 
   const handleCreateTransaction =
   async () => {
-    if (!result) return;
+    if (
+      !reviewData.amount ||
+      !reviewData.date ||
+      !reviewData.category
+    ) {
+      showStatus(
+        "error",
+        "Missing transaction details",
+        "Amount, date, and category are required before creating a transaction."
+      );
+      return;
+    }
 
     try {
       setCreatingTransaction(true);
 
       await addTransaction({
         type: "expense",
-        category:
-          result.category || "Receipt",
-        amount:
-          result.amount || 0,
+        category: reviewData.category,
+        amount: reviewData.amount,
         description:
-          result.description ||
-          result.merchant ||
+          reviewData.description ||
+          reviewData.merchant ||
           "Receipt transaction",
-        transaction_date:
-          result.date ||
-          new Date().toISOString().slice(0, 10),
+        transaction_date: reviewData.date,
       });
 
       showStatus(
@@ -228,7 +253,7 @@ function ReceiptScanner() {
       showStatus(
         "error",
         "Failed to create transaction",
-        "Please check the receipt data and try again."
+        "Please check the receipt details and try again."
       );
     } finally {
       setCreatingTransaction(false);
@@ -399,35 +424,72 @@ function ReceiptScanner() {
 
             {result ? (
               <div className="space-y-4">
-                <ReceiptItem
-                  icon={<Store size={20} />}
-                  label="Merchant"
-                  value={result.merchant || "Not detected"}
+                
+                <ReviewInput
+                 label="Merchant"
+                 value={reviewData.merchant}
+                 onChange={(value) =>
+                  setReviewData({
+                    ...reviewData,
+                    merchant: value,
+                  })
+                 }
                 />
 
-                <ReceiptItem
-                  icon={<Wallet size={20} />}
-                  label="Amount"
-                  value={`RM ${result.amount || "0.00"}`}
+                <ReviewInput
+                 label="Amount"
+                 type="number"
+                 required
+                 value={reviewData.amount}
+                 onChange={(value) =>
+                  setReviewData({
+                    ...reviewData,
+                    amount: value,
+                  })
+                 }
                 />
 
-                <ReceiptItem
-                  icon={<Calendar size={20} />}
-                  label="Date"
-                  value={result.date || "Not detected"}
+                <ReviewInput
+                 label="Date"
+                 type="date"
+                 required
+                 value={reviewData.date}
+                 onChange={(value) =>
+                  setReviewData({
+                    ...reviewData,
+                    date: value,
+                  })
+                 }
                 />
 
-                <ReceiptItem
-                  icon={<Tags size={20} />}
-                  label="Category"
-                  value={result.category || "Uncategorized"}
+                <ReviewInput
+                 label="Category"
+                 required
+                 value={reviewData.category}
+                 onChange={(value) =>
+                  setReviewData({
+                    ...reviewData,
+                    category: value,
+                  })
+                 }
                 />
 
-                <ReceiptItem
-                  icon={<FileText size={20} />}
-                  label="Description"
-                  value={result.description || "No description generated"}
-                />
+                <div>
+                  <p className="text-zinc-500 text-sm mb-2">
+                    Description
+                  </p>
+
+                  <textarea
+                   value={reviewData.description}
+                   onChange={(e) =>
+                    setReviewData({
+                      ...reviewData,
+                      description: e.target.value,
+                    })
+                   }
+                   className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-4 outline-none focus:border-blue-500/50 resize-none h-24"
+                  />
+                </div>
 
                 <button
                  onClick={handleCreateTransaction}
@@ -438,6 +500,7 @@ function ReceiptScanner() {
                   ? "Creating Transaction..."
                   : "Create Transaction"}
                 </button>
+
               </div>
             ) : (
               <div className="min-h-[320px] flex flex-col items-center justify-center text-center">
@@ -479,6 +542,47 @@ function ReceiptItem({ icon, label, value }) {
           {value}
         </p>
       </div>
+    </div>
+  );
+}
+
+function ReviewInput({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required = false,
+}) {
+  const hasError =
+    required && !value;
+
+  return (
+    <div>
+      <p className="text-zinc-500 text-sm mb-2">
+        {label}
+        {required && (
+          <span className="text-red-400"> *</span>
+        )}
+      </p>
+
+      <input
+        type={type}
+        value={value}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        className={`w-full bg-zinc-950 border rounded-2xl p-4 outline-none focus:border-blue-500/50 ${
+          hasError
+            ? "border-red-500/60"
+            : "border-zinc-800"
+        }`}
+      />
+
+      {hasError && (
+        <p className="text-red-400 text-sm mt-2">
+          {label} is required.
+        </p>
+      )}
     </div>
   );
 }
