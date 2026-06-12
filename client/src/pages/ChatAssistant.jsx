@@ -37,11 +37,32 @@ function ChatAssistant() {
     useRef(null);
 
   const prompts = [
-    "How can I save more money this month?",
-    "Analyze my spending habits.",
-    "Help me create a better budget.",
-    "What expenses should I reduce first?",
+    {
+      title: "Spending Review",
+      text: "Analyze my spending habits.",
+    },
+    {
+      title: "Budget Advice",
+      text: "Help me create a better budget.",
+    },
+    {
+      title: "Saving Strategy",
+      text: "How can I save more money this month?",
+    },
+    {
+      title: "Reduce Expenses",
+      text: "What expenses should I reduce first?",
+    },
   ];
+
+  const hour = new Date().getHours();
+
+  const greeting =
+  hour < 12
+    ? "Good morning"
+    : hour < 18
+    ? "Good afternoon"
+    : "Good evening";
 
   useEffect(() => {
     const loadHistory =
@@ -164,24 +185,30 @@ function ChatAssistant() {
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-bold mb-3">
-              What would you like to analyze?
+              {greeting}, I&apos;m Vayqor.
             </h2>
 
             <p className="text-zinc-400 max-w-xl mx-auto mb-8 text-sm sm:text-base">
-              Choose a prompt below or ask your own financial question.
+              Your AI financial analyst is ready. Choose a prompt below or ask your own money question.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {prompts.map((prompt) => (
                 <button
-                  key={prompt}
-                  onClick={() => {
-                    setQuestion(prompt);
-                    setLimitMessage("");
-                  }}
-                  className="bg-zinc-800 border border-zinc-700 rounded-2xl p-4 text-left text-zinc-300 hover:text-white hover:border-blue-500/40 hover:bg-zinc-800/80 transition text-sm sm:text-base"
+                 key={prompt.title}
+                 onClick={() => {
+                  setQuestion(prompt.text);
+                  setLimitMessage("");
+                 }}
+                 className="group bg-zinc-800 border border-zinc-700 rounded-2xl p-5 text-left hover:border-blue-500/40 hover:bg-zinc-800/80 transition"
                 >
-                  {prompt}
+                  <p className="text-white font-bold mb-2 group-hover:text-blue-400 transition">
+                    {prompt.title}
+                  </p>
+
+                  <p className="text-zinc-400 text-sm leading-relaxed">
+                    {prompt.text}
+                  </p>
                 </button>
               ))}
             </div>
@@ -342,9 +369,9 @@ function ChatAssistant() {
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
             <div className="flex items-center gap-2 text-xs text-zinc-500">
-              <Sparkles size={14} />
+              <Sparkles size={14} className="text-blue-400" />
               <span>
-                AI guidance only. Not financial advice.
+                Powered by Vayqor AI · Guidance only, not professional financial advice.
               </span>
             </div>
 
