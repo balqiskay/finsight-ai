@@ -357,6 +357,33 @@ function ChatAssistant() {
           onSubmit={handleAsk}
           className="sticky bottom-4 bg-zinc-900/95 backdrop-blur-xl border border-zinc-800 rounded-[2rem] p-4 sm:p-5 shadow-2xl"
         >
+          {messages.length > 0 && (
+            <div className="mb-5">
+              
+              <p className="text-zinc-500 text-sm mb-3">
+                Quick prompts
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                
+                {prompts.map((prompt) => (
+                  <button
+                   key={prompt.title}
+                   type="button"
+                   onClick={() => {
+                    setQuestion(prompt.text);
+                    setLimitMessage("");
+                   }}
+                   className="bg-zinc-800 border border-zinc-700 px-4 py-2 rounded-full text-sm text-zinc-300 hover:text-white hover:border-blue-500/40 hover:bg-zinc-800/80 transition"
+                  >
+                    {prompt.title}
+                  </button>
+                ))}
+
+              </div>
+
+            </div>
+          )}
           <textarea
             value={question}
             onChange={(e) => {
