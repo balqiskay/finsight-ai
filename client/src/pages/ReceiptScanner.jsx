@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import MainLayout from "../layouts/MainLayout";
 
 import { isPaidPlan } from "../utils/subscription";
+
+import {
+  addTransaction,
+} from "../services/transactionService";
 
 import {
   scanReceipt,
@@ -22,9 +28,11 @@ import {
 } from "lucide-react";
 
 function ReceiptScanner() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [creatingTransaction, setCreatingTransaction] = useState(false);
   const [result, setResult] = useState(null);
 
   const [subscription, setSubscription] = useState(null);
@@ -181,6 +189,51 @@ function ReceiptScanner() {
       </MainLayout>
     );
   }
+
+  const handleCreateTransaction =
+  async () => {
+    if (!result) return;
+
+    try {
+      setCreatingTransaction(true);
+
+      await addTransaction({
+        type: "expense",
+        category:
+          result.category || "Receipt",
+        amount:
+          result.amount || 0,
+        description:
+          result.description ||
+          result.merchant ||
+          "Receipt transaction",
+        transaction_date:
+          result.date ||
+          new Date().toISOString().slice(0, 10),
+      });
+
+      showStatus(
+        "success",
+        "Transaction created",
+        "Receipt data has been saved as a transaction."
+      );
+
+      setTimeout(() => {
+        navigate("/transactions");
+      }, 900);
+
+    } catch (error) {
+      console.error(error);
+
+      showStatus(
+        "error",
+        "Failed to create transaction",
+        "Please check the receipt data and try again."
+      );
+    } finally {
+      setCreatingTransaction(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -375,6 +428,16 @@ function ReceiptScanner() {
                   label="Description"
                   value={result.description || "No description generated"}
                 />
+
+                <button
+                 onClick={handleCreateTransaction}
+                 disabled={creatingTransaction}
+                 className="w-full mt-4 bg-white text-black px-6 py-4 rounded-2xl font-bold hover:scale-[1.02] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {creatingTransaction
+                  ? "Creating Transaction..."
+                  : "Create Transaction"}
+                </button>
               </div>
             ) : (
               <div className="min-h-[320px] flex flex-col items-center justify-center text-center">
