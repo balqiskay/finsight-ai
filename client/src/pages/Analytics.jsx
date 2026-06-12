@@ -678,9 +678,17 @@ function Analytics() {
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-          <h2 className="text-2xl font-bold">
-            AI Financial Insights
-          </h2>
+          <div>
+            
+            <p className="text-purple-400 font-semibold mb-2">
+              AI Powered Analysis
+            </p>
+
+            <h2 className="text-3xl font-bold">
+              Financial Health Report
+            </h2>
+
+          </div>
 
           <div className="flex flex-col md:flex-row gap-4">
 
@@ -719,7 +727,7 @@ function Analytics() {
 
         </div>
 
-        <div className="bg-zinc-800 p-6 rounded-2xl min-h-[120px]">
+        <div className="bg-zinc-800 border border-zinc-700 p-6 rounded-[2rem] min-h-[120px]">
 
           {aiInsights ? (
             <div className="space-y-6">
@@ -731,7 +739,7 @@ function Analytics() {
                     Financial Health Score
                   </h3>
 
-                  <p className="text-5xl font-bold">
+                  <p className="text-6xl font-extrabold text-blue-400">
                     {score}/100
                   </p>
                 </div>
@@ -741,7 +749,7 @@ function Analytics() {
                     Rating
                   </h3>
 
-                  <p className="text-3xl font-bold">
+                  <p className="text-4xl font-extrabold text-purple-400">
                     {rating}
                   </p>
                 </div>
@@ -749,14 +757,38 @@ function Analytics() {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-3">
-                  AI Insights
+                
+                <h3 className="text-xl font-bold mb-5">
+                  Key Recommendations
                 </h3>
 
-                <div className="whitespace-pre-line text-zinc-300">
-                  {insightsText}
-                </div>
+                <div className="space-y-4">
+                  
+                  {insightsText
+                  .split("\n")
+                  .filter((item) => item.trim() !== "")
+                  .map((item, index) => (
+                  
+                  <div
+                   key={index}
+                   className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex gap-4 items-start"
+                  >
+                    
+                    <div className="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center font-bold flex-shrink-0">
+                      ✓
+                    </div>
+
+                    <p className="text-zinc-300 leading-relaxed">
+                      {item}
+                    </p>
+
+                  </div>
+
+                ))}
+
               </div>
+
+            </div>
 
             </div>
           ) : (
