@@ -2,65 +2,112 @@ import { useEffect, useState } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 
-import toast from "react-hot-toast";
-
 import { isPaidPlan } from "../utils/subscription";
 
 import {
   scanReceipt,
 } from "../services/receiptService";
 
+import {
+  UploadCloud,
+  Receipt,
+  Sparkles,
+  X,
+  Store,
+  Calendar,
+  Wallet,
+  Tags,
+  FileText,
+  Crown,
+} from "lucide-react";
+
 function ReceiptScanner() {
-
-  const [file, setFile] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [result, setResult] =
-    useState(null);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
 
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
 
-  const handleScan =
-    async (e) => {
+  const [statusMessage, setStatusMessage] = useState(null);
 
-      e.preventDefault();
+  const showStatus = (type, title, message) => {
+    setStatusMessage({
+      type,
+      title,
+      message,
+    });
 
-      if (!file) {
-        toast.error("Please upload a receipt image first.");
-        return;
-      }
+    setTimeout(() => {
+      setStatusMessage(null);
+    }, 4000);
+  };
 
+  const handleFileChange = (selectedFile) => {
+    if (!selectedFile) return;
+
+    if (!selectedFile.type.startsWith("image/")) {
+      showStatus(
+        "error",
+        "Invalid file type",
+        "Please upload a receipt image."
+      );
+      return;
+    }
+
+    setFile(selectedFile);
+    setResult(null);
+    setStatusMessage(null);
+    setPreview(URL.createObjectURL(selectedFile));
+  };
+
+  const handleScan = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      showStatus(
+        "error",
+        "Receipt image required",
+        "Please upload a receipt image before scanning."
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setStatusMessage(null);
+
+      const data = await scanReceipt(file);
+
+      setResult(data);
+
+      showStatus(
+        "success",
+        "Receipt scanned successfully",
+        "Vayqor extracted the transaction details from your receipt."
+      );
+    } catch (error) {
+      console.error(error);
+
+      showStatus(
+        "error",
+        "Failed to scan receipt",
+        "Please try again with a clearer receipt image."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
       try {
+        const token =
+          localStorage.getItem("token");
 
-        setLoading(true);
-
-        const data =
-          await scanReceipt(file);
-
-        setResult(data);
-
-      } catch (error) {
-
-        console.error(error);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-    useEffect(() => {
-      const fetchSubscription = async () => {
-        try {
-          const token = localStorage.getItem("token");
-
-          const response = await fetch(
+        const response =
+          await fetch(
             `${import.meta.env.VITE_API_URL}/subscriptions/current`,
             {
               headers: {
@@ -69,179 +116,308 @@ function ReceiptScanner() {
             }
           );
 
-          const data = await response.json();
+        const data =
+          await response.json();
 
-          setSubscription(data);
-          } catch (error) {
-            console.error("Failed to fetch subscription", error);
-          } finally {
-            setLoadingSubscription(false);
-          }
-        };
+        setSubscription(data);
+      } catch (error) {
+        console.error(
+          "Failed to fetch subscription",
+          error
+        );
+      } finally {
+        setLoadingSubscription(false);
+      }
+    };
 
-        fetchSubscription();
-    }, []);
+    fetchSubscription();
+  }, []);
 
-    if (loadingSubscription) {
-      return (
+  if (loadingSubscription) {
+    return (
       <MainLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <p className="text-zinc-400">
-            Loading subscription...
-          </p>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 text-center">
+            <Sparkles className="text-blue-400 mx-auto mb-4 animate-pulse" size={32} />
+
+            <p className="text-zinc-400">
+              Checking your Vayqor plan...
+            </p>
+          </div>
         </div>
       </MainLayout>
-      );
-      }
+    );
+  }
 
-      if (!isPaidPlan(subscription?.plan_name)) {
-        return (
-        <MainLayout>
-          <div className="max-w-md mx-auto text-center mt-20 bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
-            
+  if (!isPaidPlan(subscription?.plan_name)) {
+    return (
+      <MainLayout>
+        <div className="max-w-2xl mx-auto mt-10">
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-[2rem] p-8 sm:p-10 text-center">
+            <Crown className="text-blue-400 mx-auto mb-5" size={40} />
+
             <p className="text-blue-400 font-semibold mb-3">
               Pro Feature
             </p>
 
-            <h1 className="text-3xl font-bold mb-4">
-              Upgrade to scan receipts
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-4">
+              Unlock AI Receipt Scanning
             </h1>
 
-            <p className="text-zinc-400 mb-8">
+            <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
               Receipt scanning is available on Pro and Premium plans.
+              Upload receipts and let Vayqor extract merchant, amount,
+              date, category, and description automatically.
             </p>
 
             <a
-             href="/pricing"
-             className="inline-block bg-white text-black px-8 py-3 rounded-2xl font-bold"
+              href="/pricing"
+              className="inline-block bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-[1.02] transition"
             >
               View Plans
             </a>
-
           </div>
-        </MainLayout>
-      );
-    }
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
+      <div className="max-w-6xl mx-auto space-y-8">
 
-      <div className="max-w-4xl mx-auto">
-
-        <div className="mb-10">
-
+        <div>
           <p className="text-blue-400 font-semibold mb-2">
-            OCR Receipt Scanner
+            AI Receipt Intelligence
           </p>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-            Scan Receipt
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            Receipt Scanner
           </h1>
 
-          <p className="text-zinc-400 max-w-2xl">
-            Upload a receipt image and let Vayqor
-            automatically extract transaction details.
+          <p className="text-zinc-400 max-w-2xl mt-4 leading-relaxed">
+            Upload a receipt image and let Vayqor extract transaction details
+            automatically using AI-powered scanning.
           </p>
+        </div>
+
+        {statusMessage && (
+          <div
+            className={`rounded-3xl border p-5 ${
+              statusMessage.type === "success"
+                ? "bg-green-500/10 border-green-500/30"
+                : "bg-red-500/10 border-red-500/30"
+            }`}
+          >
+            <p
+              className={`font-semibold mb-1 ${
+                statusMessage.type === "success"
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              {statusMessage.title}
+            </p>
+
+            <p className="text-zinc-400 text-sm">
+              {statusMessage.message}
+            </p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <form
+            onSubmit={handleScan}
+            className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-6 sm:p-8"
+          >
+            <div className="mb-6">
+              <p className="text-blue-400 font-semibold mb-2">
+                Upload Receipt
+              </p>
+
+              <h2 className="text-2xl font-bold">
+                Scan a receipt image
+              </h2>
+
+              <p className="text-zinc-500 text-sm mt-2">
+                JPG, PNG, or mobile camera image supported.
+              </p>
+            </div>
+
+            <label className="group relative flex flex-col items-center justify-center min-h-[260px] border-2 border-dashed border-zinc-700 rounded-[2rem] bg-zinc-950 hover:border-blue-500/50 hover:bg-zinc-900 transition cursor-pointer p-6 text-center">
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) =>
+                  handleFileChange(e.target.files[0])
+                }
+                className="hidden"
+              />
+
+              {preview ? (
+                <div className="relative w-full">
+                  <img
+                    src={preview}
+                    alt="Receipt preview"
+                    className="max-h-[260px] mx-auto rounded-2xl object-contain border border-zinc-800"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setFile(null);
+                      setPreview(null);
+                      setResult(null);
+                    }}
+                    className="absolute top-3 right-3 bg-black/70 text-white p-2 rounded-xl"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="w-16 h-16 rounded-3xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-5 group-hover:bg-blue-500/20 transition">
+                    <UploadCloud size={34} />
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-2">
+                    Drop or upload your receipt
+                  </h3>
+
+                  <p className="text-zinc-500 max-w-sm">
+                    Choose a clear receipt photo so Vayqor can extract accurate transaction data.
+                  </p>
+                </>
+              )}
+            </label>
+
+            {file && (
+              <div className="mt-5 bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
+                <p className="text-zinc-500 text-sm">
+                  Selected file
+                </p>
+
+                <p className="text-white font-semibold mt-1 truncate">
+                  {file.name}
+                </p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-6 w-full bg-white text-black px-8 py-4 rounded-2xl font-bold transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading
+                ? "Scanning receipt..."
+                : "Scan Receipt"}
+            </button>
+
+            {loading && (
+              <div className="mt-6 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5">
+                <div className="flex items-center gap-4">
+                  <Sparkles className="text-blue-400 animate-pulse" size={26} />
+
+                  <div>
+                    <p className="text-blue-400 font-semibold">
+                      Vayqor is reading your receipt...
+                    </p>
+
+                    <p className="text-zinc-500 text-sm mt-1">
+                      Detecting merchant, amount, date, category, and description.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-6 sm:p-8">
+            <p className="text-purple-400 font-semibold mb-2">
+              Extracted Data
+            </p>
+
+            <h2 className="text-2xl font-bold mb-6">
+              Receipt Summary
+            </h2>
+
+            {result ? (
+              <div className="space-y-4">
+                <ReceiptItem
+                  icon={<Store size={20} />}
+                  label="Merchant"
+                  value={result.merchant || "Not detected"}
+                />
+
+                <ReceiptItem
+                  icon={<Wallet size={20} />}
+                  label="Amount"
+                  value={`RM ${result.amount || "0.00"}`}
+                />
+
+                <ReceiptItem
+                  icon={<Calendar size={20} />}
+                  label="Date"
+                  value={result.date || "Not detected"}
+                />
+
+                <ReceiptItem
+                  icon={<Tags size={20} />}
+                  label="Category"
+                  value={result.category || "Uncategorized"}
+                />
+
+                <ReceiptItem
+                  icon={<FileText size={20} />}
+                  label="Description"
+                  value={result.description || "No description generated"}
+                />
+              </div>
+            ) : (
+              <div className="min-h-[320px] flex flex-col items-center justify-center text-center">
+                <div className="w-16 h-16 rounded-3xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-5">
+                  <Receipt size={32} />
+                </div>
+
+                <h3 className="text-xl font-bold mb-2">
+                  No receipt scanned yet
+                </h3>
+
+                <p className="text-zinc-500 max-w-sm">
+                  Upload and scan a receipt to see extracted transaction details here.
+                </p>
+              </div>
+            )}
+          </div>
 
         </div>
 
-        <form
-          onSubmit={handleScan}
-          className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6"
-        >
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) =>
-              setFile(e.target.files[0])
-            }
-            className="mb-6 block w-full text-zinc-300"
-          />
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-white text-black px-8 py-4 rounded-2xl font-bold transition duration-300 hover:scale-[1.02] disabled:opacity-50"
-          >
-            {loading
-              ? "Scanning..."
-              : "Scan Receipt"}
-          </button>
-
-        </form>
-
-        {result && (
-
-          <div className="mt-8 bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-
-            <h2 className="text-2xl font-bold mb-6">
-              Extracted Receipt Data
-            </h2>
-
-            <div className="space-y-4">
-
-              <div>
-                <p className="text-zinc-500 text-sm">
-                  Merchant
-                </p>
-
-                <p className="text-xl">
-                  {result.merchant}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-zinc-500 text-sm">
-                  Amount
-                </p>
-
-                <p className="text-xl">
-                  RM {result.amount}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-zinc-500 text-sm">
-                  Date
-                </p>
-
-                <p className="text-xl">
-                  {result.date}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-zinc-500 text-sm">
-                  Category
-                </p>
-
-                <p className="text-xl">
-                  {result.category}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-zinc-500 text-sm">
-                  Description
-                </p>
-
-                <p className="text-xl">
-                  {result.description}
-                </p>
-              </div>
-
-            </div>
-
-          </div>
-
-        )}
-
       </div>
-
     </MainLayout>
   );
+}
 
+function ReceiptItem({ icon, label, value }) {
+  return (
+    <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5 flex items-start gap-4">
+      <div className="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center flex-shrink-0">
+        {icon}
+      </div>
+
+      <div>
+        <p className="text-zinc-500 text-sm mb-1">
+          {label}
+        </p>
+
+        <p className="text-lg font-bold text-white break-words">
+          {value}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default ReceiptScanner;
