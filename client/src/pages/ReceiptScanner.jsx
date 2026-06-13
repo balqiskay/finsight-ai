@@ -43,8 +43,6 @@ function ReceiptScanner() {
     description: "",
   });
 
-  const [creatingTransaction, setCreatingTransaction] = useState(false);
-
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
 
