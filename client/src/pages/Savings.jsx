@@ -273,12 +273,85 @@ function Savings() {
 
     </div>
 
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-blue-500/30 transition">
+
+    <p className="text-zinc-400 text-sm mb-2">
+      Total Goals
+    </p>
+
+    <h2 className="text-3xl font-extrabold">
+      {goals.length}
+    </h2>
+
+    <p className="text-zinc-500 text-sm mt-2">
+      Active savings plans
+    </p>
+
+  </div>
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-green-500/30 transition">
+
+    <p className="text-zinc-400 text-sm mb-2">
+      Completed Goals
+    </p>
+
+    <h2 className="text-3xl font-extrabold text-green-400">
+      {
+        goals.filter(
+          goal =>
+            Number(goal.current_amount) >=
+            Number(goal.target_amount)
+        ).length
+      }
+    </h2>
+
+    <p className="text-zinc-500 text-sm mt-2">
+      Goals successfully achieved
+    </p>
+
+  </div>
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-purple-500/30 transition">
+
+    <p className="text-zinc-400 text-sm mb-2">
+      Completion Rate
+    </p>
+
+    <h2 className="text-3xl font-extrabold text-purple-400">
+      {goals.length > 0
+        ? (
+            goals.filter(
+              goal =>
+                Number(goal.current_amount) >=
+                Number(goal.target_amount)
+            ).length /
+            goals.length *
+            100
+          ).toFixed(0)
+        : 0}
+      %
+    </h2>
+
+    <p className="text-zinc-500 text-sm mt-2">
+      Overall achievement
+    </p>
+
+  </div>
+
+</div>
+
       <form
         onSubmit={handleSubmit}
-        className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10"
+        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-8 shadow-xl mb-10"
       >
-        <h2 className="text-2xl font-bold mb-6">
-          {editingId ? "Update Goal" : "Create New Goal"}
+        <h2 className="text-3xl font-extrabold mb-2">
+          <p className="text-zinc-500 mb-8">
+            {editingId
+            ? "Update your savings progress and financial target."
+            : "Create a new savings goal and start tracking your progress."}
+          </p>
         </h2>
 
         <div className="mb-4">
@@ -469,10 +542,20 @@ function Savings() {
                     </h2>
 
                     {progress >= 100 && (
-                        <span className="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full font-semibold">
-                            Completed
+                      
+                      <div className="flex items-center gap-2">
+                        
+                        <span className="animate-pulse text-2xl">
+                          🎉
                         </span>
-                     )}
+
+                        <span className="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full font-semibold border border-green-500/30">
+                        Goal Completed
+                        </span>
+
+                      </div>
+
+                    )}
 
                 </div>
 
@@ -492,6 +575,23 @@ function Savings() {
                 <p className="text-sm text-zinc-400 mb-4">
                   {progress.toFixed(1)}% completed
                 </p>
+
+                {progress >= 100 && (
+                  
+                  <div className="mb-5 rounded-2xl bg-green-500/10 border border-green-500/30 p-4">
+                    
+                    <p className="text-green-400 font-bold mb-1">
+                      🎉 Congratulations!
+                    </p>
+
+                    <p className="text-zinc-300 text-sm">
+                      You've successfully achieved this savings goal.
+                      Time to celebrate or set your next financial milestone.
+                    </p>
+
+                  </div>
+
+                )}
 
                 {goal.deadline && (() => {
                   
