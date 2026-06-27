@@ -174,9 +174,23 @@ function Recurring() {
 
   return (
     <MainLayout>
-      <h1 className="text-2xl md:text-4xl font-bold mb-8">
-        Recurring Transactions
-      </h1>
+      <div className="mb-10">
+        
+        <p className="text-blue-400 font-semibold mb-2">
+          Financial Automation
+        </p>
+
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+          Recurring Transactions
+        </h1>
+
+        <p className="text-zinc-400 max-w-2xl leading-relaxed">
+          Automate your recurring income and expenses such as salaries,
+          subscriptions, rent, utilities, and monthly bills to keep your
+          finances organized effortlessly.
+        </p>
+
+      </div>
 
       <form
         onSubmit={handleSubmit}
