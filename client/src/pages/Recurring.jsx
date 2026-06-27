@@ -192,6 +192,66 @@ function Recurring() {
 
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+        
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-blue-500/30 transition">
+        
+        <p className="text-zinc-400 text-sm mb-2">
+          Total Recurring
+        </p>
+
+        <h2 className="text-3xl font-extrabold">
+          {transactions.length}
+        </h2>
+
+        <p className="text-zinc-500 text-sm mt-2">
+          Active recurring plans
+        </p>
+
+      </div>
+
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-green-500/30 transition">
+      
+      <p className="text-zinc-400 text-sm mb-2">
+        Income Plans
+      </p>
+
+      <h2 className="text-3xl font-extrabold text-green-400">
+        {
+        transactions.filter(
+          t => t.type === "Income"
+        ).length
+        }
+      </h2>
+
+      <p className="text-zinc-500 text-sm mt-2">
+        Automated income
+      </p>
+
+    </div>
+
+    <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-red-500/30 transition">
+    
+    <p className="text-zinc-400 text-sm mb-2">
+      Expense Plans
+    </p>
+
+    <h2 className="text-3xl font-extrabold text-red-400">
+      {
+        transactions.filter(
+          t => t.type === "Expense"
+        ).length
+      }
+    </h2>
+
+    <p className="text-zinc-500 text-sm mt-2">
+      Automated expenses
+    </p>
+
+    </div>
+
+  </div>
+
       <form
         onSubmit={handleSubmit}
         className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10"
