@@ -31,6 +31,8 @@ function Recurring() {
 
   const [statusMessage, setStatusMessage] = useState(null);
 
+  const [errors, setErrors] = useState({});
+
   const showStatus = (type, title, message) => {
     setStatusMessage({
       type,
@@ -83,24 +85,48 @@ function Recurring() {
     });
 
     setEditingId(null);
+    setErrors({});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.category ||
-      !formData.amount ||
-      !formData.start_date
+    const newErrors = {};
+
+    if (!formData.category.trim()) {
+      newErrors.category = "Category is required.";
+    }
+
+    if (!formData.amount) {
+      newErrors.amount = "Amount is required.";
+    }
+    else if (
+      Number(formData.amount) <= 0
     ) {
+      newErrors.amount = "Amount must be greater than 0.";
+    }
+
+    if (!formData.start_date) {
+      newErrors.start_date = "Start date is required.";
+    }
+
+    if (
+      Object.keys(newErrors).length > 0
+    ) {
+      
+      setErrors(newErrors);
+
       showStatus(
         "error",
-        "Missing information",
-        "Please fill in category, amount, and start date."
+        "Please correct the highlighted fields",
+        "Some required information is missing."
       );
 
       return;
     }
+
+    setErrors({});
+    
 
     if (
       Number(formData.amount) <= 0
@@ -305,12 +331,14 @@ function Recurring() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10"
+        className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-8 shadow-xl mb-10"
       >
-        <h2 className="text-2xl font-bold mb-6">
-          {editingId
-            ? "Update Recurring Transaction"
-            : "Create Recurring Transaction"}
+        <h2 className="text-3xl font-extrabold mb-2">
+          <p className="text-zinc-500 mb-8">
+            {editingId
+            ? "Update your recurring transaction."
+            : "Create automatic income and expense schedules."}
+          </p>
         </h2>
 
         <div className="flex gap-2 mb-4">
@@ -351,24 +379,82 @@ function Recurring() {
 
         </div>
 
-        <input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+        <div className="mb-4">
+          
+          <label className="block text-zinc-400 text-sm mb-2">
+            Category
+            <span className="text-red-400"> *</span>
+          </label>
 
-        <input
-          type="number"
-          name="amount"
-          min="1"
-          placeholder="Amount"
-          value={formData.amount}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+          <input
+           type="text"
+           name="category"
+           placeholder="Subscription"
+
+           value={formData.category}
+
+           onChange={(e)=>{
+            
+            handleChange(e);
+
+            setErrors(prev=>({
+              
+              ...prev,
+
+              category:"",
+
+            }));
+
+           }}
+
+           className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.category
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.category &&(
+            
+            <p className="text-red-400 text-sm mt-2">
+              {errors.category}
+            </p>
+
+          )}
+
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Amount <span className="text-red-400">*</span>
+          </label>
+
+          <input
+           type="number"
+           name="amount"
+           min="1"
+           placeholder="99.90"
+           value={formData.amount}
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              amount: "",
+            }));
+          }}
+          className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.amount
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.amount && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.amount}
+            </p>
+          )}
+        </div>
 
         <input
           type="text"
@@ -403,13 +489,35 @@ function Recurring() {
 
         </div>
 
-        <input
-          type="date"
-          name="start_date"
-          value={formData.start_date}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-6"
-        />
+        <div className="mb-6">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Start Date <span className="text-red-400">*</span>
+          </label>
+
+          <input
+           type="date"
+           name="start_date"
+           value={formData.start_date}
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              start_date: "",
+            }));
+          }}
+          className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.start_date
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.start_date && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.start_date}
+            </p>
+          )}
+        </div>
 
         <div className="flex gap-3">
           <button
