@@ -216,6 +216,63 @@ function Savings() {
 
     </div>
 
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+      
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+        
+        <p className="text-zinc-400 text-sm mb-2">
+          Total Goals
+        </p>
+
+        <h2 className="text-3xl font-extrabold">
+          {goals.length}
+        </h2>
+
+      </div>
+
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+        
+        <p className="text-zinc-400 text-sm mb-2">
+          Completed Goals
+        </p>
+
+        <h2 className="text-3xl font-extrabold text-green-400">
+          {
+          goals.filter(
+            goal =>
+              Number(goal.current_amount) >=
+              Number(goal.target_amount)
+          ).length
+          }
+        </h2>
+
+      </div>
+
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+        
+        <p className="text-zinc-400 text-sm mb-2">
+          Completion Rate
+        </p>
+
+        <h2 className="text-3xl font-extrabold text-purple-400">
+          {goals.length > 0
+          ? (
+            goals.filter(
+              goal =>
+                Number(goal.current_amount) >=
+                Number(goal.target_amount)
+            ).length /
+            goals.length *
+            100
+          ).toFixed(0)
+          : 0}
+          %
+        </h2>
+
+      </div>
+
+    </div>
+
       <form
         onSubmit={handleSubmit}
         className="bg-zinc-900 p-6 md:p-8 rounded-2xl mb-10"
