@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -25,6 +24,19 @@ function Savings() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [statusMessage, setStatusMessage] = useState(null);
+
+  const showStatus = (type, title, message) => {
+    setStatusMessage({
+      type,
+      title,
+      message,
+    });
+
+    setTimeout(() => {
+      setStatusMessage(null);
+    }, 4000);
+  };
 
   const fetchGoals = async () => {
     setLoadingGoals(true);
@@ -68,12 +80,20 @@ function Savings() {
       !formData.goal_name ||
       !formData.target_amount
     ) {
-      toast.error("Please fill in goal name and target amount.");
+      showStatus(
+        "error",
+        "Missing information",
+        "Please fill in goal name and target amount."
+      );
       return;
     }
 
     if (Number(formData.target_amount) <= 0) {
-      toast.error("Target amount must be greater than 0.");
+      showStatus(
+        "error",
+        "Invalid target amount",
+        "Target amount must be greater than 0."
+      );
       return;
     }
 
@@ -81,7 +101,11 @@ function Savings() {
       formData.current_amount &&
       Number(formData.current_amount) < 0
     ) {
-      toast.error("Current amount cannot be negative.");
+      showStatus(
+        "error",
+        "Invalid current amount",
+        "Current amount cannot be negative."
+      );
       return;
     }
 
@@ -89,7 +113,11 @@ function Savings() {
         Number(formData.current_amount) >
         Number(formData.target_amount)
     ) {
-        toast.error("Current amount cannot exceed target amount.");
+        showStatus(
+          "error",
+          "Invalid savings progress",
+          "Current amount cannot exceed target amount."
+        );
         return;
     }
 
@@ -98,17 +126,29 @@ function Savings() {
 
       if (editingId) {
         await updateSavingsGoal(editingId, formData);
-        toast.success("Savings goal updated");
+        showStatus(
+          "success",
+          "Savings goal updated",
+          "Your savings goal has been updated successfully."
+        );
       } else {
         await addSavingsGoal(formData);
-        toast.success("Savings goal added");
+        showStatus(
+          "success",
+          "Savings goal added",
+          "Your new savings target has been created."
+        );
       }
 
       await fetchGoals();
       resetForm();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to save savings goal");
+      showStatus(
+        "error",
+        "Failed to save goal",
+        "Please try again in a moment."
+      );
     } finally {
       setLoading(false);
     }
@@ -132,11 +172,19 @@ function Savings() {
     try {
       setDeletingId(id);
       await deleteSavingsGoal(id);
-      toast.success("Savings goal deleted");
+      showStatus(
+        "success",
+        "Savings goal deleted",
+        "The savings goal has been removed."
+      );
       await fetchGoals();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete savings goal");
+      showStatus(
+        "error",
+        "Failed to delete goal",
+        "Please try again in a moment."
+      );
     } finally {
       setDeletingId(null);
     }
@@ -144,9 +192,22 @@ function Savings() {
 
   return (
     <MainLayout>
-      <h1 className="text-2xl md:text-4xl font-bold mb-8">
+      <div className="mb-10">
+      
+      <p className="text-purple-400 font-semibold mb-2">
+        Future Planning
+      </p>
+
+      <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
         Savings Goals
       </h1>
+
+      <p className="text-zinc-400 max-w-2xl leading-relaxed">
+        Plan your financial future, monitor your savings progress,
+        and achieve your personal financial milestones with Vayqor.
+      </p>
+
+    </div>
 
       <form
         onSubmit={handleSubmit}
