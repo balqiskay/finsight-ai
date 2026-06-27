@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -29,6 +28,20 @@ function Recurring() {
   const [loading, setLoading] = useState(false);
 
   const [deletingId, setDeletingId] = useState(null);
+
+  const [statusMessage, setStatusMessage] = useState(null);
+
+  const showStatus = (type, title, message) => {
+    setStatusMessage({
+      type,
+      title,
+      message,
+    });
+
+    setTimeout(() => {
+      setStatusMessage(null);
+    }, 4000);
+  };
 
   const fetchRecurringTransactions =
     async () => {
@@ -80,8 +93,10 @@ function Recurring() {
       !formData.amount ||
       !formData.start_date
     ) {
-      toast.error(
-        "Please fill in all required fields."
+      showStatus(
+        "error",
+        "Missing information",
+        "Please fill in category, amount, and start date."
       );
 
       return;
@@ -90,7 +105,9 @@ function Recurring() {
     if (
       Number(formData.amount) <= 0
     ) {
-      toast.error(
+      showStatus(
+        "error",
+        "Invalid amount",
         "Amount must be greater than 0."
       );
 
@@ -106,16 +123,20 @@ function Recurring() {
           formData
         );
 
-        toast.success(
-          "Recurring transaction updated"
+        showStatus(
+          "success",
+          "Recurring transaction updated",
+          "Your recurring transaction has been updated successfully."
         );
       } else {
         await addRecurringTransaction(
           formData
         );
 
-        toast.success(
-          "Recurring transaction added"
+        showStatus(
+          "success",
+          "Recurring transaction added",
+          "Your recurring transaction has been created."
         );
       }
 
@@ -125,8 +146,10 @@ function Recurring() {
     } catch (error) {
       console.error(error);
 
-      toast.error(
-        "Failed to save recurring transaction"
+      showStatus(
+        "error",
+        "Failed to save recurring transaction",
+        "Please try again in a moment."
       );
     } finally {
       setLoading(false);
@@ -156,16 +179,20 @@ function Recurring() {
 
       await deleteRecurringTransaction(id);
 
-      toast.success(
-        "Recurring transaction deleted"
+      showStatus(
+        "success",
+        "Recurring transaction deleted",
+        "The recurring transaction has been removed."
       );
 
       await fetchRecurringTransactions();
     } catch (error) {
       console.error(error);
 
-      toast.error(
-        "Failed to delete recurring transaction"
+      showStatus(
+        "error",
+        "Failed to delete recurring transaction",
+        "Please try again in a moment."
       );
     } finally {
       setDeletingId(null);
@@ -251,6 +278,30 @@ function Recurring() {
     </div>
 
   </div>
+
+  {statusMessage && (
+    <div
+     className={`mb-8 rounded-3xl border p-5 ${
+      statusMessage.type === "success"
+      ? "bg-green-500/10 border-green-500/30"
+      : "bg-red-500/10 border-red-500/30"
+     }`}
+    >
+      <p
+       className={`font-semibold mb-1 ${
+        statusMessage.type === "success"
+        ? "text-green-400"
+        : "text-red-400"
+       }`}
+      >
+        {statusMessage.title}
+      </p>
+
+      <p className="text-zinc-400 text-sm">
+        {statusMessage.message}
+      </p>
+    </div>
+  )}
 
       <form
         onSubmit={handleSubmit}
