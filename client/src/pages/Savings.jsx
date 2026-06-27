@@ -26,6 +26,7 @@ function Savings() {
   const [deletingId, setDeletingId] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const showStatus = (type, title, message) => {
     setStatusMessage({
@@ -72,55 +73,60 @@ function Savings() {
     });
 
     setEditingId(null);
+    setErrors({});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.goal_name ||
-      !formData.target_amount
-    ) {
-      showStatus(
-        "error",
-        "Missing information",
-        "Please fill in goal name and target amount."
-      );
-      return;
+    const newErrors = {};
+
+    if (!formData.goal_name.trim()) {
+      newErrors.goal_name = "Goal name is required.";
     }
 
-    if (Number(formData.target_amount) <= 0) {
-      showStatus(
-        "error",
-        "Invalid target amount",
-        "Target amount must be greater than 0."
-      );
-      return;
+    if (!formData.target_amount) {
+      newErrors.target_amount = "Target amount is required.";
+    } else if (Number(formData.target_amount) <= 0) {
+      newErrors.target_amount = "Target amount must be greater than 0.";
     }
 
     if (
       formData.current_amount &&
       Number(formData.current_amount) < 0
     ) {
+      newErrors.current_amount = "Current amount cannot be negative.";
+    }
+
+    if (
+      formData.current_amount &&
+      formData.target_amount &&
+      Number(formData.current_amount) >
+      Number(formData.target_amount)
+    ) {
+      newErrors.current_amount = "Current amount cannot exceed target amount.";
+    }
+
+    if (
+      formData.deadline &&
+      new Date(formData.deadline) <
+      new Date(new Date().toISOString().split("T")[0])
+    ) {
+      newErrors.deadline = "Deadline cannot be in the past.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+
       showStatus(
         "error",
-        "Invalid current amount",
-        "Current amount cannot be negative."
+        "Please correct the highlighted fields",
+        "Some required information is missing or invalid."
       );
       return;
     }
 
-    if (
-        Number(formData.current_amount) >
-        Number(formData.target_amount)
-    ) {
-        showStatus(
-          "error",
-          "Invalid savings progress",
-          "Current amount cannot exceed target amount."
-        );
-        return;
-    }
+    setErrors({});
 
     try {
       setLoading(true);
@@ -218,34 +224,100 @@ function Savings() {
           {editingId ? "Update Goal" : "Create New Goal"}
         </h2>
 
-        <input
-          type="text"
-          name="goal_name"
-          placeholder="Goal name"
-          value={formData.goal_name}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+        <div className="mb-4">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Goal Name <span className="text-red-400">*</span>
+          </label>
 
-        <input
-          type="number"
-          name="target_amount"
-          min="1"
-          placeholder="Target amount"
-          value={formData.target_amount}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+          <input
+           type="text"
+           name="goal_name"
+           placeholder="Emergency Fund"
+           value={formData.goal_name}
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              goal_name: "",
+            }));
+           }}
+           className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.goal_name
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.goal_name && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.goal_name}
+            </p>
+          )}
+        </div>
 
-        <input
-          type="number"
-          name="current_amount"
-          min="0"
-          placeholder="Current saved amount"
-          value={formData.current_amount}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
-        />
+        <div className="mb-4">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Target Amount <span className="text-red-400">*</span>
+          </label>
+
+          <input
+           type="number"
+           name="target_amount"
+           min="1"
+           placeholder="5000"
+           value={formData.target_amount}
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              target_amount: "",
+            }));
+           }}
+           className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.target_amount
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.target_amount && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.target_amount}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Current Saved Amount
+          </label>
+
+          <input
+           type="number"
+           name="current_amount"
+           min="0"
+           placeholder="0"
+           value={formData.current_amount}
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              current_amount: "",
+            }));
+          }}
+          className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.current_amount
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
+          />
+          
+          {errors.current_amount && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.current_amount}
+            </p>
+          )}
+        </div>
 
         <div className="mb-6">
           <label className="block text-zinc-400 text-sm mb-2">
@@ -256,9 +328,25 @@ function Savings() {
            type="date"
            name="deadline"
            value={formData.deadline}
-           onChange={handleChange}
-           className="w-full p-3 rounded-lg bg-zinc-800"
+           onChange={(e) => {
+            handleChange(e);
+            setErrors((prev) => ({
+              ...prev,
+              deadline: "",
+            }));
+          }}
+          className={`w-full p-3 rounded-lg bg-zinc-800 border outline-none ${
+            errors.deadline
+            ? "border-red-500"
+            : "border-zinc-700"
+           }`}
           />
+          
+          {errors.deadline && (
+            <p className="text-red-400 text-sm mt-2">
+              {errors.deadline}
+            </p>
+          )}
         </div>
 
         <div className="flex gap-3">
