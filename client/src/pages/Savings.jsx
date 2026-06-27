@@ -24,6 +24,7 @@ function Savings() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
 
   const showStatus = (type, title, message) => {
@@ -246,13 +247,19 @@ function Savings() {
           className="w-full p-3 rounded-lg bg-zinc-800 mb-4"
         />
 
-        <input
-          type="date"
-          name="deadline"
-          value={formData.deadline}
-          onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-zinc-800 mb-6"
-        />
+        <div className="mb-6">
+          <label className="block text-zinc-400 text-sm mb-2">
+            Deadline Date
+          </label>
+
+          <input
+           type="date"
+           name="deadline"
+           value={formData.deadline}
+           onChange={handleChange}
+           className="w-full p-3 rounded-lg bg-zinc-800"
+          />
+        </div>
 
         <div className="flex gap-3">
           <button
@@ -399,7 +406,7 @@ function Savings() {
                   </button>
 
                   <button
-                    onClick={() => handleDelete(goal.id)}
+                    onClick={() => setDeleteTarget(goal)}
                     disabled={deletingId === goal.id}
                     className="flex-1 bg-red-500 px-3 py-2 rounded-lg text-sm transition duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -425,6 +432,49 @@ function Savings() {
           </div>
         )}
       </div>
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-zinc-950 border border-red-500/30 rounded-[2rem] p-6 shadow-2xl">
+          
+          <h2 className="text-2xl font-extrabold mb-3">
+            Delete Savings Goal?
+          </h2>
+
+          <p className="text-zinc-400 mb-6">
+            You are about to delete{" "}
+            <span className="text-white font-semibold">
+              {deleteTarget.goal_name}
+            </span>
+            . This action cannot be undone.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+             onClick={() => setDeleteTarget(null)}
+             className="flex-1 bg-zinc-900 border border-zinc-800 px-5 py-3 rounded-2xl font-bold hover:bg-zinc-800 transition"
+            >
+              Cancel
+            </button>
+
+            <button
+             onClick={async () => {
+              await handleDelete(deleteTarget.id);
+              setDeleteTarget(null);
+             }}
+             disabled={deletingId === deleteTarget.id}
+             className="flex-1 bg-red-500 text-white px-5 py-3 rounded-2xl font-bold hover:bg-red-600 transition disabled:opacity-50"
+            >
+              {deletingId === deleteTarget.id
+              ? "Deleting..."
+              : "Delete"}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    )}
+
     </MainLayout>
   );
 }
